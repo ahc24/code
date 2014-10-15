@@ -6019,7 +6019,7 @@ void blip4();
 void blink0();
 void blink1();
 
-# 28 "../src/my_uart.h"
+# 31 "../src/my_uart.h"
 typedef struct
 {
 unsigned char data[(14 + 2 + 2)];
@@ -6043,7 +6043,7 @@ unsigned char byte_error;
 unsigned char acked;
 } uart_packet_type;
 
-# 57
+# 60
 unsigned char send_uart_message( unsigned char * message_ptr );
 
 
@@ -6055,7 +6055,7 @@ void uart_receive_interrupt_handler();
 
 void uart_transmit_interrupt_handler();
 
-# 79
+# 82
 unsigned char uart_num_bytes_in_recv_buffer();
 
 
@@ -6073,8 +6073,8 @@ BAUDCONbits.BRG16 = 1;
 TXSTA1bits.BRGH = 1;
 
 # 36
-SPBRGH = 0x00;
-SPBRG= 0xCF;
+SPBRGH = 0x01;
+SPBRG = 0x38;
 
 
 
@@ -6218,7 +6218,7 @@ error = 0;
 
 unsigned char send_uart_message( unsigned char * message_ptr )
 {
-unsigned char message_q_code = FromMainLow_sendmsg(14,31,(void *) message_ptr );
+unsigned char message_q_code = FromMainLow_sendmsg(2,31,(void *) message_ptr );
 
 if( message_q_code == -1)
 {
@@ -6232,18 +6232,19 @@ return 0x00;
 
 void uart_transmit_interrupt_handler()
 {
+blip();
 
 static unsigned char done = 1;
 static unsigned char index = 0;
 
-unsigned char data[14];
-static unsigned char message[(14 + 2 + 2)];
+unsigned char data[2];
+
 
 unsigned char msgtype = 31;
 
 if( done )
 {
-signed char message_status = FromMainLow_recvmsg(14,&msgtype, (void*)data );
+signed char message_status = FromMainLow_recvmsg(2,&msgtype, (void*)data );
 
 if( message_status == -4)
 {
@@ -6252,13 +6253,13 @@ PIE1bits.TX1IE = 0;
 }
 else if( message_status > 0 )
 {
-uart_frame_message( data , message );
+
 index = 0;
 done = 0;
 
-TXREG1 = message[index];
+TXREG1 = data[index];
 index++;
-if( index >= (14 + 2 + 2) )
+if( index >= 2 )
 {
 done = 1;
 }
@@ -6280,9 +6281,9 @@ else
 else
 {
 
-TXREG1 = message[index];
+TXREG1 = data[index];
 index++;
-if( index >= (14 + 2 + 2) )
+if( index >= 2 )
 {
 done = 1;
 }
@@ -6291,7 +6292,7 @@ done = 1;
 
 }
 
-# 368
+# 369
 void uart_frame_message( unsigned char * inner , unsigned char * outer )
 {
 static unsigned char sent_counter = 0;

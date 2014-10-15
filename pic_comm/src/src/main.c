@@ -366,6 +366,15 @@ void main(void) {
     // Here is how it looks: printf("Hello\r\n");
 
 
+    unsigned char sensor_data[MSGLEN];
+    sensor_data[0] = MSGID_STATUS_RESPONSE;
+    unsigned char z;
+    for(z=1;z<MSGLEN;z++)
+    {
+        sensor_data[z] = 0x00;
+    }
+
+
     // loop forever
     // This loop is responsible for "handing off" messages to the subroutines
     // that should get them.  Although the subroutines are not threads, but
@@ -419,11 +428,11 @@ void main(void) {
                 case MSGT_I2C_RQST:
                 {
                     if ( msgbuffer[0] == 0xff )
-					{
-						
-					
-					
-					}
+                    {
+
+
+
+                    }
 					
                     break;
                 };
@@ -503,7 +512,11 @@ void main(void) {
 					
                     switch( msgbuffer[0] )
                     {
-                        
+                        case MSGID_STATUS_REQUEST:
+                        {
+                            send_uart_message( sensor_data );
+                            break;
+                        }
                         default:
                         {
 

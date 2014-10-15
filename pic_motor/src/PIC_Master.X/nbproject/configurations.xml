@@ -14,6 +14,7 @@
       <itemPath>../src/uart_thread.h</itemPath>
       <itemPath>../src/user_interrupts.h</itemPath>
       <itemPath>../src/debug.h</itemPath>
+      <itemPath>C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/motor.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -32,6 +33,7 @@
       <itemPath>../src/uart_thread.c</itemPath>
       <itemPath>../src/user_interrupts.c</itemPath>
       <itemPath>../src/debug.c</itemPath>
+      <itemPath>C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/motor.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -148,6 +150,7 @@
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

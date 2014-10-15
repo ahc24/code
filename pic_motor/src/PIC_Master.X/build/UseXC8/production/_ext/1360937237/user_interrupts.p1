@@ -4645,30 +4645,30 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;messages.h: 87: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 [; ;messages.h: 93: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 [; ;messages.h: 94: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
-[; ;my_uart.h: 28: typedef struct
-[; ;my_uart.h: 29: {
-[; ;my_uart.h: 30: unsigned char data[(14 + 2 + 2)];
-[; ;my_uart.h: 33: unsigned char index;
-[; ;my_uart.h: 34: unsigned char size;
-[; ;my_uart.h: 35: unsigned char done;
-[; ;my_uart.h: 36: } uart_buffer_type;
-[; ;my_uart.h: 38: typedef struct
-[; ;my_uart.h: 39: {
-[; ;my_uart.h: 40: unsigned char header;
-[; ;my_uart.h: 41: unsigned char checksum;
-[; ;my_uart.h: 42: unsigned char data[ (14 + 2 + 2) - 2 ];
-[; ;my_uart.h: 44: unsigned char bytes_received;
-[; ;my_uart.h: 45: unsigned char checksum_error;
-[; ;my_uart.h: 46: unsigned char count_error;
-[; ;my_uart.h: 47: unsigned char byte_error;
-[; ;my_uart.h: 48: unsigned char acked;
-[; ;my_uart.h: 49: } uart_packet_type;
-[; ;my_uart.h: 57: unsigned char send_uart_message( unsigned char * message_ptr );
-[; ;my_uart.h: 60: void uart_configure( );
-[; ;my_uart.h: 63: void uart_receive_interrupt_handler();
-[; ;my_uart.h: 66: void uart_transmit_interrupt_handler();
-[; ;my_uart.h: 79: unsigned char uart_num_bytes_in_recv_buffer();
-[; ;my_uart.h: 84: void uart_frame_message( unsigned char * inner , unsigned char * outer );
+[; ;my_uart.h: 31: typedef struct
+[; ;my_uart.h: 32: {
+[; ;my_uart.h: 33: unsigned char data[(14 + 2 + 2)];
+[; ;my_uart.h: 36: unsigned char index;
+[; ;my_uart.h: 37: unsigned char size;
+[; ;my_uart.h: 38: unsigned char done;
+[; ;my_uart.h: 39: } uart_buffer_type;
+[; ;my_uart.h: 41: typedef struct
+[; ;my_uart.h: 42: {
+[; ;my_uart.h: 43: unsigned char header;
+[; ;my_uart.h: 44: unsigned char checksum;
+[; ;my_uart.h: 45: unsigned char data[ (14 + 2 + 2) - 2 ];
+[; ;my_uart.h: 47: unsigned char bytes_received;
+[; ;my_uart.h: 48: unsigned char checksum_error;
+[; ;my_uart.h: 49: unsigned char count_error;
+[; ;my_uart.h: 50: unsigned char byte_error;
+[; ;my_uart.h: 51: unsigned char acked;
+[; ;my_uart.h: 52: } uart_packet_type;
+[; ;my_uart.h: 60: unsigned char send_uart_message( unsigned char * message_ptr );
+[; ;my_uart.h: 63: void uart_configure( );
+[; ;my_uart.h: 66: void uart_receive_interrupt_handler();
+[; ;my_uart.h: 69: void uart_transmit_interrupt_handler();
+[; ;my_uart.h: 82: unsigned char uart_num_bytes_in_recv_buffer();
+[; ;my_uart.h: 87: void uart_frame_message( unsigned char * inner , unsigned char * outer );
 [; ;my_i2c.h: 8: typedef struct __i2c_comm {
 [; ;my_i2c.h: 9: unsigned char buffer[14];
 [; ;my_i2c.h: 10: unsigned char buflen;

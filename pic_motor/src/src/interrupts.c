@@ -84,6 +84,8 @@ interrupt
 #pragma interrupt InterruptHandlerHigh
 #endif
 void InterruptHandlerHigh() {
+    LATDbits.LD6 = 0;
+    LATDbits.LD6 = 1;
     // We need to check the interrupt flag of each enabled high-priority interrupt to
     // see which device generated this interrupt.  Then we can call the correct handler.
 
@@ -116,6 +118,8 @@ void InterruptHandlerHigh() {
     // initialized using "init_queues()" -- if you aren't using
     // this, then you shouldn't have this call here
     SleepIfOkay();
+    LATDbits.LD6 = 1;
+    LATDbits.LD6 = 0;
 }
 
 //----------------------------------------------------------------------------

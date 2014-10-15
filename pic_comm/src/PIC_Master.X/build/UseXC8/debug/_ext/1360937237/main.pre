@@ -10903,7 +10903,7 @@ int in_low_int(void);
 
 int in_main(void);
 
-# 25 "../src/messages.h"
+# 26 "../src/messages.h"
 typedef struct __msg {
 unsigned char full;
 unsigned char length;
@@ -10917,7 +10917,7 @@ unsigned char cur_write_ind;
 unsigned char cur_read_ind;
 } msg_queue;
 
-# 58
+# 59
 void init_queues(void);
 
 
@@ -10928,19 +10928,19 @@ void SleepIfOkay(void);
 
 void block_on_To_msgqueues(void);
 
-# 72
+# 73
 signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 79
+# 80
 signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 86
+# 87
 signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 93
+# 94
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
@@ -11165,10 +11165,19 @@ uart_configure();
 unsigned char myByte1 = 0x44;
 unsigned char myByte2 = 0x44;
 
-# 374
+# 369
+unsigned char sensor_data[14];
+sensor_data[0] = 0x03;
+unsigned char z;
+for(z=1;z<14;z++)
+{
+sensor_data[z] = 0x00;
+}
+
+# 383
 while (1) {
 
-# 381
+# 390
 if( need_sensor_data )
 {
 
@@ -11176,7 +11185,7 @@ if( need_sensor_data )
 need_sensor_data = 0;
 }
 
-# 396
+# 405
 length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -11287,7 +11296,11 @@ case 31:
 
 switch( msgbuffer[0] )
 {
+case 0x02:
+{
+send_uart_message( sensor_data );
 
+}
 default:
 {
 

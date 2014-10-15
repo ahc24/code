@@ -115,6 +115,10 @@ void uart_receive_interrupt_handler()
             bad_counter_id[0] = received_counter;
             bad_counter_id[1] = frame[UART_POS_COUNTER];   //Format for bad counter in error message sent
             ToMainLow_sendmsg(2,MSGT_UART_BAD_COUNTER,(void *)&bad_counter_id);
+
+            //Reset counter
+            received_counter = frame[UART_POS_COUNTER];
+
             error = 1;
         }
 
@@ -131,8 +135,11 @@ void uart_receive_interrupt_handler()
         if( checksum != frame[UART_FRAME_LENGTH - UART_FOOTER_WIDTH] )
         {
             //Send Error message to main to be sent to sender
-            unsigned char bad_checksum_id = received_counter;
-            ToMainLow_sendmsg(1,MSGT_UART_BAD_CHECKSUM,(void *)&bad_checksum_id);
+            unsigned char bad_checksum_message[3];
+            bad_checksum_message[0] = received_counter;
+            bad_checksum_message[1] = frame[UART_FRAME_LENGTH - UART_FOOTER_WIDTH];
+            bad_checksum_message[2] = checksum;
+            ToMainLow_sendmsg(3,MSGT_UART_BAD_CHECKSUM,(void *)&bad_checksum_message);
             error = 1;
         }
 
@@ -360,7 +367,7 @@ void init_uart_recv(uart_comm *uc) {
 
 void uart_frame_message( unsigned char * inner , unsigned char * outer )
 {
-    static unsigned char sent_counter = 0;    
+    static unsigned char sent_counter = 0;
 
     outer[0] = 0xff;                    //Insert start byte
     outer[1] = sent_counter++;          //Insert counter value

@@ -33,10 +33,10 @@ void uart_configure()
     SPBRG1 = 0xCF;   
     #else  //Alex: End definitions for the Mk 4
     #ifdef __USE18F45J10  //Alex: Begin definitions for the Mk 3
-    SPBRGH = 0x00;
-    SPBRG= 0xCF;
+    SPBRGH = 0x01;
+    SPBRG = 0x38;
     #endif  //Alex: End definitions for the Mk 3
-	#endif
+    #endif
 
     TXSTA1bits.SYNC = 0; //Alex: Set Asynchronous mode
     RCSTA1bits.SPEN = 1; //Alex: Enable UART module 1..or something
@@ -185,7 +185,7 @@ void uart_receive_interrupt_handler()
 //Send a UART Packet
 unsigned char send_uart_message( unsigned char * message_ptr )
 {
-    unsigned char message_q_code = FromMainLow_sendmsg(UART_DATA_LENGTH,MSGT_UART_DATA,(void *) message_ptr );
+    unsigned char message_q_code = FromMainLow_sendmsg(MOTOR_COMMAND_SIZE,MSGT_UART_DATA,(void *) message_ptr );
 
     if( message_q_code == MSGQUEUE_FULL)
     {
@@ -199,18 +199,19 @@ unsigned char send_uart_message( unsigned char * message_ptr )
 //Handle uart transmit handler
 void uart_transmit_interrupt_handler()
 {
+    blip();
 
     static unsigned char done = 1;
     static unsigned char index = 0;
 
-    unsigned char data[UART_DATA_LENGTH];
-    static unsigned char message[UART_FRAME_LENGTH];
+    unsigned char data[MOTOR_COMMAND_SIZE];
+    //static unsigned char message[MOTOR_COMMAND_SIZE];
 
     unsigned char msgtype = MSGT_UART_DATA;
 
     if( done )
     {
-        signed char message_status =  FromMainLow_recvmsg(UART_DATA_LENGTH,&msgtype, (void*)data );
+        signed char message_status =  FromMainLow_recvmsg(MOTOR_COMMAND_SIZE,&msgtype, (void*)data );
 
         if( message_status == MSGQUEUE_EMPTY)
         {
@@ -219,13 +220,13 @@ void uart_transmit_interrupt_handler()
         }
         else if( message_status > 0 )
         {
-            uart_frame_message( data , message );
+            //uart_frame_message( data , message );
             index = 0;
             done = 0;
 
-            TXREG1 = message[index];
+            TXREG1 = data[index];
             index++;
-            if( index >= UART_FRAME_LENGTH )
+            if( index >= MOTOR_COMMAND_SIZE )
             {
                 done = 1;
             }
@@ -247,9 +248,9 @@ void uart_transmit_interrupt_handler()
     else
     {
 
-        TXREG1 = message[index];
+        TXREG1 = data[index];
         index++;
-        if( index >= UART_FRAME_LENGTH )
+        if( index >= MOTOR_COMMAND_SIZE )
         {
             done = 1;
         }

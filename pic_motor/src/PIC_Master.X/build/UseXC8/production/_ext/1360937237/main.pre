@@ -6031,7 +6031,7 @@ void blip4();
 void blink0();
 void blink1();
 
-# 28 "../src/my_uart.h"
+# 31 "../src/my_uart.h"
 typedef struct
 {
 unsigned char data[(14 + 2 + 2)];
@@ -6055,7 +6055,7 @@ unsigned char byte_error;
 unsigned char acked;
 } uart_packet_type;
 
-# 57
+# 60
 unsigned char send_uart_message( unsigned char * message_ptr );
 
 
@@ -6067,7 +6067,7 @@ void uart_receive_interrupt_handler();
 
 void uart_transmit_interrupt_handler();
 
-# 79
+# 82
 unsigned char uart_num_bytes_in_recv_buffer();
 
 
@@ -6127,8 +6127,11 @@ int data;
 
 int timer0_lthread(timer0_thread_struct *,int,int,unsigned char*);
 
+# 12 "../src/motor.h"
+void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char right_side_speed );
 
-# 27 "../src/main.c"
+
+# 28 "../src/main.c"
 #pragma config WDTEN = OFF
 #pragma config STVREN = OFF
 
@@ -6153,7 +6156,7 @@ int timer0_lthread(timer0_thread_struct *,int,int,unsigned char*);
 
 #pragma config CCP2MX = DEFAULT
 
-# 188
+# 189
 void main(void) {
 char c;
 signed char length;
@@ -6167,11 +6170,11 @@ timer1_thread_struct t1thread_data;
 timer0_thread_struct t0thread_data;
 unsigned char need_sensor_data = 1;
 
-# 207
+# 208
 OSCCON = 0x82;
 OSCTUNEbits.PLLEN = 0;
 
-# 238
+# 239
 init_i2c(&ic);
 
 
@@ -6185,13 +6188,13 @@ init_queues();
 TRISB = 0x0;
 LATB = 0x0;
 
-# 262
+# 263
 OpenTimer0(0b11111111 & 0b10111111 & 0b11011111 & 0b11110110);
 
-# 271
+# 272
 OpenTimer1(0b11111111 & 0b11111111 & 0b11111111 & 0b11111101 & 0b11110111 & 0b11111111);
 
-# 278
+# 279
 IPR1bits.TMR1IP = 0;
 
 IPR1bits.RCIP = 0;
@@ -6199,32 +6202,29 @@ IPR1bits.RCIP = 0;
 
 IPR1bits.SSPIP = 1;
 
-# 292
+# 293
 i2c_configure_slave(0x9E);
 
-# 307
+# 308
 PIE1bits.SSPIE = 1;
 
-# 332
+# 333
 debug_configure();
 blip();
 blip1();
 blip2();
 blip3();
 
-# 345
+# 346
 enable_interrupts();
 
-# 358
+# 359
 uart_configure();
 
-unsigned char myByte1 = 0x44;
-unsigned char myByte2 = 0x44;
-
-# 374
+# 381
 while (1) {
 
-# 381
+# 388
 unsigned char motor_data[14];
 
 
@@ -6234,7 +6234,7 @@ for(poop=0;poop<14;poop++)
 motor_data[poop]=0x55;
 }
 
-# 395
+# 402
 length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -6251,6 +6251,22 @@ timer0_lthread(&t0thread_data, msgtype, length, msgbuffer);
 break;
 };
 case 40:
+{
+switch( msgbuffer[0] )
+{
+case 0x01:
+{
+i_like_to_moveit_moveit( msgbuffer[1] , msgbuffer[2] );
+blip();
+break;
+}
+default:
+{
+break;
+}
+}
+
+}
 case 41:
 {
 

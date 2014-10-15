@@ -2,9 +2,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 "1 ../src/timer1_thread.h
 [s S1134 `ui 1 ]
 [n S1134 __timer1_thread_struct msgcount ]
-"17 ../src/timer1_thread.c
-[v _blink0 `(i ~T0 @X0 0 ef ]
-"93 ../src/messages.h
+"41 ../src/debug.h
+[v _blink0 `(v ~T0 @X0 0 ef ]
+"57 ../src/my_uart.h
+[v _send_uart_message `(uc ~T0 @X0 0 ef1`*uc ]
+"94 ../src/messages.h
 [v _FromMainHigh_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 24: extern void __builtin_software_breakpoint(void);
@@ -8341,86 +8343,145 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;stdio.h: 201: extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
 [; ;stdio.h: 205: extern int sprintf(char *, const char *, ...);
 [; ;stdio.h: 206: extern int printf(const char *, ...);
-[; ;messages.h: 25: typedef struct __msg {
-[; ;messages.h: 26: unsigned char full;
-[; ;messages.h: 27: unsigned char length;
-[; ;messages.h: 28: unsigned char msgtype;
-[; ;messages.h: 29: unsigned char data[14];
-[; ;messages.h: 30: } msg;
-[; ;messages.h: 32: typedef struct __msg_queue {
-[; ;messages.h: 33: msg queue[8];
-[; ;messages.h: 34: unsigned char cur_write_ind;
-[; ;messages.h: 35: unsigned char cur_read_ind;
-[; ;messages.h: 36: } msg_queue;
-[; ;messages.h: 58: void init_queues(void);
-[; ;messages.h: 62: void SleepIfOkay(void);
-[; ;messages.h: 66: void block_on_To_msgqueues(void);
-[; ;messages.h: 72: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 73: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 79: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 80: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 86: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 87: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 93: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 94: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 26: typedef struct __msg {
+[; ;messages.h: 27: unsigned char full;
+[; ;messages.h: 28: unsigned char length;
+[; ;messages.h: 29: unsigned char msgtype;
+[; ;messages.h: 30: unsigned char data[14];
+[; ;messages.h: 31: } msg;
+[; ;messages.h: 33: typedef struct __msg_queue {
+[; ;messages.h: 34: msg queue[8];
+[; ;messages.h: 35: unsigned char cur_write_ind;
+[; ;messages.h: 36: unsigned char cur_read_ind;
+[; ;messages.h: 37: } msg_queue;
+[; ;messages.h: 59: void init_queues(void);
+[; ;messages.h: 63: void SleepIfOkay(void);
+[; ;messages.h: 67: void block_on_To_msgqueues(void);
+[; ;messages.h: 73: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 74: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 80: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 81: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 87: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 88: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 94: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 95: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 [; ;timer1_thread.h: 1: typedef struct __timer1_thread_struct {
 [; ;timer1_thread.h: 3: unsigned int msgcount;
 [; ;timer1_thread.h: 4: } timer1_thread_struct;
 [; ;timer1_thread.h: 6: void init_timer1_lthread(timer1_thread_struct *);
 [; ;timer1_thread.h: 7: int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
-"6 ../src/timer1_thread.c
+[; ;debug.h: 35: void debug_configure();
+[; ;debug.h: 36: void blip();
+[; ;debug.h: 37: void blip1();
+[; ;debug.h: 38: void blip2();
+[; ;debug.h: 39: void blip3();
+[; ;debug.h: 40: void blip4();
+[; ;debug.h: 41: void blink0();
+[; ;debug.h: 42: void blink1();
+[; ;my_uart.h: 28: typedef struct
+[; ;my_uart.h: 29: {
+[; ;my_uart.h: 30: unsigned char data[(14 + 2 + 2)];
+[; ;my_uart.h: 33: unsigned char index;
+[; ;my_uart.h: 34: unsigned char size;
+[; ;my_uart.h: 35: unsigned char done;
+[; ;my_uart.h: 36: } uart_buffer_type;
+[; ;my_uart.h: 38: typedef struct
+[; ;my_uart.h: 39: {
+[; ;my_uart.h: 40: unsigned char header;
+[; ;my_uart.h: 41: unsigned char checksum;
+[; ;my_uart.h: 42: unsigned char data[ (14 + 2 + 2) - 2 ];
+[; ;my_uart.h: 44: unsigned char bytes_received;
+[; ;my_uart.h: 45: unsigned char checksum_error;
+[; ;my_uart.h: 46: unsigned char count_error;
+[; ;my_uart.h: 47: unsigned char byte_error;
+[; ;my_uart.h: 48: unsigned char acked;
+[; ;my_uart.h: 49: } uart_packet_type;
+[; ;my_uart.h: 57: unsigned char send_uart_message( unsigned char * message_ptr );
+[; ;my_uart.h: 60: void uart_configure( );
+[; ;my_uart.h: 63: void uart_receive_interrupt_handler();
+[; ;my_uart.h: 66: void uart_transmit_interrupt_handler();
+[; ;my_uart.h: 79: unsigned char uart_num_bytes_in_recv_buffer();
+[; ;my_uart.h: 84: void uart_frame_message( unsigned char * inner , unsigned char * outer );
+"8 ../src/timer1_thread.c
 [v _init_timer1_lthread `(v ~T0 @X0 1 ef1`*S1134 ]
 {
-[; ;timer1_thread.c: 6: void init_timer1_lthread(timer1_thread_struct *tptr) {
+[; ;timer1_thread.c: 8: void init_timer1_lthread(timer1_thread_struct *tptr) {
 [e :U _init_timer1_lthread ]
 [v _tptr `*S1134 ~T0 @X0 1 r1 ]
 [f ]
-[; ;timer1_thread.c: 7: tptr->msgcount = 0;
-"7
+[; ;timer1_thread.c: 9: tptr->msgcount = 0;
+"9
 [e = . *U _tptr 0 -> -> 0 `i `ui ]
-[; ;timer1_thread.c: 8: }
-"8
-[e :UE 1135 ]
+[; ;timer1_thread.c: 10: }
+"10
+[e :UE 1137 ]
 }
-"14
+"16
 [v _timer1_lthread `(i ~T0 @X0 1 ef4`*S1134`i`i`*uc ]
 {
-[; ;timer1_thread.c: 14: int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
+[; ;timer1_thread.c: 16: int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
 [e :U _timer1_lthread ]
 [v _tptr `*S1134 ~T0 @X0 1 r1 ]
 [v _msgtype `i ~T0 @X0 1 r2 ]
 [v _length `i ~T0 @X0 1 r3 ]
 [v _msgbuffer `*uc ~T0 @X0 1 r4 ]
 [f ]
-"15
-[v _retval `c ~T0 @X0 1 a ]
-[; ;timer1_thread.c: 15: signed char retval;
-[; ;timer1_thread.c: 17: blink0();
 "17
-[e ( _blink0 ..  ]
-[; ;timer1_thread.c: 19: tptr->msgcount++;
+[v _retval `c ~T0 @X0 1 a ]
+[; ;timer1_thread.c: 17: signed char retval;
+[; ;timer1_thread.c: 19: blink0();
 "19
-[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 22: if ((tptr->msgcount % 10) == 9) {
+[e ( _blink0 ..  ]
+"21
+[v F9192 `uc ~T0 @X0 1 s left_speed ]
+[i F9192
+-> -> 0 `i `uc
+]
 "22
-[e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1137  ]
-{
-[; ;timer1_thread.c: 23: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
-"23
-[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
-[; ;timer1_thread.c: 24: if (retval < 0) {
+[v F9193 `uc ~T0 @X0 1 s right_speed ]
+[i F9193
+-> -> 0 `i `uc
+]
 "24
-[e $ ! < -> _retval `i -> 0 `i 1138  ]
-{
+[v _whatever_msg `uc ~T0 @X0 -> 14 `i a ]
+[; ;timer1_thread.c: 21: static unsigned char left_speed = 0;
+[; ;timer1_thread.c: 22: static unsigned char right_speed = 0;
+[; ;timer1_thread.c: 24: unsigned char whatever_msg[14];
+[; ;timer1_thread.c: 26: whatever_msg[0] = 0x01;
 "26
-}
-[e :U 1138 ]
+[e = *U + &U _whatever_msg * -> -> -> 0 `i `ui `ux -> -> # *U &U _whatever_msg `ui `ux -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 27: whatever_msg[1] = left_speed++;
 "27
-}
-[e :U 1137 ]
-[; ;timer1_thread.c: 26: }
-[; ;timer1_thread.c: 27: }
-[; ;timer1_thread.c: 28: }
+[e = *U + &U _whatever_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _whatever_msg `ui `ux ++ F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 28: whatever_msg[2] = right_speed++;
 "28
-[e :UE 1136 ]
+[e = *U + &U _whatever_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _whatever_msg `ui `ux ++ F9193 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 31: send_uart_message( whatever_msg );
+"31
+[e ( _send_uart_message (1 &U _whatever_msg ]
+[; ;timer1_thread.c: 33: tptr->msgcount++;
+"33
+[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
+[; ;timer1_thread.c: 36: if ((tptr->msgcount % 10) == 9) {
+"36
+[e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1139  ]
+{
+[; ;timer1_thread.c: 37: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+"37
+[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
+[; ;timer1_thread.c: 38: if (retval < 0) {
+"38
+[e $ ! < -> _retval `i -> 0 `i 1140  ]
+{
+"40
+}
+[e :U 1140 ]
+"41
+}
+[e :U 1139 ]
+[; ;timer1_thread.c: 40: }
+[; ;timer1_thread.c: 41: }
+[; ;timer1_thread.c: 42: }
+"42
+[e :UE 1138 ]
 }

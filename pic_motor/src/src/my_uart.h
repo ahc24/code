@@ -24,6 +24,9 @@
 #define UART_POS_FOOTER_BYTE UART_FRAME_LENGTH - 1
 #define UART_POS_CHECKSUM UART_FRAME_LENGTH - 2
 
+//UART Motor Command Stuff
+#define MOTOR_COMMAND_SIZE  2
+
 //Buffer to hold uart messages waiting to be transmitted or messages just recieved
 typedef struct
 {

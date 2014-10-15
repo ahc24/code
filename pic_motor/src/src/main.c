@@ -17,6 +17,7 @@
 #include "timer1_thread.h"
 #include "timer0_thread.h"
 #include "debug.h"
+#include "motor.h"
 
 
 
@@ -330,10 +331,10 @@ void main(void) {
 
     // Alex: Set registers for debug output
     debug_configure();
-	blip();
-	blip1();
-	blip2();
-	blip3();
+    blip();
+    blip1();
+    blip2();
+    blip3();
 	
     //uart_send_byte( 0x50 );
     //uart_send_byte( 0x54 );
@@ -352,13 +353,19 @@ void main(void) {
      */
 
 
-    //blip();
+
 
     //Alex: Configure UART for transmit and recieve
     uart_configure();
 
-    unsigned char myByte1 = 0x44;
-    unsigned char myByte2 = 0x44;
+    /*
+    blip();
+    unsigned char move_you_bastard[2];
+    move_you_bastard[0] = 0x85;
+    move_you_bastard[1] = 0x05;
+    send_uart_message( move_you_bastard );
+    blip();
+    */
 
     // printf() is available, but is not advisable.  It goes to the UART pin
     // on the PIC and then you must hook something up to that to view it.
@@ -378,14 +385,14 @@ void main(void) {
         // an idle mode)
         //block_on_To_msgqueues();
 
-		unsigned char motor_data[I2C_DATA_SIZE];
-		
-		//fill motor data with junk....for now
-		unsigned char poop;
-		for(poop=0;poop<I2C_DATA_SIZE;poop++)
-		{
-			motor_data[poop]=0x55;		
-		}
+        unsigned char motor_data[I2C_DATA_SIZE];
+
+        //fill motor data with junk....for now
+        unsigned char poop;
+        for(poop=0;poop<I2C_DATA_SIZE;poop++)
+        {
+                motor_data[poop]=0x55;
+        }
  
         // At this point, one or both of the queues has a message.  It
         // makes sense to check the high-priority messages first -- in fact,
@@ -408,6 +415,22 @@ void main(void) {
                     break;
                 };
                 case MSGT_I2C_DATA:
+                {
+                    switch( msgbuffer[0] )
+                    {
+                        case MSGID_MOVE:
+                        {
+                            i_like_to_moveit_moveit( msgbuffer[1] , msgbuffer[2] );
+                            blip();
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
+
+                }
                 case MSGT_I2C_DBG:
                 {
                     // Here is where you could handle debugging, if you wanted
@@ -417,7 +440,7 @@ void main(void) {
                 };
                 case MSGT_I2C_RQST:
                 {
-					FromMainHigh_sendmsg(I2C_DATA_SIZE,MSGT_I2C_DATA,(void *) motor_data);
+                    FromMainHigh_sendmsg(I2C_DATA_SIZE,MSGT_I2C_DATA,(void *) motor_data);
 					
                     break;
                 };
@@ -439,7 +462,7 @@ void main(void) {
         } 
         else
         {
-			unsigned char uart_response[UART_DATA_LENGTH];
+            unsigned char uart_response[UART_DATA_LENGTH];
             int jjj;
             for(jjj=0;jjj<UART_DATA_LENGTH;jjj++)
             {

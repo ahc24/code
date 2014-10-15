@@ -6024,7 +6024,7 @@ signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 28 "../src/my_uart.h"
+# 31 "../src/my_uart.h"
 typedef struct
 {
 unsigned char data[(14 + 2 + 2)];
@@ -6048,7 +6048,7 @@ unsigned char byte_error;
 unsigned char acked;
 } uart_packet_type;
 
-# 57
+# 60
 unsigned char send_uart_message( unsigned char * message_ptr );
 
 
@@ -6060,7 +6060,7 @@ void uart_receive_interrupt_handler();
 
 void uart_transmit_interrupt_handler();
 
-# 79
+# 82
 unsigned char uart_num_bytes_in_recv_buffer();
 
 
