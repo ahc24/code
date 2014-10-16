@@ -4673,16 +4673,29 @@ Version 3.2 HI-TECH Software Intermediate Code
 "14
 [v _moves `uc ~T0 @X0 -> 2 `i a ]
 [; ;motor.c: 14: unsigned char moves[2];
-[; ;motor.c: 17: moves[0] = (left_side_speed>>1) + 192;
+[; ;motor.c: 17: moves[0] = ((signed char)left_side_speed>>1) + 192;
 "17
-[e = *U + &U _moves * -> -> -> 0 `i `ui `ux -> -> # *U &U _moves `ui `ux -> + >> -> _left_side_speed `i -> 1 `i -> 192 `i `uc ]
-[; ;motor.c: 18: moves[1] = (right_side_speed>>1) + 64 ;
+[e = *U + &U _moves * -> -> -> 0 `i `ui `ux -> -> # *U &U _moves `ui `ux -> + >> -> -> _left_side_speed `c `i -> 1 `i -> 192 `i `uc ]
+[; ;motor.c: 18: moves[1] = ((signed char)right_side_speed>>1) + 64;
 "18
-[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> + >> -> _right_side_speed `i -> 1 `i -> 64 `i `uc ]
-[; ;motor.c: 20: send_uart_message(moves);
+[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> + >> -> -> _right_side_speed `c `i -> 1 `i -> 64 `i `uc ]
+[; ;motor.c: 20: if(moves[1] == 0)
 "20
-[e ( _send_uart_message (1 &U _moves ]
-[; ;motor.c: 22: }
+[e $ ! == -> *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> 0 `i 587  ]
+[; ;motor.c: 21: {
+"21
+{
+[; ;motor.c: 22: moves[1] = 1;
 "22
+[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -> 1 `i `uc ]
+"23
+}
+[e :U 587 ]
+[; ;motor.c: 23: }
+[; ;motor.c: 25: send_uart_message(moves);
+"25
+[e ( _send_uart_message (1 &U _moves ]
+[; ;motor.c: 27: }
+"27
 [e :UE 586 ]
 }

@@ -10891,7 +10891,7 @@ extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupport
 extern int sprintf(char *, const char *, ...);
 extern int printf(const char *, ...);
 
-# 26 "../src/messages.h"
+# 31 "../src/messages.h"
 typedef struct __msg {
 unsigned char full;
 unsigned char length;
@@ -10905,7 +10905,7 @@ unsigned char cur_write_ind;
 unsigned char cur_read_ind;
 } msg_queue;
 
-# 59
+# 64
 void init_queues(void);
 
 
@@ -10916,19 +10916,19 @@ void SleepIfOkay(void);
 
 void block_on_To_msgqueues(void);
 
-# 73
+# 78
 signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 80
+# 85
 signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 87
+# 92
 signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 94
+# 99
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
@@ -11006,17 +11006,102 @@ signed char retval;
 
 blink0();
 
-static unsigned char left_speed = 0;
-static unsigned char right_speed = 0;
+static unsigned char move_time = 40;
 
-unsigned char whatever_msg[14];
+unsigned char move_msg[14];
+move_msg[0] = 0x01;
 
-whatever_msg[0] = 0x01;
-whatever_msg[1] = left_speed++;
-whatever_msg[2] = right_speed++;
+# 33
+static unsigned char move_state = 0x00;
+switch(move_state)
+{
+case 0x00:
+{
+move_msg[1] = 127;
+move_msg[2] = 127;
+
+send_uart_message( move_msg );
+
+move_time--;
+
+if(move_time==0)
+{
+move_time = 40;
+move_state = 0x01;
+}
+break;
+}
+case 0x01:
+{
+move_msg[1] = (unsigned char)-128;
+move_msg[2] = (unsigned char)-128;
+
+send_uart_message( move_msg );
+
+move_time--;
+
+if(move_time==0)
+{
+move_time = 40;
+move_state = 0x02;
+}
+break;
+}
+case 0x02:
+{
+move_msg[1] = (unsigned char)-128;
+move_msg[2] = 127;
+
+send_uart_message( move_msg );
+
+move_time--;
+
+if(move_time==0)
+{
+move_time = 40;
+move_state = 0x03;
+}
+break;
+}
+case 0x03:
+{
+move_msg[1] = 127;
+move_msg[2] = (unsigned char)-128;
+send_uart_message( move_msg );
+
+move_time--;
+
+if(move_time==0)
+{
+move_time = 40;
+move_state = 0x04;
+}
+break;
+}
+case 0x04:
+{
+move_msg[1] = 0;
+move_msg[2] = 0;
+send_uart_message( move_msg );
+
+move_time--;
+
+if(move_time==0)
+{
+move_time = 40;
+move_state = 0x00;
+}
+break;
+}
+default:
+{
+move_time = 40;
+move_state = 0x00;
+break;
+}
 
 
-send_uart_message( whatever_msg );
+}
 
 tptr->msgcount++;
 

@@ -29,7 +29,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _init_i2c `(v ~T0 @X0 0 ef1`*S1136 ]
 "6 ../src/timer1_thread.h
 [v _init_timer1_lthread `(v ~T0 @X0 0 ef1`*S1138 ]
-"59 ../src/messages.h
+"64 ../src/messages.h
 [v _init_queues `(v ~T0 @X0 0 ef ]
 "8324 C:\Program Files (x86)\Microchip\xc8\v1.32\include\pic18f46j50.h
 [v _TRISB `Vuc ~T0 @X0 0 e@3987 ]
@@ -83,11 +83,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _enable_interrupts `(v ~T0 @X0 0 ef ]
 "60 ../src/my_uart.h
 [v _uart_configure `(v ~T0 @X0 0 ef ]
-"81 ../src/messages.h
+"86 ../src/messages.h
 [v _ToMainHigh_recvmsg `(c ~T0 @X0 0 ef3`uc`*uc`*v ]
 "6 ../src/timer0_thread.h
 [v _timer0_lthread `(i ~T0 @X0 0 ef4`*S1139`i`i`*uc ]
-"74 ../src/messages.h
+"79 ../src/messages.h
 [v _ToMainLow_recvmsg `(c ~T0 @X0 0 ef3`uc`*uc`*v ]
 "7 ../src/timer1_thread.h
 [v _timer1_lthread `(i ~T0 @X0 0 ef4`*S1138`i`i`*uc ]
@@ -8433,28 +8433,28 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interrupts.h: 16: int low_int_active(void);
 [; ;interrupts.h: 18: int in_low_int(void);
 [; ;interrupts.h: 21: int in_main(void);
-[; ;messages.h: 26: typedef struct __msg {
-[; ;messages.h: 27: unsigned char full;
-[; ;messages.h: 28: unsigned char length;
-[; ;messages.h: 29: unsigned char msgtype;
-[; ;messages.h: 30: unsigned char data[14];
-[; ;messages.h: 31: } msg;
-[; ;messages.h: 33: typedef struct __msg_queue {
-[; ;messages.h: 34: msg queue[8];
-[; ;messages.h: 35: unsigned char cur_write_ind;
-[; ;messages.h: 36: unsigned char cur_read_ind;
-[; ;messages.h: 37: } msg_queue;
-[; ;messages.h: 59: void init_queues(void);
-[; ;messages.h: 63: void SleepIfOkay(void);
-[; ;messages.h: 67: void block_on_To_msgqueues(void);
-[; ;messages.h: 73: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 74: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 80: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 81: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 87: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 88: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 94: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 95: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 31: typedef struct __msg {
+[; ;messages.h: 32: unsigned char full;
+[; ;messages.h: 33: unsigned char length;
+[; ;messages.h: 34: unsigned char msgtype;
+[; ;messages.h: 35: unsigned char data[14];
+[; ;messages.h: 36: } msg;
+[; ;messages.h: 38: typedef struct __msg_queue {
+[; ;messages.h: 39: msg queue[8];
+[; ;messages.h: 40: unsigned char cur_write_ind;
+[; ;messages.h: 41: unsigned char cur_read_ind;
+[; ;messages.h: 42: } msg_queue;
+[; ;messages.h: 64: void init_queues(void);
+[; ;messages.h: 68: void SleepIfOkay(void);
+[; ;messages.h: 72: void block_on_To_msgqueues(void);
+[; ;messages.h: 78: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 79: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 85: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 86: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 92: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 93: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 99: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 100: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 [; ;debug.h: 35: void debug_configure();
 [; ;debug.h: 36: void blip();
 [; ;debug.h: 37: void blip1();

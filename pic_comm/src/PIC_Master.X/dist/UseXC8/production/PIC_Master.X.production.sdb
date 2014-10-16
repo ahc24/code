@@ -1008,8 +1008,8 @@
 "16 C:\Users\alex\Documents\VI\School\Embedded\code\pic_comm\src/src/timer1_thread.c
 [v _timer1_lthread timer1_lthread `(i  1 e 2 0 ]
 {
-"24
-[v timer1_lthread@whatever_msg whatever_msg `[14]uc  1 a 14 37 ]
+"23
+[v timer1_lthread@move_msg move_msg `[14]uc  1 a 14 37 ]
 "17
 [v timer1_lthread@retval retval `c  1 a 1 51 ]
 [s S341 __timer1_thread_struct 2 `ui 1 msgcount 2 0 ]
@@ -1019,10 +1019,10 @@
 [v timer1_lthread@length length `i  1 p 2 33 ]
 [v timer1_lthread@msgbuffer msgbuffer `*.39uc  1 p 2 35 ]
 "21
-[v timer1_lthread@left_speed left_speed `uc  1 s 1 left_speed ]
-"22
-[v timer1_lthread@right_speed right_speed `uc  1 s 1 right_speed ]
-"42
+[v timer1_lthread@move_time move_time `uc  1 s 1 move_time ]
+"33
+[v timer1_lthread@move_state move_state `uc  1 s 1 move_state ]
+"133
 } 0
 "186 C:\Users\alex\Documents\VI\School\Embedded\code\pic_comm\src/src/my_uart.c
 [v _send_uart_message send_uart_message `(uc  1 e 1 0 ]

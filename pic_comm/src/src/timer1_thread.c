@@ -18,17 +18,108 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
 	
     blink0();	//Make LED0 blink
 
-    static unsigned char left_speed = 0;
-    static unsigned char right_speed = 0;
+    static unsigned char move_time = 40;
 
-    unsigned char whatever_msg[UART_DATA_LENGTH];
+    unsigned char move_msg[UART_DATA_LENGTH];
+    move_msg[0] = MSGID_MOVE;
+  
 
-    whatever_msg[0] = MSGID_MOVE;
-    whatever_msg[1] = left_speed++;
-    whatever_msg[2] = right_speed++;
+    #define FORWARD     0x00
+    #define BACKWARD    0x01
+    #define TURN_LEFT   0x02
+    #define TURN_RIGHT  0x03
+    #define STOP        0x04
+
+    static unsigned char move_state = FORWARD;
+    switch(move_state)
+    {
+        case FORWARD:
+        {
+           move_msg[1] = 127;
+           move_msg[2] = 127;
+
+           send_uart_message( move_msg );
+
+           move_time--;
+
+           if(move_time==0)
+           {
+                move_time = 40;
+                move_state = BACKWARD;
+           }
+           break;
+        }
+        case BACKWARD:
+        {
+            move_msg[1] = (unsigned char)-128;
+            move_msg[2] = (unsigned char)-128;
+
+            send_uart_message( move_msg );
+
+           move_time--;
+
+           if(move_time==0)
+           {
+                move_time = 40;
+                move_state = TURN_LEFT;
+           }
+           break;
+        }
+        case TURN_LEFT:
+        {
+            move_msg[1] = (unsigned char)-128;
+            move_msg[2] = 127;
+
+            send_uart_message( move_msg );
+
+            move_time--;
+
+            if(move_time==0)
+            {
+                move_time = 40;
+                move_state = TURN_RIGHT;
+            }
+            break;
+        }
+        case TURN_RIGHT:
+        {
+            move_msg[1] = 127;
+            move_msg[2] = (unsigned char)-128;
+            send_uart_message( move_msg );
+
+            move_time--;
+
+            if(move_time==0)
+            {
+                move_time = 40;
+                move_state = STOP;
+            }
+            break;
+        }
+        case STOP:
+        {
+            move_msg[1] = 0;
+            move_msg[2] = 0;
+            send_uart_message( move_msg );
+
+            move_time--;
+
+            if(move_time==0)
+            {
+                move_time = 40;
+                move_state = FORWARD;
+            }
+            break;
+        }
+        default:
+        {
+            move_time = 40;
+            move_state = FORWARD;
+            break;
+        }
 
 
-    send_uart_message( whatever_msg );
+    }
 
     tptr->msgcount++;
     // Every tenth message we get from timer1 we

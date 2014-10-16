@@ -945,7 +945,7 @@
 [v i_like_to_moveit_moveit@right_side_speed right_side_speed `uc  1 p 1 16 ]
 "17
 [v i_like_to_moveit_moveit@left_side_speed left_side_speed `uc  1 a 1 17 ]
-"22
+"27
 } 0
 "186 C:\Users\alex\Documents\VI\School\Embedded\code\pic_motor\src/src/my_uart.c
 [v _send_uart_message send_uart_message `(uc  1 e 1 0 ]

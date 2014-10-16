@@ -14,8 +14,13 @@ void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char righ
     unsigned char moves[MOTOR_COMMAND_SIZE];
 
     // Convert to motor simplified serial format
-    moves[0] = (left_side_speed>>1) + 192;
-    moves[1] = (right_side_speed>>1) + 64 ;
+    moves[0] = ((signed char)left_side_speed>>1) + 192;
+    moves[1] = ((signed char)right_side_speed>>1) + 64;
+
+    if(moves[1] == 0)
+    {
+        moves[1] = 1;
+    }
 
     send_uart_message(moves);
 

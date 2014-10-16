@@ -6,7 +6,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _blink0 `(v ~T0 @X0 0 ef ]
 "57 ../src/my_uart.h
 [v _send_uart_message `(uc ~T0 @X0 0 ef1`*uc ]
-"94 ../src/messages.h
+"99 ../src/messages.h
 [v _FromMainHigh_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 24: extern void __builtin_software_breakpoint(void);
@@ -8343,28 +8343,28 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;stdio.h: 201: extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
 [; ;stdio.h: 205: extern int sprintf(char *, const char *, ...);
 [; ;stdio.h: 206: extern int printf(const char *, ...);
-[; ;messages.h: 26: typedef struct __msg {
-[; ;messages.h: 27: unsigned char full;
-[; ;messages.h: 28: unsigned char length;
-[; ;messages.h: 29: unsigned char msgtype;
-[; ;messages.h: 30: unsigned char data[14];
-[; ;messages.h: 31: } msg;
-[; ;messages.h: 33: typedef struct __msg_queue {
-[; ;messages.h: 34: msg queue[8];
-[; ;messages.h: 35: unsigned char cur_write_ind;
-[; ;messages.h: 36: unsigned char cur_read_ind;
-[; ;messages.h: 37: } msg_queue;
-[; ;messages.h: 59: void init_queues(void);
-[; ;messages.h: 63: void SleepIfOkay(void);
-[; ;messages.h: 67: void block_on_To_msgqueues(void);
-[; ;messages.h: 73: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 74: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 80: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 81: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 87: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 88: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 94: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 95: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 31: typedef struct __msg {
+[; ;messages.h: 32: unsigned char full;
+[; ;messages.h: 33: unsigned char length;
+[; ;messages.h: 34: unsigned char msgtype;
+[; ;messages.h: 35: unsigned char data[14];
+[; ;messages.h: 36: } msg;
+[; ;messages.h: 38: typedef struct __msg_queue {
+[; ;messages.h: 39: msg queue[8];
+[; ;messages.h: 40: unsigned char cur_write_ind;
+[; ;messages.h: 41: unsigned char cur_read_ind;
+[; ;messages.h: 42: } msg_queue;
+[; ;messages.h: 64: void init_queues(void);
+[; ;messages.h: 68: void SleepIfOkay(void);
+[; ;messages.h: 72: void block_on_To_msgqueues(void);
+[; ;messages.h: 78: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 79: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 85: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 86: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 92: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 93: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 99: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 100: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 [; ;timer1_thread.h: 1: typedef struct __timer1_thread_struct {
 [; ;timer1_thread.h: 3: unsigned int msgcount;
 [; ;timer1_thread.h: 4: } timer1_thread_struct;
@@ -8433,55 +8433,284 @@ Version 3.2 HI-TECH Software Intermediate Code
 "19
 [e ( _blink0 ..  ]
 "21
-[v F9192 `uc ~T0 @X0 1 s left_speed ]
+[v F9192 `uc ~T0 @X0 1 s move_time ]
 [i F9192
--> -> 0 `i `uc
+-> -> 40 `i `uc
 ]
-"22
-[v F9193 `uc ~T0 @X0 1 s right_speed ]
-[i F9193
--> -> 0 `i `uc
-]
+"23
+[v _move_msg `uc ~T0 @X0 -> 14 `i a ]
+[; ;timer1_thread.c: 21: static unsigned char move_time = 40;
+[; ;timer1_thread.c: 23: unsigned char move_msg[14];
+[; ;timer1_thread.c: 24: move_msg[0] = 0x01;
 "24
-[v _whatever_msg `uc ~T0 @X0 -> 14 `i a ]
-[; ;timer1_thread.c: 21: static unsigned char left_speed = 0;
-[; ;timer1_thread.c: 22: static unsigned char right_speed = 0;
-[; ;timer1_thread.c: 24: unsigned char whatever_msg[14];
-[; ;timer1_thread.c: 26: whatever_msg[0] = 0x01;
-"26
-[e = *U + &U _whatever_msg * -> -> -> 0 `i `ui `ux -> -> # *U &U _whatever_msg `ui `ux -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 27: whatever_msg[1] = left_speed++;
-"27
-[e = *U + &U _whatever_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _whatever_msg `ui `ux ++ F9192 -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 28: whatever_msg[2] = right_speed++;
-"28
-[e = *U + &U _whatever_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _whatever_msg `ui `ux ++ F9193 -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 31: send_uart_message( whatever_msg );
-"31
-[e ( _send_uart_message (1 &U _whatever_msg ]
-[; ;timer1_thread.c: 33: tptr->msgcount++;
+[e = *U + &U _move_msg * -> -> -> 0 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 1 `i `uc ]
 "33
-[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 36: if ((tptr->msgcount % 10) == 9) {
+[v F9194 `uc ~T0 @X0 1 s move_state ]
+[i F9194
+-> -> 0 `i `uc
+]
+[; ;timer1_thread.c: 33: static unsigned char move_state = 0x00;
+[; ;timer1_thread.c: 34: switch(move_state)
+"34
+[e $U 1140  ]
+[; ;timer1_thread.c: 35: {
+"35
+{
+[; ;timer1_thread.c: 36: case 0x00:
 "36
-[e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1139  ]
-{
-[; ;timer1_thread.c: 37: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+[e :U 1141 ]
+[; ;timer1_thread.c: 37: {
 "37
-[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
-[; ;timer1_thread.c: 38: if (retval < 0) {
-"38
-[e $ ! < -> _retval `i -> 0 `i 1140  ]
 {
-"40
-}
-[e :U 1140 ]
+[; ;timer1_thread.c: 38: move_msg[1] = 127;
+"38
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 39: move_msg[2] = 127;
+"39
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 41: send_uart_message( move_msg );
 "41
+[e ( _send_uart_message (1 &U _move_msg ]
+[; ;timer1_thread.c: 43: move_time--;
+"43
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 45: if(move_time==0)
+"45
+[e $ ! == -> F9192 `i -> 0 `i 1142  ]
+[; ;timer1_thread.c: 46: {
+"46
+{
+[; ;timer1_thread.c: 47: move_time = 40;
+"47
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 48: move_state = 0x01;
+"48
+[e = F9194 -> -> 1 `i `uc ]
+"49
 }
+[e :U 1142 ]
+[; ;timer1_thread.c: 49: }
+[; ;timer1_thread.c: 50: break;
+"50
+[e $U 1139  ]
+"51
+}
+[; ;timer1_thread.c: 51: }
+[; ;timer1_thread.c: 52: case 0x01:
+"52
+[e :U 1143 ]
+[; ;timer1_thread.c: 53: {
+"53
+{
+[; ;timer1_thread.c: 54: move_msg[1] = (unsigned char)-128;
+"54
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
+[; ;timer1_thread.c: 55: move_msg[2] = (unsigned char)-128;
+"55
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
+[; ;timer1_thread.c: 57: send_uart_message( move_msg );
+"57
+[e ( _send_uart_message (1 &U _move_msg ]
+[; ;timer1_thread.c: 59: move_time--;
+"59
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 61: if(move_time==0)
+"61
+[e $ ! == -> F9192 `i -> 0 `i 1144  ]
+[; ;timer1_thread.c: 62: {
+"62
+{
+[; ;timer1_thread.c: 63: move_time = 40;
+"63
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 64: move_state = 0x02;
+"64
+[e = F9194 -> -> 2 `i `uc ]
+"65
+}
+[e :U 1144 ]
+[; ;timer1_thread.c: 65: }
+[; ;timer1_thread.c: 66: break;
+"66
+[e $U 1139  ]
+"67
+}
+[; ;timer1_thread.c: 67: }
+[; ;timer1_thread.c: 68: case 0x02:
+"68
+[e :U 1145 ]
+[; ;timer1_thread.c: 69: {
+"69
+{
+[; ;timer1_thread.c: 70: move_msg[1] = (unsigned char)-128;
+"70
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
+[; ;timer1_thread.c: 71: move_msg[2] = 127;
+"71
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 73: send_uart_message( move_msg );
+"73
+[e ( _send_uart_message (1 &U _move_msg ]
+[; ;timer1_thread.c: 75: move_time--;
+"75
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 77: if(move_time==0)
+"77
+[e $ ! == -> F9192 `i -> 0 `i 1146  ]
+[; ;timer1_thread.c: 78: {
+"78
+{
+[; ;timer1_thread.c: 79: move_time = 40;
+"79
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 80: move_state = 0x03;
+"80
+[e = F9194 -> -> 3 `i `uc ]
+"81
+}
+[e :U 1146 ]
+[; ;timer1_thread.c: 81: }
+[; ;timer1_thread.c: 82: break;
+"82
+[e $U 1139  ]
+"83
+}
+[; ;timer1_thread.c: 83: }
+[; ;timer1_thread.c: 84: case 0x03:
+"84
+[e :U 1147 ]
+[; ;timer1_thread.c: 85: {
+"85
+{
+[; ;timer1_thread.c: 86: move_msg[1] = 127;
+"86
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 87: move_msg[2] = (unsigned char)-128;
+"87
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
+[; ;timer1_thread.c: 88: send_uart_message( move_msg );
+"88
+[e ( _send_uart_message (1 &U _move_msg ]
+[; ;timer1_thread.c: 90: move_time--;
+"90
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 92: if(move_time==0)
+"92
+[e $ ! == -> F9192 `i -> 0 `i 1148  ]
+[; ;timer1_thread.c: 93: {
+"93
+{
+[; ;timer1_thread.c: 94: move_time = 40;
+"94
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 95: move_state = 0x04;
+"95
+[e = F9194 -> -> 4 `i `uc ]
+"96
+}
+[e :U 1148 ]
+[; ;timer1_thread.c: 96: }
+[; ;timer1_thread.c: 97: break;
+"97
+[e $U 1139  ]
+"98
+}
+[; ;timer1_thread.c: 98: }
+[; ;timer1_thread.c: 99: case 0x04:
+"99
+[e :U 1149 ]
+[; ;timer1_thread.c: 100: {
+"100
+{
+[; ;timer1_thread.c: 101: move_msg[1] = 0;
+"101
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 102: move_msg[2] = 0;
+"102
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 103: send_uart_message( move_msg );
+"103
+[e ( _send_uart_message (1 &U _move_msg ]
+[; ;timer1_thread.c: 105: move_time--;
+"105
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 107: if(move_time==0)
+"107
+[e $ ! == -> F9192 `i -> 0 `i 1150  ]
+[; ;timer1_thread.c: 108: {
+"108
+{
+[; ;timer1_thread.c: 109: move_time = 40;
+"109
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 110: move_state = 0x00;
+"110
+[e = F9194 -> -> 0 `i `uc ]
+"111
+}
+[e :U 1150 ]
+[; ;timer1_thread.c: 111: }
+[; ;timer1_thread.c: 112: break;
+"112
+[e $U 1139  ]
+"113
+}
+[; ;timer1_thread.c: 113: }
+[; ;timer1_thread.c: 114: default:
+"114
+[e :U 1151 ]
+[; ;timer1_thread.c: 115: {
+"115
+{
+[; ;timer1_thread.c: 116: move_time = 40;
+"116
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 117: move_state = 0x00;
+"117
+[e = F9194 -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 118: break;
+"118
+[e $U 1139  ]
+"119
+}
+"122
+}
+[; ;timer1_thread.c: 119: }
+[; ;timer1_thread.c: 122: }
+[e $U 1139  ]
+"34
+[e :U 1140 ]
+[e [\ F9194 , $ -> -> 0 `i `uc 1141
+ , $ -> -> 1 `i `uc 1143
+ , $ -> -> 2 `i `uc 1145
+ , $ -> -> 3 `i `uc 1147
+ , $ -> -> 4 `i `uc 1149
+ 1151 ]
+"122
 [e :U 1139 ]
-[; ;timer1_thread.c: 40: }
-[; ;timer1_thread.c: 41: }
-[; ;timer1_thread.c: 42: }
-"42
+[; ;timer1_thread.c: 124: tptr->msgcount++;
+"124
+[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
+[; ;timer1_thread.c: 127: if ((tptr->msgcount % 10) == 9) {
+"127
+[e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1152  ]
+{
+[; ;timer1_thread.c: 128: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+"128
+[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
+[; ;timer1_thread.c: 129: if (retval < 0) {
+"129
+[e $ ! < -> _retval `i -> 0 `i 1153  ]
+{
+"131
+}
+[e :U 1153 ]
+"132
+}
+[e :U 1152 ]
+[; ;timer1_thread.c: 131: }
+[; ;timer1_thread.c: 132: }
+[; ;timer1_thread.c: 133: }
+"133
 [e :UE 1138 ]
 }
