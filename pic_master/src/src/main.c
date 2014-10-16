@@ -517,7 +517,14 @@ void main(void) {
                         }
                         case MSGID_MOVE:
                         {
-                            i2c_master_send(14, msgbuffer);
+                            // Copy msgbuffer over for timer 1 to deal with
+                            for(i=0;i<UART_DATA_LENGTH;i++)
+                            {
+                                t1thread_data.move_msg[i] = msgbuffer[i];
+                            }
+
+                            t1thread_data.new_move_msg = 1;
+                            
                             break;
                         }                        
                         default:

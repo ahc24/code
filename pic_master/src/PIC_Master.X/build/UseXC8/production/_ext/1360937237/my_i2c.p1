@@ -9551,9 +9551,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_i2c.c: 318: ic_ptr->outbufind = 0;
 "318
 [e = . *U _ic_ptr 4 -> -> 0 `i `uc ]
-"319
-[v _g `i ~T0 @X0 1 a ]
-[; ;my_i2c.c: 319: int g;
 [; ;my_i2c.c: 321: ic_ptr->status = 0x5;
 "321
 [e = . *U _ic_ptr 7 -> -> 5 `i `uc ]

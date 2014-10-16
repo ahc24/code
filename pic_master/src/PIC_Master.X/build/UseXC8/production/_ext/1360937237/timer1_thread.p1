@@ -8451,29 +8451,52 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;timer1_thread.c: 19: blink0();
 "19
 [e ( _blink0 ..  ]
-[; ;timer1_thread.c: 48: tptr->msgcount++;
-"48
+[v F9223 `uc ~T0 @X0 -> 14 `i s ]
+[i F9223
+:U ..
+"24
+-> -> 4 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 254 `i `uc
+-> -> 254 `i `uc
+-> -> 170 `i `uc
+-> -> 255 `i `uc
+-> -> 255 `i `uc
+-> -> 254 `i `uc
+-> -> 254 `i `uc
+-> -> 170 `i `uc
+-> -> 17 `i `uc
+-> -> 51 `i `uc
+-> -> 69 `i `uc
+..
+]
+[v _sensor_request `uc ~T0 @X0 -> 14 `i a ]
+[; ;timer1_thread.c: 24: unsigned char sensor_request[14] = {0x04,0xff,0xff,0xfe,0xfe,0xaa,0xff,0xff,0xfe,0xfe,0xaa,0x11,0x33,0x45};
+[e = _sensor_request F9223 ]
+[; ;timer1_thread.c: 29: tptr->msgcount++;
+"29
 [e ++ . *U _tptr 0 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 51: if ((tptr->msgcount % 10) == 9) {
-"51
+[; ;timer1_thread.c: 32: if ((tptr->msgcount % 10) == 9) {
+"32
 [e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1140  ]
 {
-[; ;timer1_thread.c: 52: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
-"52
+[; ;timer1_thread.c: 33: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+"33
 [e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
-[; ;timer1_thread.c: 53: if (retval < 0) {
-"53
+[; ;timer1_thread.c: 34: if (retval < 0) {
+"34
 [e $ ! < -> _retval `i -> 0 `i 1141  ]
 {
-"55
+"36
 }
 [e :U 1141 ]
-"56
+"37
 }
 [e :U 1140 ]
-[; ;timer1_thread.c: 55: }
-[; ;timer1_thread.c: 56: }
-[; ;timer1_thread.c: 58: }
-"58
+[; ;timer1_thread.c: 36: }
+[; ;timer1_thread.c: 37: }
+[; ;timer1_thread.c: 39: }
+"39
 [e :UE 1139 ]
 }

@@ -11030,7 +11030,14 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
 signed char retval;
 blink0();
 
-# 48
+
+
+
+unsigned char sensor_request[14] = {0x04,0xff,0xff,0xfe,0xfe,0xaa,0xff,0xff,0xfe,0xfe,0xaa,0x11,0x33,0x45};
+
+
+
+
 tptr->msgcount++;
 
 

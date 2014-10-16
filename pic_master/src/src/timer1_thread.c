@@ -18,31 +18,26 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
     signed char retval;
     blink0();
 
-    /*
-    static unsigned char left_side_speed = 255;
-    static unsigned char right_side_speed = 255;
-    
-   
+    unsigned char sensor_request[14];
+    sensor_request[0]=0x02;
+
+    i2c_master_send(14,sensor_request);
+
+    static unsigned char move_counter = 0;
+
+    if( tptr->new_move_msg )
+    {
+        tptr->new_move_msg = 0;
+        move_counter = tptr->move_msg[4];
+    }
+
+    if( move_counter != 0 )
+    {
+        i2c_master_send(14,tptr->move_msg);
+        move_counter--;
+    }
 
     
-
-    unsigned char msg2[14] = {MSGID_SENSOR_REQUEST,0xff,0xff,0xfe,0xfe,0xaa,0xff,0xff,0xfe,0xfe,0xaa,0x11,0x33,0x45};
-
-    unsigned char msg3[14];
-    msg3[0] = MSGID_MOVE;
-    msg3[1] = left_side_speed++;
-    msg3[2] = right_side_speed++;
-    unsigned char msg4[14] = {MSGID_SENSOR_REQUEST,0xa9,0xa9,0xa9,0xa9,0xa9,0xff,0xff,0xfe,0xfe,0xaa,0x11,0x33,0x45};
-
-
-    
-    //send_uart_message( msg2 );
-
-    
-    i2c_master_send(14, msg2);
-    i2c_master_send(14, msg3);
-    i2c_master_send(14, msg4);
-    */
     
     
     tptr->msgcount++;
