@@ -11014,6 +11014,8 @@ void uart_frame_message( unsigned char * inner , unsigned char * outer );
 # 4 "../src/timer1_thread.h"
 typedef struct __timer1_thread_struct {
 
+unsigned char move_msg[14];
+unsigned char new_move_msg;
 unsigned int msgcount;
 } timer1_thread_struct;
 
@@ -11030,10 +11032,31 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
 signed char retval;
 blink0();
 
+unsigned char sensor_request[14];
+sensor_request[0]=0x04;
 
+i2c_master_send(14,sensor_request);
 
+static unsigned char move_counter = 0;
 
-unsigned char sensor_request[14] = {0x04,0xff,0xff,0xfe,0xfe,0xaa,0xff,0xff,0xfe,0xfe,0xaa,0x11,0x33,0x45};
+if( tptr->new_move_msg )
+{
+tptr->new_move_msg = 0;
+move_counter = tptr->move_msg[4];
+}
+
+if( move_counter != 0 )
+{
+i2c_master_send(14,tptr->move_msg);
+move_counter--;
+}
+else
+{
+tptr->move_msg[0]=0x01;
+tptr->move_msg[1]=0;
+tptr->move_msg[2]=0;
+i2c_master_send(14,tptr->move_msg);
+}
 
 
 

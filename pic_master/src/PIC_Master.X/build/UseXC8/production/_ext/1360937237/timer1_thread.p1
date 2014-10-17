@@ -1,9 +1,11 @@
 Version 3.2 HI-TECH Software Intermediate Code
 "4 ../src/timer1_thread.h
-[s S1137 `ui 1 ]
-[n S1137 __timer1_thread_struct msgcount ]
+[s S1137 `uc -> 14 `i `uc 1 `ui 1 ]
+[n S1137 __timer1_thread_struct move_msg new_move_msg msgcount ]
 "41 ../src/debug.h
 [v _blink0 `(v ~T0 @X0 0 ef ]
+"52 ../src/my_i2c.h
+[v _i2c_master_send `(uc ~T0 @X0 0 ef2`uc`*uc ]
 "98 ../src/messages.h
 [v _FromMainHigh_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
@@ -8417,10 +8419,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_uart.h: 79: unsigned char uart_num_bytes_in_recv_buffer();
 [; ;my_uart.h: 84: void uart_frame_message( unsigned char * inner , unsigned char * outer );
 [; ;timer1_thread.h: 4: typedef struct __timer1_thread_struct {
-[; ;timer1_thread.h: 6: unsigned int msgcount;
-[; ;timer1_thread.h: 7: } timer1_thread_struct;
-[; ;timer1_thread.h: 9: void init_timer1_lthread(timer1_thread_struct *);
-[; ;timer1_thread.h: 10: int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
+[; ;timer1_thread.h: 6: unsigned char move_msg[14];
+[; ;timer1_thread.h: 7: unsigned char new_move_msg;
+[; ;timer1_thread.h: 8: unsigned int msgcount;
+[; ;timer1_thread.h: 9: } timer1_thread_struct;
+[; ;timer1_thread.h: 11: void init_timer1_lthread(timer1_thread_struct *);
+[; ;timer1_thread.h: 12: int timer1_lthread(timer1_thread_struct *,int,int,unsigned char*);
 "9 ../src/timer1_thread.c
 [v _init_timer1_lthread `(v ~T0 @X0 1 ef1`*S1137 ]
 {
@@ -8430,7 +8434,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [f ]
 [; ;timer1_thread.c: 10: tptr->msgcount = 0;
 "10
-[e = . *U _tptr 0 -> -> 0 `i `ui ]
+[e = . *U _tptr 2 -> -> 0 `i `ui ]
 [; ;timer1_thread.c: 11: }
 "11
 [e :UE 1138 ]
@@ -8451,52 +8455,98 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;timer1_thread.c: 19: blink0();
 "19
 [e ( _blink0 ..  ]
-[v F9223 `uc ~T0 @X0 -> 14 `i s ]
-[i F9223
-:U ..
-"24
--> -> 4 `i `uc
--> -> 255 `i `uc
--> -> 255 `i `uc
--> -> 254 `i `uc
--> -> 254 `i `uc
--> -> 170 `i `uc
--> -> 255 `i `uc
--> -> 255 `i `uc
--> -> 254 `i `uc
--> -> 254 `i `uc
--> -> 170 `i `uc
--> -> 17 `i `uc
--> -> 51 `i `uc
--> -> 69 `i `uc
-..
-]
+"21
 [v _sensor_request `uc ~T0 @X0 -> 14 `i a ]
-[; ;timer1_thread.c: 24: unsigned char sensor_request[14] = {0x04,0xff,0xff,0xfe,0xfe,0xaa,0xff,0xff,0xfe,0xfe,0xaa,0x11,0x33,0x45};
-[e = _sensor_request F9223 ]
-[; ;timer1_thread.c: 29: tptr->msgcount++;
+[; ;timer1_thread.c: 21: unsigned char sensor_request[14];
+[; ;timer1_thread.c: 22: sensor_request[0]=0x04;
+"22
+[e = *U + &U _sensor_request * -> -> -> 0 `i `ui `ux -> -> # *U &U _sensor_request `ui `ux -> -> 4 `i `uc ]
+[; ;timer1_thread.c: 24: i2c_master_send(14,sensor_request);
+"24
+[e ( _i2c_master_send (2 , -> -> 14 `i `uc &U _sensor_request ]
+"26
+[v F9225 `uc ~T0 @X0 1 s move_counter ]
+[i F9225
+-> -> 0 `i `uc
+]
+[; ;timer1_thread.c: 26: static unsigned char move_counter = 0;
+[; ;timer1_thread.c: 28: if( tptr->new_move_msg )
+"28
+[e $ ! != -> . *U _tptr 1 `i -> -> -> 0 `i `uc `i 1140  ]
+[; ;timer1_thread.c: 29: {
 "29
-[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 32: if ((tptr->msgcount % 10) == 9) {
+{
+[; ;timer1_thread.c: 30: tptr->new_move_msg = 0;
+"30
+[e = . *U _tptr 1 -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 31: move_counter = tptr->move_msg[4];
+"31
+[e = F9225 *U + &U . *U _tptr 0 * -> -> -> 4 `i `ui `ux -> -> # *U &U . *U _tptr 0 `ui `ux ]
 "32
-[e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1140  ]
-{
-[; ;timer1_thread.c: 33: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
-"33
-[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
-[; ;timer1_thread.c: 34: if (retval < 0) {
-"34
-[e $ ! < -> _retval `i -> 0 `i 1141  ]
-{
-"36
-}
-[e :U 1141 ]
-"37
 }
 [e :U 1140 ]
-[; ;timer1_thread.c: 36: }
-[; ;timer1_thread.c: 37: }
-[; ;timer1_thread.c: 39: }
+[; ;timer1_thread.c: 32: }
+[; ;timer1_thread.c: 34: if( move_counter != 0 )
+"34
+[e $ ! != -> F9225 `i -> 0 `i 1141  ]
+[; ;timer1_thread.c: 35: {
+"35
+{
+[; ;timer1_thread.c: 36: i2c_master_send(14,tptr->move_msg);
+"36
+[e ( _i2c_master_send (2 , -> -> 14 `i `uc &U . *U _tptr 0 ]
+[; ;timer1_thread.c: 37: move_counter--;
+"37
+[e -- F9225 -> -> 1 `i `uc ]
+"38
+}
+[; ;timer1_thread.c: 38: }
+[e $U 1142  ]
 "39
+[e :U 1141 ]
+[; ;timer1_thread.c: 39: else
+[; ;timer1_thread.c: 40: {
+"40
+{
+[; ;timer1_thread.c: 41: tptr->move_msg[0]=0x01;
+"41
+[e = *U + &U . *U _tptr 0 * -> -> -> 0 `i `ui `ux -> -> # *U &U . *U _tptr 0 `ui `ux -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 42: tptr->move_msg[1]=0;
+"42
+[e = *U + &U . *U _tptr 0 * -> -> -> 1 `i `ui `ux -> -> # *U &U . *U _tptr 0 `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 43: tptr->move_msg[2]=0;
+"43
+[e = *U + &U . *U _tptr 0 * -> -> -> 2 `i `ui `ux -> -> # *U &U . *U _tptr 0 `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 44: i2c_master_send(14,tptr->move_msg);
+"44
+[e ( _i2c_master_send (2 , -> -> 14 `i `uc &U . *U _tptr 0 ]
+"45
+}
+[e :U 1142 ]
+[; ;timer1_thread.c: 45: }
+[; ;timer1_thread.c: 50: tptr->msgcount++;
+"50
+[e ++ . *U _tptr 2 -> -> 1 `i `ui ]
+[; ;timer1_thread.c: 53: if ((tptr->msgcount % 10) == 9) {
+"53
+[e $ ! == % . *U _tptr 2 -> -> 10 `i `ui -> -> 9 `i `ui 1143  ]
+{
+[; ;timer1_thread.c: 54: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+"54
+[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 2 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 2 `*v ]
+[; ;timer1_thread.c: 55: if (retval < 0) {
+"55
+[e $ ! < -> _retval `i -> 0 `i 1144  ]
+{
+"57
+}
+[e :U 1144 ]
+"58
+}
+[e :U 1143 ]
+[; ;timer1_thread.c: 57: }
+[; ;timer1_thread.c: 58: }
+[; ;timer1_thread.c: 60: }
+"60
 [e :UE 1139 ]
 }

@@ -33,8 +33,8 @@ void uart_configure()
     SPBRG1 = 0xCF;   
     #else  //Alex: End definitions for the Mk 4
     #ifdef __USE18F45J10  //Alex: Begin definitions for the Mk 3
-    SPBRGH = 0x01;
-    SPBRG = 0x38;
+    SPBRGH = 0x04;
+    SPBRG = 0xe1;
     #endif  //Alex: End definitions for the Mk 3
     #endif
 

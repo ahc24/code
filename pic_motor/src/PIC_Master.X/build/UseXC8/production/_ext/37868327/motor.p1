@@ -1,5 +1,5 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"60 C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/my_uart.h
+"65 C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/my_uart.h
 [v _send_uart_message `(uc ~T0 @X0 0 ef1`*uc ]
 [; ;messages.h: 25: typedef struct __msg {
 [; ;messages.h: 26: unsigned char full;
@@ -4633,69 +4633,172 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;debug.h: 40: void blip4();
 [; ;debug.h: 41: void blink0();
 [; ;debug.h: 42: void blink1();
-[; ;my_uart.h: 31: typedef struct
-[; ;my_uart.h: 32: {
-[; ;my_uart.h: 33: unsigned char data[(14 + 2 + 2)];
-[; ;my_uart.h: 36: unsigned char index;
-[; ;my_uart.h: 37: unsigned char size;
-[; ;my_uart.h: 38: unsigned char done;
-[; ;my_uart.h: 39: } uart_buffer_type;
-[; ;my_uart.h: 41: typedef struct
-[; ;my_uart.h: 42: {
-[; ;my_uart.h: 43: unsigned char header;
-[; ;my_uart.h: 44: unsigned char checksum;
-[; ;my_uart.h: 45: unsigned char data[ (14 + 2 + 2) - 2 ];
-[; ;my_uart.h: 47: unsigned char bytes_received;
-[; ;my_uart.h: 48: unsigned char checksum_error;
-[; ;my_uart.h: 49: unsigned char count_error;
-[; ;my_uart.h: 50: unsigned char byte_error;
-[; ;my_uart.h: 51: unsigned char acked;
-[; ;my_uart.h: 52: } uart_packet_type;
-[; ;my_uart.h: 60: unsigned char send_uart_message( unsigned char * message_ptr );
-[; ;my_uart.h: 63: void uart_configure( );
-[; ;my_uart.h: 66: void uart_receive_interrupt_handler();
-[; ;my_uart.h: 69: void uart_transmit_interrupt_handler();
-[; ;my_uart.h: 82: unsigned char uart_num_bytes_in_recv_buffer();
-[; ;my_uart.h: 87: void uart_frame_message( unsigned char * inner , unsigned char * outer );
-[; ;motor.h: 12: void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char right_side_speed );
+[; ;my_uart.h: 36: typedef struct
+[; ;my_uart.h: 37: {
+[; ;my_uart.h: 38: unsigned char data[(14 + 2 + 2)];
+[; ;my_uart.h: 41: unsigned char index;
+[; ;my_uart.h: 42: unsigned char size;
+[; ;my_uart.h: 43: unsigned char done;
+[; ;my_uart.h: 44: } uart_buffer_type;
+[; ;my_uart.h: 46: typedef struct
+[; ;my_uart.h: 47: {
+[; ;my_uart.h: 48: unsigned char header;
+[; ;my_uart.h: 49: unsigned char checksum;
+[; ;my_uart.h: 50: unsigned char data[ (14 + 2 + 2) - 2 ];
+[; ;my_uart.h: 52: unsigned char bytes_received;
+[; ;my_uart.h: 53: unsigned char checksum_error;
+[; ;my_uart.h: 54: unsigned char count_error;
+[; ;my_uart.h: 55: unsigned char byte_error;
+[; ;my_uart.h: 56: unsigned char acked;
+[; ;my_uart.h: 57: } uart_packet_type;
+[; ;my_uart.h: 65: unsigned char send_uart_message( unsigned char * message_ptr );
+[; ;my_uart.h: 68: void uart_configure( );
+[; ;my_uart.h: 71: void uart_receive_interrupt_handler();
+[; ;my_uart.h: 74: void uart_transmit_interrupt_handler();
+[; ;my_uart.h: 87: unsigned char uart_num_bytes_in_recv_buffer();
+[; ;my_uart.h: 92: void uart_frame_message( unsigned char * inner , unsigned char * outer );
+[; ;motor.h: 12: void i_like_to_moveit_moveit( signed char left_side_speed , signed char right_side_speed );
 "3 C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/motor.c
-[v _i_like_to_moveit_moveit `(v ~T0 @X0 1 ef2`uc`uc ]
+[v _i_like_to_moveit_moveit `(v ~T0 @X0 1 ef2`c`c ]
 "4
 {
-[; ;motor.c: 3: void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char right_side_speed )
+[; ;motor.c: 3: void i_like_to_moveit_moveit( signed char left_side_speed , signed char right_side_speed )
 [; ;motor.c: 4: {
 [e :U _i_like_to_moveit_moveit ]
 "3
-[v _left_side_speed `uc ~T0 @X0 1 r1 ]
-[v _right_side_speed `uc ~T0 @X0 1 r2 ]
+[v _left_side_speed `c ~T0 @X0 1 r1 ]
+[v _right_side_speed `c ~T0 @X0 1 r2 ]
 "4
 [f ]
+"5
+[v _moves `uc ~T0 @X0 -> 4 `i a ]
+[; ;motor.c: 5: unsigned char moves[4];
+[; ;motor.c: 11: moves[0] = 128;
+"11
+[e = *U + &U _moves * -> -> -> 0 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -> 128 `i `uc ]
+[; ;motor.c: 13: if( left_side_speed >=0 )
+"13
+[e $ ! >= -> _left_side_speed `i -> 0 `i 587  ]
+[; ;motor.c: 14: {
 "14
-[v _moves `uc ~T0 @X0 -> 2 `i a ]
-[; ;motor.c: 14: unsigned char moves[2];
-[; ;motor.c: 17: moves[0] = ((signed char)left_side_speed>>1) + 192;
-"17
-[e = *U + &U _moves * -> -> -> 0 `i `ui `ux -> -> # *U &U _moves `ui `ux -> + >> -> -> _left_side_speed `c `i -> 1 `i -> 192 `i `uc ]
-[; ;motor.c: 18: moves[1] = ((signed char)right_side_speed>>1) + 64;
-"18
-[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> + >> -> -> _right_side_speed `c `i -> 1 `i -> 64 `i `uc ]
-[; ;motor.c: 20: if(moves[1] == 0)
-"20
-[e $ ! == -> *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> 0 `i 587  ]
-[; ;motor.c: 21: {
-"21
 {
-[; ;motor.c: 22: moves[1] = 1;
-"22
-[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -> 1 `i `uc ]
-"23
+[; ;motor.c: 15: moves[1] = 0;
+"15
+[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -> 0 `i `uc ]
+[; ;motor.c: 16: moves[2] = left_side_speed;
+"16
+[e = *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux -> _left_side_speed `uc ]
+"17
 }
+[; ;motor.c: 17: }
+[e $U 588  ]
+"18
 [e :U 587 ]
-[; ;motor.c: 23: }
-[; ;motor.c: 25: send_uart_message(moves);
+[; ;motor.c: 18: else
+[; ;motor.c: 19: {
+"19
+{
+[; ;motor.c: 20: moves[1] = 1;
+"20
+[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -> 1 `i `uc ]
+[; ;motor.c: 22: if(left_side_speed == -128)
+"22
+[e $ ! == -> _left_side_speed `i -U -> 128 `i 589  ]
+[; ;motor.c: 23: {
+"23
+{
+[; ;motor.c: 24: moves[2] = (unsigned char)((-left_side_speed)-1);
+"24
+[e = *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux -> - -U -> _left_side_speed `i -> 1 `i `uc ]
 "25
-[e ( _send_uart_message (1 &U _moves ]
-[; ;motor.c: 27: }
+}
+[; ;motor.c: 25: }
+[e $U 590  ]
+"26
+[e :U 589 ]
+[; ;motor.c: 26: else
+[; ;motor.c: 27: {
 "27
+{
+[; ;motor.c: 28: moves[2] = (unsigned char)(-left_side_speed);
+"28
+[e = *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -U -> _left_side_speed `i `uc ]
+"29
+}
+[e :U 590 ]
+"30
+}
+[e :U 588 ]
+[; ;motor.c: 29: }
+[; ;motor.c: 30: }
+[; ;motor.c: 32: moves[3] = (moves[0] + moves[1] + moves[2])&127;
+"32
+[e = *U + &U _moves * -> -> -> 3 `i `ui `ux -> -> # *U &U _moves `ui `ux -> & + + -> *U + &U _moves * -> -> -> 0 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> 127 `i `uc ]
+[; ;motor.c: 34: send_uart_message(moves);
+"34
+[e ( _send_uart_message (1 &U _moves ]
+[; ;motor.c: 36: if( right_side_speed >=0 )
+"36
+[e $ ! >= -> _right_side_speed `i -> 0 `i 591  ]
+[; ;motor.c: 37: {
+"37
+{
+[; ;motor.c: 38: moves[1] = 4;
+"38
+[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -> 4 `i `uc ]
+[; ;motor.c: 39: moves[2] = right_side_speed;
+"39
+[e = *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux -> _right_side_speed `uc ]
+"40
+}
+[; ;motor.c: 40: }
+[e $U 592  ]
+"41
+[e :U 591 ]
+[; ;motor.c: 41: else
+[; ;motor.c: 42: {
+"42
+{
+[; ;motor.c: 43: moves[1] = 5;
+"43
+[e = *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -> 5 `i `uc ]
+[; ;motor.c: 45: if(right_side_speed == -128)
+"45
+[e $ ! == -> _right_side_speed `i -U -> 128 `i 593  ]
+[; ;motor.c: 46: {
+"46
+{
+[; ;motor.c: 47: moves[2] = (unsigned char)((-right_side_speed)-1);
+"47
+[e = *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux -> - -U -> _right_side_speed `i -> 1 `i `uc ]
+"48
+}
+[; ;motor.c: 48: }
+[e $U 594  ]
+"49
+[e :U 593 ]
+[; ;motor.c: 49: else
+[; ;motor.c: 50: {
+"50
+{
+[; ;motor.c: 51: moves[2] = (unsigned char)(-right_side_speed);
+"51
+[e = *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux -> -U -> _right_side_speed `i `uc ]
+"52
+}
+[e :U 594 ]
+"53
+}
+[e :U 592 ]
+[; ;motor.c: 52: }
+[; ;motor.c: 53: }
+[; ;motor.c: 55: moves[3] = (moves[0] + moves[1] + moves[2])&127;
+"55
+[e = *U + &U _moves * -> -> -> 3 `i `ui `ux -> -> # *U &U _moves `ui `ux -> & + + -> *U + &U _moves * -> -> -> 0 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> *U + &U _moves * -> -> -> 1 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> *U + &U _moves * -> -> -> 2 `i `ui `ux -> -> # *U &U _moves `ui `ux `i -> 127 `i `uc ]
+[; ;motor.c: 57: send_uart_message(moves);
+"57
+[e ( _send_uart_message (1 &U _moves ]
+[; ;motor.c: 59: }
+"59
 [e :UE 586 ]
 }

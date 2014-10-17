@@ -6019,7 +6019,7 @@ void blip4();
 void blink0();
 void blink1();
 
-# 31 "C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/my_uart.h"
+# 36 "C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/my_uart.h"
 typedef struct
 {
 unsigned char data[(14 + 2 + 2)];
@@ -6043,7 +6043,7 @@ unsigned char byte_error;
 unsigned char acked;
 } uart_packet_type;
 
-# 60
+# 65
 unsigned char send_uart_message( unsigned char * message_ptr );
 
 
@@ -6055,7 +6055,7 @@ void uart_receive_interrupt_handler();
 
 void uart_transmit_interrupt_handler();
 
-# 82
+# 87
 unsigned char uart_num_bytes_in_recv_buffer();
 
 
@@ -6064,23 +6064,59 @@ unsigned char uart_num_bytes_in_recv_buffer();
 void uart_frame_message( unsigned char * inner , unsigned char * outer );
 
 # 12 "C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/motor.h"
-void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char right_side_speed );
+void i_like_to_moveit_moveit( signed char left_side_speed , signed char right_side_speed );
 
 # 3 "C:/Users/alex/Documents/VI/School/Embedded/code/pic_motor/src/src/motor.c"
-void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char right_side_speed )
+void i_like_to_moveit_moveit( signed char left_side_speed , signed char right_side_speed )
 {
+unsigned char moves[4];
 
-# 14
-unsigned char moves[2];
+# 11
+moves[0] = 128;
 
-
-moves[0] = ((signed char)left_side_speed>>1) + 192;
-moves[1] = ((signed char)right_side_speed>>1) + 64;
-
-if(moves[1] == 0)
+if( left_side_speed >=0 )
+{
+moves[1] = 0;
+moves[2] = left_side_speed;
+}
+else
 {
 moves[1] = 1;
+
+if(left_side_speed == -128)
+{
+moves[2] = (unsigned char)((-left_side_speed)-1);
 }
+else
+{
+moves[2] = (unsigned char)(-left_side_speed);
+}
+}
+
+moves[3] = (moves[0] + moves[1] + moves[2])&127;
+
+send_uart_message(moves);
+
+if( right_side_speed >=0 )
+{
+moves[1] = 4;
+moves[2] = right_side_speed;
+}
+else
+{
+moves[1] = 5;
+
+if(right_side_speed == -128)
+{
+moves[2] = (unsigned char)((-right_side_speed)-1);
+}
+else
+{
+moves[2] = (unsigned char)(-right_side_speed);
+}
+}
+
+moves[3] = (moves[0] + moves[1] + moves[2])&127;
 
 send_uart_message(moves);
 

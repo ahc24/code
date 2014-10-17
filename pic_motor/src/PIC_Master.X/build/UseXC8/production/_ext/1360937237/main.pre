@@ -6031,7 +6031,7 @@ void blip4();
 void blink0();
 void blink1();
 
-# 31 "../src/my_uart.h"
+# 36 "../src/my_uart.h"
 typedef struct
 {
 unsigned char data[(14 + 2 + 2)];
@@ -6055,7 +6055,7 @@ unsigned char byte_error;
 unsigned char acked;
 } uart_packet_type;
 
-# 60
+# 65
 unsigned char send_uart_message( unsigned char * message_ptr );
 
 
@@ -6067,7 +6067,7 @@ void uart_receive_interrupt_handler();
 
 void uart_transmit_interrupt_handler();
 
-# 82
+# 87
 unsigned char uart_num_bytes_in_recv_buffer();
 
 
@@ -6128,7 +6128,7 @@ int data;
 int timer0_lthread(timer0_thread_struct *,int,int,unsigned char*);
 
 # 12 "../src/motor.h"
-void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char right_side_speed );
+void i_like_to_moveit_moveit( signed char left_side_speed , signed char right_side_speed );
 
 
 # 28 "../src/main.c"
@@ -6172,7 +6172,7 @@ unsigned char need_sensor_data = 1;
 
 # 208
 OSCCON = 0x82;
-OSCTUNEbits.PLLEN = 0;
+OSCTUNEbits.PLLEN = 1;
 
 # 239
 init_i2c(&ic);
@@ -6221,10 +6221,10 @@ enable_interrupts();
 # 359
 uart_configure();
 
-# 381
+# 383
 while (1) {
 
-# 388
+# 390
 unsigned char motor_data[14];
 
 
@@ -6234,7 +6234,7 @@ for(poop=0;poop<14;poop++)
 motor_data[poop]=0x55;
 }
 
-# 402
+# 404
 length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -6256,7 +6256,7 @@ switch( msgbuffer[0] )
 {
 case 0x01:
 {
-i_like_to_moveit_moveit( msgbuffer[1] , msgbuffer[2] );
+i_like_to_moveit_moveit( (signed char)msgbuffer[1] , (signed char)msgbuffer[2] );
 blip();
 break;
 }
@@ -6298,12 +6298,8 @@ if (length != -4) {
 }
 else
 {
-unsigned char uart_response[14];
-int jjj;
-for(jjj=0;jjj<14;jjj++)
-{
-uart_response[jjj] = 0;
-}
+
+# 475
 switch (msgtype)
 {
 case 11:
@@ -6315,41 +6311,28 @@ case 30:
 {}
 case 32:
 {
-uart_response[0] = 0xf1;
-uart_response[1] = msgbuffer[0];
-send_uart_message( uart_response );
-break;
+
+# 492
 }
 case 33:
 {
-uart_response[0] = 0xf2;
-uart_response[1] = msgbuffer[0];
-uart_response[2] = msgbuffer[1];
-send_uart_message( uart_response );
-break;
+
+# 502
 }
 case 34:
 {
-uart_response[0] = 0xf3;
-uart_response[1] = msgbuffer[0];
-send_uart_message( uart_response );
-break;
+
+# 511
 }
 case 35:
 {
-uart_response[0] = 0xf4;
-uart_response[1] = msgbuffer[0];
-send_uart_message( uart_response );
-break;
 
+# 521
 }
 case 36:
 {
-uart_response[0] = 0x11;
-uart_response[1] = msgbuffer[0];
-send_uart_message( uart_response );
-break;
 
+# 531
 }
 case 31:
 {

@@ -196,6 +196,8 @@ void main(void) {
     timer1_thread_struct t1thread_data; // info for timer1_lthread
     timer0_thread_struct t0thread_data; // info for timer0_lthread
 
+    t1thread_data.new_move_msg=0;
+
     #ifdef __USE18F2680
     OSCCON = 0xFC; // see datasheet
     // We have enough room below the Max Freq to enable the PLL for this chip

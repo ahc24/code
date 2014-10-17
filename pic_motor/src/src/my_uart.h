@@ -25,7 +25,12 @@
 #define UART_POS_CHECKSUM UART_FRAME_LENGTH - 2
 
 //UART Motor Command Stuff
-#define MOTOR_COMMAND_SIZE  2
+#define MOTOR_COMMAND_SIZE            4
+#define MOTOR_CONTROLLER_ADDRESS    128
+#define MOTOR_FORWARD_LEFT            0
+#define MOTOR_FORWARD_RIGHT           4
+#define MOTOR_BACKWARD_LEFT           1
+#define MOTOR_BACKWARD_RIGHT          5
 
 //Buffer to hold uart messages waiting to be transmitted or messages just recieved
 typedef struct

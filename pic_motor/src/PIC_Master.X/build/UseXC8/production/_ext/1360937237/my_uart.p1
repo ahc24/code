@@ -4740,30 +4740,30 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;debug.h: 40: void blip4();
 [; ;debug.h: 41: void blink0();
 [; ;debug.h: 42: void blink1();
-[; ;my_uart.h: 31: typedef struct
-[; ;my_uart.h: 32: {
-[; ;my_uart.h: 33: unsigned char data[(14 + 2 + 2)];
-[; ;my_uart.h: 36: unsigned char index;
-[; ;my_uart.h: 37: unsigned char size;
-[; ;my_uart.h: 38: unsigned char done;
-[; ;my_uart.h: 39: } uart_buffer_type;
-[; ;my_uart.h: 41: typedef struct
-[; ;my_uart.h: 42: {
-[; ;my_uart.h: 43: unsigned char header;
-[; ;my_uart.h: 44: unsigned char checksum;
-[; ;my_uart.h: 45: unsigned char data[ (14 + 2 + 2) - 2 ];
-[; ;my_uart.h: 47: unsigned char bytes_received;
-[; ;my_uart.h: 48: unsigned char checksum_error;
-[; ;my_uart.h: 49: unsigned char count_error;
-[; ;my_uart.h: 50: unsigned char byte_error;
-[; ;my_uart.h: 51: unsigned char acked;
-[; ;my_uart.h: 52: } uart_packet_type;
-[; ;my_uart.h: 60: unsigned char send_uart_message( unsigned char * message_ptr );
-[; ;my_uart.h: 63: void uart_configure( );
-[; ;my_uart.h: 66: void uart_receive_interrupt_handler();
-[; ;my_uart.h: 69: void uart_transmit_interrupt_handler();
-[; ;my_uart.h: 82: unsigned char uart_num_bytes_in_recv_buffer();
-[; ;my_uart.h: 87: void uart_frame_message( unsigned char * inner , unsigned char * outer );
+[; ;my_uart.h: 36: typedef struct
+[; ;my_uart.h: 37: {
+[; ;my_uart.h: 38: unsigned char data[(14 + 2 + 2)];
+[; ;my_uart.h: 41: unsigned char index;
+[; ;my_uart.h: 42: unsigned char size;
+[; ;my_uart.h: 43: unsigned char done;
+[; ;my_uart.h: 44: } uart_buffer_type;
+[; ;my_uart.h: 46: typedef struct
+[; ;my_uart.h: 47: {
+[; ;my_uart.h: 48: unsigned char header;
+[; ;my_uart.h: 49: unsigned char checksum;
+[; ;my_uart.h: 50: unsigned char data[ (14 + 2 + 2) - 2 ];
+[; ;my_uart.h: 52: unsigned char bytes_received;
+[; ;my_uart.h: 53: unsigned char checksum_error;
+[; ;my_uart.h: 54: unsigned char count_error;
+[; ;my_uart.h: 55: unsigned char byte_error;
+[; ;my_uart.h: 56: unsigned char acked;
+[; ;my_uart.h: 57: } uart_packet_type;
+[; ;my_uart.h: 65: unsigned char send_uart_message( unsigned char * message_ptr );
+[; ;my_uart.h: 68: void uart_configure( );
+[; ;my_uart.h: 71: void uart_receive_interrupt_handler();
+[; ;my_uart.h: 74: void uart_transmit_interrupt_handler();
+[; ;my_uart.h: 87: unsigned char uart_num_bytes_in_recv_buffer();
+[; ;my_uart.h: 92: void uart_frame_message( unsigned char * inner , unsigned char * outer );
 "22 ../src/my_uart.c
 [v _uart_configure `(v ~T0 @X0 1 ef ]
 "23
@@ -4784,12 +4784,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_uart.c: 28: TXSTA1bits.BRGH = 1;
 "28
 [e = . . _TXSTA1bits 0 2 -> -> 1 `i `uc ]
-[; ;my_uart.c: 36: SPBRGH = 0x01;
+[; ;my_uart.c: 36: SPBRGH = 0x04;
 "36
-[e = _SPBRGH -> -> 1 `i `uc ]
-[; ;my_uart.c: 37: SPBRG = 0x38;
+[e = _SPBRGH -> -> 4 `i `uc ]
+[; ;my_uart.c: 37: SPBRG = 0xe1;
 "37
-[e = _SPBRG -> -> 56 `i `uc ]
+[e = _SPBRG -> -> 225 `i `uc ]
 [; ;my_uart.c: 41: TXSTA1bits.SYNC = 0;
 "41
 [e = . . _TXSTA1bits 0 4 -> -> 0 `i `uc ]
@@ -5148,8 +5148,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [f ]
 "188
 [v _message_q_code `uc ~T0 @X0 1 a ]
-[; ;my_uart.c: 188: unsigned char message_q_code = FromMainLow_sendmsg(2,31,(void *) message_ptr );
-[e = _message_q_code -> ( _FromMainLow_sendmsg (3 , , -> -> 2 `i `uc -> -> 31 `i `uc -> _message_ptr `*v `uc ]
+[; ;my_uart.c: 188: unsigned char message_q_code = FromMainLow_sendmsg(4,31,(void *) message_ptr );
+[e = _message_q_code -> ( _FromMainLow_sendmsg (3 , , -> -> 4 `i `uc -> -> 31 `i `uc -> _message_ptr `*v `uc ]
 [; ;my_uart.c: 190: if( message_q_code == -1)
 "190
 [e $ ! == -> _message_q_code `i -U -> 1 `i 608  ]
@@ -5197,12 +5197,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 0 `i `uc
 ]
 "207
-[v _data `uc ~T0 @X0 -> 2 `i a ]
+[v _data `uc ~T0 @X0 -> 4 `i a ]
 "210
 [v _msgtype `uc ~T0 @X0 1 a ]
 [; ;my_uart.c: 204: static unsigned char done = 1;
 [; ;my_uart.c: 205: static unsigned char index = 0;
-[; ;my_uart.c: 207: unsigned char data[2];
+[; ;my_uart.c: 207: unsigned char data[4];
 [; ;my_uart.c: 210: unsigned char msgtype = 31;
 [e = _msgtype -> -> 31 `i `uc ]
 [; ;my_uart.c: 212: if( done )
@@ -5213,8 +5213,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 {
 "214
 [v _message_status `c ~T0 @X0 1 a ]
-[; ;my_uart.c: 214: signed char message_status = FromMainLow_recvmsg(2,&msgtype, (void*)data );
-[e = _message_status ( _FromMainLow_recvmsg (3 , , -> -> 2 `i `uc &U _msgtype -> &U _data `*v ]
+[; ;my_uart.c: 214: signed char message_status = FromMainLow_recvmsg(4,&msgtype, (void*)data );
+[e = _message_status ( _FromMainLow_recvmsg (3 , , -> -> 4 `i `uc &U _msgtype -> &U _data `*v ]
 [; ;my_uart.c: 216: if( message_status == -4)
 "216
 [e $ ! == -> _message_status `i -U -> 4 `i 611  ]
@@ -5247,9 +5247,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_uart.c: 228: index++;
 "228
 [e ++ F5173 -> -> 1 `i `uc ]
-[; ;my_uart.c: 229: if( index >= 2 )
+[; ;my_uart.c: 229: if( index >= 4 )
 "229
-[e $ ! >= -> F5173 `i -> 2 `i 614  ]
+[e $ ! >= -> F5173 `i -> 4 `i 614  ]
 [; ;my_uart.c: 230: {
 "230
 {
@@ -5327,9 +5327,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_uart.c: 252: index++;
 "252
 [e ++ F5173 -> -> 1 `i `uc ]
-[; ;my_uart.c: 253: if( index >= 2 )
+[; ;my_uart.c: 253: if( index >= 4 )
 "253
-[e $ ! >= -> F5173 `i -> 2 `i 623  ]
+[e $ ! >= -> F5173 `i -> 4 `i 623  ]
 [; ;my_uart.c: 254: {
 "254
 {

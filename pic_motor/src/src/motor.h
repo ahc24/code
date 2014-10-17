@@ -9,7 +9,7 @@
 #ifndef MOTOR_H
 #define	MOTOR_H
 
-void i_like_to_moveit_moveit( unsigned char left_side_speed , unsigned char right_side_speed );
+void i_like_to_moveit_moveit( signed char left_side_speed , signed char right_side_speed );
 
 #endif	/* MOTOR_H */
 

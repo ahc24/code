@@ -53,8 +53,8 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
                 move_time = 40;
                 move_state = BACKWARD;
 
-                move_msg[1] = (unsigned char)-SPEED;
-                move_msg[2] = (unsigned char)-SPEED;
+                move_msg[1] = (unsigned char)(-SPEED);
+                move_msg[2] = (unsigned char)(-SPEED);
 
                 send_uart_message( move_msg );
            }
@@ -69,7 +69,7 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
                 move_time = 40;
                 move_state = TURN_LEFT;
 
-                move_msg[1] = (unsigned char)-SPEED;
+                move_msg[1] = (unsigned char)(-SPEED);
                 move_msg[2] = SPEED;
 
                 send_uart_message( move_msg );
@@ -85,7 +85,7 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
                 move_time = 40;
                 move_state = TURN_RIGHT;
                 move_msg[1] = SPEED;
-                move_msg[2] = (unsigned char)-SPEED;
+                move_msg[2] = (unsigned char)(-SPEED);
                 send_uart_message( move_msg );
             }
             break;

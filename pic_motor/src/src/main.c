@@ -206,7 +206,7 @@ void main(void) {
     #else
     #ifdef __USE18F45J10
     OSCCON = 0x82; // see datasheeet
-    OSCTUNEbits.PLLEN = 0; // Makes the clock exceed the PIC's rated speed if the PLL is on
+    OSCTUNEbits.PLLEN = 1; // Makes the clock exceed the PIC's rated speed if the PLL is on
     #else
     #ifdef __USE18F26J50
     OSCCON = 0xE0; // see datasheeet
@@ -367,6 +367,8 @@ void main(void) {
     blip();
     */
 
+    //i_like_to_moveit_moveit( 127 , 127 );
+
     // printf() is available, but is not advisable.  It goes to the UART pin
     // on the PIC and then you must hook something up to that to view it.
     // It is also slow and is blocking, so it will perturb your code's operation
@@ -420,7 +422,7 @@ void main(void) {
                     {
                         case MSGID_MOVE:
                         {
-                            i_like_to_moveit_moveit( msgbuffer[1] , msgbuffer[2] );
+                            i_like_to_moveit_moveit( (signed char)msgbuffer[1] , (signed char)msgbuffer[2] );
                             blip();
                             break;
                         }
@@ -462,12 +464,14 @@ void main(void) {
         } 
         else
         {
+            /*
             unsigned char uart_response[UART_DATA_LENGTH];
             int jjj;
             for(jjj=0;jjj<UART_DATA_LENGTH;jjj++)
             {
                 uart_response[jjj] = 0;
             }
+             * */
             switch (msgtype)
             {
                 case MSGT_TIMER1:
@@ -479,40 +483,50 @@ void main(void) {
                 {}
                 case MSGT_UART_BAD_CHECKSUM:
                 {
+                    /*
                     uart_response[0] = MSGID_UART_BAD_CHECKSUM; //Set Message ID
                     uart_response[1] = msgbuffer[0];
                     send_uart_message( uart_response );
                     break;
+                    */
                 }
                 case MSGT_UART_BAD_COUNTER:
                 {
+                    /*
                     uart_response[0] = MSGID_UART_BAD_COUNTER; //Set Message ID
                     uart_response[1] = msgbuffer[0];
                     uart_response[2] = msgbuffer[1];
                     send_uart_message( uart_response );
                     break;
+                    */
                 }
                 case MSGT_UART_BAD_START:
                 {
+                    /*
                     uart_response[0] = MSGID_UART_BAD_START; //Set Message ID
                     uart_response[1] = msgbuffer[0];
                     send_uart_message( uart_response );
                     break;
+                    */
                 }
                 case MSGT_UART_BAD_END:
                 {
+                     /*
                     uart_response[0] = MSGID_UART_BAD_END; //Set Message ID
                     uart_response[1] = msgbuffer[0];
                     send_uart_message( uart_response );
                     break;
+                    */
 
                 }
                 case MSGT_UART_ACK_DATA:
                 {
+                     /*
                     uart_response[0] = MSGID_UART_ACK; //Set Message ID
                     uart_response[1] = msgbuffer[0];
                     send_uart_message( uart_response );
                     break;
+                    */
 
                 }
                 case MSGT_UART_DATA:
