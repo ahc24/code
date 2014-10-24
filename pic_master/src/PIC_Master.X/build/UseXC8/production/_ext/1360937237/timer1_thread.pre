@@ -11059,8 +11059,6 @@ i2c_master_send(14,tptr->move_msg);
 }
 
 
-
-
 tptr->msgcount++;
 
 

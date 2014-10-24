@@ -8444,273 +8444,298 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;timer1_thread.c: 24: move_msg[0] = 0x01;
 "24
 [e = *U + &U _move_msg * -> -> -> 0 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 1 `i `uc ]
-"33
+[; ;timer1_thread.c: 25: move_msg[4] = 40;
+"25
+[e = *U + &U _move_msg * -> -> -> 4 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 40 `i `uc ]
+"36
 [v F9194 `uc ~T0 @X0 1 s move_state ]
 [i F9194
 -> -> 0 `i `uc
 ]
-[; ;timer1_thread.c: 33: static unsigned char move_state = 0x00;
-[; ;timer1_thread.c: 34: switch(move_state)
-"34
-[e $U 1140  ]
-[; ;timer1_thread.c: 35: {
-"35
-{
-[; ;timer1_thread.c: 36: case 0x00:
-"36
-[e :U 1141 ]
-[; ;timer1_thread.c: 37: {
+[; ;timer1_thread.c: 36: static unsigned char move_state = 0x00;
+[; ;timer1_thread.c: 37: switch(move_state)
 "37
-{
-[; ;timer1_thread.c: 38: move_msg[1] = 127;
+[e $U 1140  ]
+[; ;timer1_thread.c: 38: {
 "38
-[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
-[; ;timer1_thread.c: 39: move_msg[2] = 127;
+{
+[; ;timer1_thread.c: 39: case 0x05:
 "39
-[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
-[; ;timer1_thread.c: 41: send_uart_message( move_msg );
+[e :U 1141 ]
+[; ;timer1_thread.c: 40: {
+"40
+{
+[; ;timer1_thread.c: 41: move_state = 0x00;
 "41
-[e ( _send_uart_message (1 &U _move_msg ]
-[; ;timer1_thread.c: 43: move_time--;
+[e = F9194 -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 43: move_msg[1] = 127;
 "43
-[e -- F9192 -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 45: if(move_time==0)
-"45
-[e $ ! == -> F9192 `i -> 0 `i 1142  ]
-[; ;timer1_thread.c: 46: {
-"46
-{
-[; ;timer1_thread.c: 47: move_time = 40;
-"47
-[e = F9192 -> -> 40 `i `uc ]
-[; ;timer1_thread.c: 48: move_state = 0x01;
-"48
-[e = F9194 -> -> 1 `i `uc ]
-"49
-}
-[e :U 1142 ]
-[; ;timer1_thread.c: 49: }
-[; ;timer1_thread.c: 50: break;
-"50
-[e $U 1139  ]
-"51
-}
-[; ;timer1_thread.c: 51: }
-[; ;timer1_thread.c: 52: case 0x01:
-"52
-[e :U 1143 ]
-[; ;timer1_thread.c: 53: {
-"53
-{
-[; ;timer1_thread.c: 54: move_msg[1] = (unsigned char)-128;
-"54
-[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
-[; ;timer1_thread.c: 55: move_msg[2] = (unsigned char)-128;
-"55
-[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
-[; ;timer1_thread.c: 57: send_uart_message( move_msg );
-"57
-[e ( _send_uart_message (1 &U _move_msg ]
-[; ;timer1_thread.c: 59: move_time--;
-"59
-[e -- F9192 -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 61: if(move_time==0)
-"61
-[e $ ! == -> F9192 `i -> 0 `i 1144  ]
-[; ;timer1_thread.c: 62: {
-"62
-{
-[; ;timer1_thread.c: 63: move_time = 40;
-"63
-[e = F9192 -> -> 40 `i `uc ]
-[; ;timer1_thread.c: 64: move_state = 0x02;
-"64
-[e = F9194 -> -> 2 `i `uc ]
-"65
-}
-[e :U 1144 ]
-[; ;timer1_thread.c: 65: }
-[; ;timer1_thread.c: 66: break;
-"66
-[e $U 1139  ]
-"67
-}
-[; ;timer1_thread.c: 67: }
-[; ;timer1_thread.c: 68: case 0x02:
-"68
-[e :U 1145 ]
-[; ;timer1_thread.c: 69: {
-"69
-{
-[; ;timer1_thread.c: 70: move_msg[1] = (unsigned char)-128;
-"70
-[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
-[; ;timer1_thread.c: 71: move_msg[2] = 127;
-"71
-[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
-[; ;timer1_thread.c: 73: send_uart_message( move_msg );
-"73
-[e ( _send_uart_message (1 &U _move_msg ]
-[; ;timer1_thread.c: 75: move_time--;
-"75
-[e -- F9192 -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 77: if(move_time==0)
-"77
-[e $ ! == -> F9192 `i -> 0 `i 1146  ]
-[; ;timer1_thread.c: 78: {
-"78
-{
-[; ;timer1_thread.c: 79: move_time = 40;
-"79
-[e = F9192 -> -> 40 `i `uc ]
-[; ;timer1_thread.c: 80: move_state = 0x03;
-"80
-[e = F9194 -> -> 3 `i `uc ]
-"81
-}
-[e :U 1146 ]
-[; ;timer1_thread.c: 81: }
-[; ;timer1_thread.c: 82: break;
-"82
-[e $U 1139  ]
-"83
-}
-[; ;timer1_thread.c: 83: }
-[; ;timer1_thread.c: 84: case 0x03:
-"84
-[e :U 1147 ]
-[; ;timer1_thread.c: 85: {
-"85
-{
-[; ;timer1_thread.c: 86: move_msg[1] = 127;
-"86
 [e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
-[; ;timer1_thread.c: 87: move_msg[2] = (unsigned char)-128;
-"87
-[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 128 `i `uc ]
-[; ;timer1_thread.c: 88: send_uart_message( move_msg );
-"88
+[; ;timer1_thread.c: 44: move_msg[2] = 127;
+"44
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 45: send_uart_message( move_msg );
+"45
 [e ( _send_uart_message (1 &U _move_msg ]
-[; ;timer1_thread.c: 90: move_time--;
-"90
-[e -- F9192 -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 92: if(move_time==0)
-"92
-[e $ ! == -> F9192 `i -> 0 `i 1148  ]
-[; ;timer1_thread.c: 93: {
-"93
+"46
+}
+[; ;timer1_thread.c: 46: }
+[; ;timer1_thread.c: 47: case 0x00:
+"47
+[e :U 1142 ]
+[; ;timer1_thread.c: 48: {
+"48
 {
-[; ;timer1_thread.c: 94: move_time = 40;
-"94
+[; ;timer1_thread.c: 49: move_time--;
+"49
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 51: if(move_time==0)
+"51
+[e $ ! == -> F9192 `i -> 0 `i 1143  ]
+[; ;timer1_thread.c: 52: {
+"52
+{
+[; ;timer1_thread.c: 53: move_time = 40;
+"53
 [e = F9192 -> -> 40 `i `uc ]
-[; ;timer1_thread.c: 95: move_state = 0x04;
-"95
-[e = F9194 -> -> 4 `i `uc ]
-"96
+[; ;timer1_thread.c: 54: move_state = 0x01;
+"54
+[e = F9194 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 56: move_msg[1] = (unsigned char)(-127);
+"56
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 127 `i `uc ]
+[; ;timer1_thread.c: 57: move_msg[2] = (unsigned char)(-127);
+"57
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 127 `i `uc ]
+[; ;timer1_thread.c: 59: send_uart_message( move_msg );
+"59
+[e ( _send_uart_message (1 &U _move_msg ]
+"60
 }
-[e :U 1148 ]
-[; ;timer1_thread.c: 96: }
-[; ;timer1_thread.c: 97: break;
-"97
+[e :U 1143 ]
+[; ;timer1_thread.c: 60: }
+[; ;timer1_thread.c: 61: break;
+"61
 [e $U 1139  ]
-"98
+"62
 }
-[; ;timer1_thread.c: 98: }
-[; ;timer1_thread.c: 99: case 0x04:
+[; ;timer1_thread.c: 62: }
+[; ;timer1_thread.c: 63: case 0x01:
+"63
+[e :U 1144 ]
+[; ;timer1_thread.c: 64: {
+"64
+{
+[; ;timer1_thread.c: 65: move_time--;
+"65
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 67: if(move_time==0)
+"67
+[e $ ! == -> F9192 `i -> 0 `i 1145  ]
+[; ;timer1_thread.c: 68: {
+"68
+{
+[; ;timer1_thread.c: 69: move_time = 40;
+"69
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 70: move_state = 0x02;
+"70
+[e = F9194 -> -> 2 `i `uc ]
+[; ;timer1_thread.c: 72: move_msg[1] = (unsigned char)(-127);
+"72
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 127 `i `uc ]
+[; ;timer1_thread.c: 73: move_msg[2] = 127;
+"73
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 75: send_uart_message( move_msg );
+"75
+[e ( _send_uart_message (1 &U _move_msg ]
+"76
+}
+[e :U 1145 ]
+[; ;timer1_thread.c: 76: }
+[; ;timer1_thread.c: 77: break;
+"77
+[e $U 1139  ]
+"78
+}
+[; ;timer1_thread.c: 78: }
+[; ;timer1_thread.c: 79: case 0x02:
+"79
+[e :U 1146 ]
+[; ;timer1_thread.c: 80: {
+"80
+{
+[; ;timer1_thread.c: 81: move_time--;
+"81
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 83: if(move_time==0)
+"83
+[e $ ! == -> F9192 `i -> 0 `i 1147  ]
+[; ;timer1_thread.c: 84: {
+"84
+{
+[; ;timer1_thread.c: 85: move_time = 40;
+"85
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 86: move_state = 0x03;
+"86
+[e = F9194 -> -> 3 `i `uc ]
+[; ;timer1_thread.c: 87: move_msg[1] = 127;
+"87
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 88: move_msg[2] = (unsigned char)(-127);
+"88
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -U -> 127 `i `uc ]
+[; ;timer1_thread.c: 89: send_uart_message( move_msg );
+"89
+[e ( _send_uart_message (1 &U _move_msg ]
+"90
+}
+[e :U 1147 ]
+[; ;timer1_thread.c: 90: }
+[; ;timer1_thread.c: 91: break;
+"91
+[e $U 1139  ]
+"92
+}
+[; ;timer1_thread.c: 92: }
+[; ;timer1_thread.c: 93: case 0x03:
+"93
+[e :U 1148 ]
+[; ;timer1_thread.c: 94: {
+"94
+{
+[; ;timer1_thread.c: 97: move_time--;
+"97
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 99: if(move_time==0)
 "99
-[e :U 1149 ]
+[e $ ! == -> F9192 `i -> 0 `i 1149  ]
 [; ;timer1_thread.c: 100: {
 "100
 {
-[; ;timer1_thread.c: 101: move_msg[1] = 0;
+[; ;timer1_thread.c: 101: move_time = 40;
 "101
-[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 102: move_msg[2] = 0;
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 102: move_state = 0x04;
 "102
-[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 103: send_uart_message( move_msg );
+[e = F9194 -> -> 4 `i `uc ]
+[; ;timer1_thread.c: 103: move_msg[1] = 0;
 "103
-[e ( _send_uart_message (1 &U _move_msg ]
-[; ;timer1_thread.c: 105: move_time--;
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 104: move_msg[2] = 0;
+"104
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 105: send_uart_message( move_msg );
 "105
-[e -- F9192 -> -> 1 `i `uc ]
-[; ;timer1_thread.c: 107: if(move_time==0)
+[e ( _send_uart_message (1 &U _move_msg ]
+"106
+}
+[e :U 1149 ]
+[; ;timer1_thread.c: 106: }
+[; ;timer1_thread.c: 107: break;
 "107
-[e $ ! == -> F9192 `i -> 0 `i 1150  ]
-[; ;timer1_thread.c: 108: {
+[e $U 1139  ]
 "108
-{
-[; ;timer1_thread.c: 109: move_time = 40;
+}
+[; ;timer1_thread.c: 108: }
+[; ;timer1_thread.c: 109: case 0x04:
 "109
-[e = F9192 -> -> 40 `i `uc ]
-[; ;timer1_thread.c: 110: move_state = 0x00;
-"110
-[e = F9194 -> -> 0 `i `uc ]
-"111
-}
 [e :U 1150 ]
-[; ;timer1_thread.c: 111: }
-[; ;timer1_thread.c: 112: break;
-"112
-[e $U 1139  ]
+[; ;timer1_thread.c: 110: {
+"110
+{
+[; ;timer1_thread.c: 111: move_time--;
+"111
+[e -- F9192 -> -> 1 `i `uc ]
+[; ;timer1_thread.c: 113: if(move_time==0)
 "113
-}
-[; ;timer1_thread.c: 113: }
-[; ;timer1_thread.c: 114: default:
+[e $ ! == -> F9192 `i -> 0 `i 1151  ]
+[; ;timer1_thread.c: 114: {
 "114
-[e :U 1151 ]
-[; ;timer1_thread.c: 115: {
+{
+[; ;timer1_thread.c: 115: move_time = 40;
 "115
-{
-[; ;timer1_thread.c: 116: move_time = 40;
-"116
 [e = F9192 -> -> 40 `i `uc ]
-[; ;timer1_thread.c: 117: move_state = 0x00;
-"117
+[; ;timer1_thread.c: 116: move_state = 0x00;
+"116
 [e = F9194 -> -> 0 `i `uc ]
-[; ;timer1_thread.c: 118: break;
+[; ;timer1_thread.c: 117: move_msg[1] = 127;
+"117
+[e = *U + &U _move_msg * -> -> -> 1 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 118: move_msg[2] = 127;
 "118
-[e $U 1139  ]
+[e = *U + &U _move_msg * -> -> -> 2 `i `ui `ux -> -> # *U &U _move_msg `ui `ux -> -> 127 `i `uc ]
+[; ;timer1_thread.c: 119: send_uart_message( move_msg );
 "119
+[e ( _send_uart_message (1 &U _move_msg ]
+"120
 }
-"122
-}
-[; ;timer1_thread.c: 119: }
-[; ;timer1_thread.c: 122: }
+[e :U 1151 ]
+[; ;timer1_thread.c: 120: }
+[; ;timer1_thread.c: 121: break;
+"121
 [e $U 1139  ]
-"34
-[e :U 1140 ]
-[e [\ F9194 , $ -> -> 0 `i `uc 1141
- , $ -> -> 1 `i `uc 1143
- , $ -> -> 2 `i `uc 1145
- , $ -> -> 3 `i `uc 1147
- , $ -> -> 4 `i `uc 1149
- 1151 ]
 "122
-[e :U 1139 ]
-[; ;timer1_thread.c: 124: tptr->msgcount++;
+}
+[; ;timer1_thread.c: 122: }
+[; ;timer1_thread.c: 123: default:
+"123
+[e :U 1152 ]
+[; ;timer1_thread.c: 124: {
 "124
-[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 127: if ((tptr->msgcount % 10) == 9) {
+{
+[; ;timer1_thread.c: 125: move_time = 40;
+"125
+[e = F9192 -> -> 40 `i `uc ]
+[; ;timer1_thread.c: 126: move_state = 0x00;
+"126
+[e = F9194 -> -> 0 `i `uc ]
+[; ;timer1_thread.c: 127: break;
 "127
-[e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1152  ]
-{
-[; ;timer1_thread.c: 128: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+[e $U 1139  ]
 "128
-[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
-[; ;timer1_thread.c: 129: if (retval < 0) {
-"129
-[e $ ! < -> _retval `i -> 0 `i 1153  ]
-{
+}
 "131
 }
-[e :U 1153 ]
-"132
-}
-[e :U 1152 ]
+[; ;timer1_thread.c: 128: }
 [; ;timer1_thread.c: 131: }
-[; ;timer1_thread.c: 132: }
-[; ;timer1_thread.c: 133: }
+[e $U 1139  ]
+"37
+[e :U 1140 ]
+[e [\ F9194 , $ -> -> 5 `i `uc 1141
+ , $ -> -> 0 `i `uc 1142
+ , $ -> -> 1 `i `uc 1144
+ , $ -> -> 2 `i `uc 1146
+ , $ -> -> 3 `i `uc 1148
+ , $ -> -> 4 `i `uc 1150
+ 1152 ]
+"131
+[e :U 1139 ]
+[; ;timer1_thread.c: 133: tptr->msgcount++;
 "133
+[e ++ . *U _tptr 0 -> -> 1 `i `ui ]
+[; ;timer1_thread.c: 136: if ((tptr->msgcount % 10) == 9) {
+"136
+[e $ ! == % . *U _tptr 0 -> -> 10 `i `ui -> -> 9 `i `ui 1153  ]
+{
+[; ;timer1_thread.c: 137: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+"137
+[e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 0 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 0 `*v ]
+[; ;timer1_thread.c: 138: if (retval < 0) {
+"138
+[e $ ! < -> _retval `i -> 0 `i 1154  ]
+{
+"140
+}
+[e :U 1154 ]
+"141
+}
+[e :U 1153 ]
+[; ;timer1_thread.c: 140: }
+[; ;timer1_thread.c: 141: }
+[; ;timer1_thread.c: 142: }
+"142
 [e :UE 1138 ]
 }

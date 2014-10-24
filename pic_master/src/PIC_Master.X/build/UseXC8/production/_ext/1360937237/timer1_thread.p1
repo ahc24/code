@@ -8524,29 +8524,29 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 1142 ]
 [; ;timer1_thread.c: 45: }
-[; ;timer1_thread.c: 50: tptr->msgcount++;
-"50
+[; ;timer1_thread.c: 48: tptr->msgcount++;
+"48
 [e ++ . *U _tptr 2 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 53: if ((tptr->msgcount % 10) == 9) {
-"53
+[; ;timer1_thread.c: 51: if ((tptr->msgcount % 10) == 9) {
+"51
 [e $ ! == % . *U _tptr 2 -> -> 10 `i `ui -> -> 9 `i `ui 1143  ]
 {
-[; ;timer1_thread.c: 54: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
-"54
+[; ;timer1_thread.c: 52: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+"52
 [e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 2 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 2 `*v ]
-[; ;timer1_thread.c: 55: if (retval < 0) {
-"55
+[; ;timer1_thread.c: 53: if (retval < 0) {
+"53
 [e $ ! < -> _retval `i -> 0 `i 1144  ]
 {
-"57
+"55
 }
 [e :U 1144 ]
-"58
+"56
 }
 [e :U 1143 ]
-[; ;timer1_thread.c: 57: }
+[; ;timer1_thread.c: 55: }
+[; ;timer1_thread.c: 56: }
 [; ;timer1_thread.c: 58: }
-[; ;timer1_thread.c: 60: }
-"60
+"58
 [e :UE 1139 ]
 }

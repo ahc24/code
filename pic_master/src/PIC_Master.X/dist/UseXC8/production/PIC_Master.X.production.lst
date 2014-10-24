@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC18 LITE Macro Assembler V1.32 build 58300 
-                                                                                               Fri Oct 17 16:10:40 2014
+                                                                                               Fri Oct 17 16:52:12 2014
 
 Microchip Technology Omniscient Code Generator (Lite mode) build 58300
      1                           	processor	18F46J50
@@ -2111,7 +2111,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   2089  000A5E                     l4039:
   2090                           
   2091                           ;timer1_thread.c: 45: }
-  2092                           ;timer1_thread.c: 50: tptr->msgcount++;
+  2092                           ;timer1_thread.c: 48: tptr->msgcount++;
   2093  000A5E  0101               	movlb	1	; () banked
   2094  000A60  EE20 F00F          	lfsr	2,15
   2095  000A64  0101               	movlb	1	; () banked
@@ -2125,7 +2125,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   2103  000A74  22DD               	addwfc	postdec2,f,c
   2104                           
   2105                           ; BSR set to: 1
-  2106                           ;timer1_thread.c: 53: if ((tptr->msgcount % 10) == 9) {
+  2106                           ;timer1_thread.c: 51: if ((tptr->msgcount % 10) == 9) {
   2107  000A76  0101               	movlb	1	; () banked
   2108  000A78  EE20 F00F          	lfsr	2,15
   2109  000A7C  0101               	movlb	1	; () banked
@@ -2154,7 +2154,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   2132  000AB0  0012               	return	
   2133                           
   2134                           ; BSR set to: 0
-  2135                           ;timer1_thread.c: 54: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *
+  2135                           ;timer1_thread.c: 52: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *
       +                          ) &(tptr->msgcount));
   2136  000AB2  0E14               	movlw	20
   2137  000AB4  0100               	movlb	0	; () banked
@@ -11135,7 +11135,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V1.32 build 58300 
-Symbol Table                                                                                   Fri Oct 17 16:10:40 2014
+Symbol Table                                                                                   Fri Oct 17 16:52:12 2014
 
                                  ??_debug_configure 0092                            _MQ_Main_Willing_to_block 00B8  
                                        _SSPSTATbits 000FC7                  uart_receive_interrupt_handler@done 004B  

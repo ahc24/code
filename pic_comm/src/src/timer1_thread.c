@@ -31,14 +31,14 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
     #define TURN_RIGHT  0x03
     #define STOP        0x04
     #define INITIAL     0x05
-    #define SPEED       100
+    #define SPEED       127
 
     static unsigned char move_state = FORWARD;
     switch(move_state)
     {
         case INITIAL:
         {
-            move_state = FORWARD
+            move_state = FORWARD;
 
             move_msg[1] = SPEED;
             move_msg[2] = SPEED;

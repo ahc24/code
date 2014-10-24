@@ -43,8 +43,6 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
         tptr->move_msg[2]=0;
         i2c_master_send(14,tptr->move_msg);
     }
-
-    
     
     
     tptr->msgcount++;

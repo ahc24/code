@@ -842,7 +842,7 @@ bssBANK4 400 489 BANK4 400 1
 %locals
 dist/UseXC8/production\PIC_Master.X.production.obj
 C:\Program Files (x86)\Microchip\xc8\v1.32\include\pic18f46j50.h
-C:\Users\alex\AppData\Local\Temp\s7e4.
+C:\Users\alex\AppData\Local\Temp\s6t8.
 6060 1358 0 CODE 0
 6062 1358 0 CODE 0
 6065 1358 0 CODE 0
@@ -1004,9 +1004,9 @@ C:\Users\alex\AppData\Local\Temp\s7e4.
 42 A20 0 CODE 0
 43 A36 0 CODE 0
 44 A4C 0 CODE 0
-50 A5E 0 CODE 0
-53 A76 0 CODE 0
-54 AB2 0 CODE 0
+48 A5E 0 CODE 0
+51 A76 0 CODE 0
+52 AB2 0 CODE 0
 ../src/my_i2c.c
 47 18E4 0 CODE 0
 49 18E8 0 CODE 0

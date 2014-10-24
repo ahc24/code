@@ -1027,7 +1027,7 @@
 [v timer1_lthread@msgbuffer msgbuffer `*.39uc  1 p 2 16 ]
 "26
 [v timer1_lthread@move_counter move_counter `uc  1 s 1 move_counter ]
-"60
+"58
 } 0
 "47 C:\Users\alex\Documents\VI\School\Embedded\code\pic_master\src/src/my_i2c.c
 [v _i2c_master_send i2c_master_send `(uc  1 e 1 0 ]
