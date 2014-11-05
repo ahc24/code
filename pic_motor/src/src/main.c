@@ -260,7 +260,21 @@ void main(void) {
      */
 
     // initialize Timers
-    OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_128);
+
+    // Timer0
+    //OpenTimer0(TIMER_INT_ON & T0_8BIT & T0_SOURCE_INT & T0_PS_1_128);
+    ///*
+    INTCONbits.TMR0IE = 1;
+    TRISBbits.TRISB5 = 1;
+    T0CONbits.T08BIT = 1;
+    T0CONbits.T0CS = 1;
+    T0CONbits.T0SE = 1;
+    T0CONbits.PSA = 0;
+    T0CONbits.T0PS = 0x1;
+    T0CONbits.TMR0ON = 1;
+
+
+    //*/
     
     #ifdef __USE18F26J50
     // MTJ added second argument for OpenTimer1()
@@ -270,6 +284,12 @@ void main(void) {
     OpenTimer1(TIMER_INT_ON & T1_SOURCE_FOSC_4 & T1_PS_1_8 & T1_16BIT_RW & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF,0x0);
     #else
     OpenTimer1(TIMER_INT_ON & T1_PS_1_8 & T1_16BIT_RW & T1_SOURCE_INT & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF);
+    //OpenTimer2(TIMER_INT_ON & T2_PS_1_16 & T2_POST_1_16);
+
+
+
+    // Set Timer 2 period
+    //PR2 = 0xff;
     #endif
     #endif
 
@@ -281,7 +301,10 @@ void main(void) {
     IPR1bits.RCIP = 0;
     
     // I2C interrupt
-    IPR1bits.SSPIP = 1;     
+    IPR1bits.SSPIP = 1;
+
+    //Set timer 0 to low
+    INTCON2bits.TMR0IP = 0;
 
     // configure the hardware i2c device as a slave (0x9E -> 0x4F) or (0x9A -> 0x4D)
     #if 1
@@ -290,7 +313,7 @@ void main(void) {
     // They *are* changed in the timer interrupt handlers if those timers are
     //   enabled.  They are just there to make the lights blink and can be
     //   disabled.
-    i2c_configure_slave(0x9E);
+    i2c_configure_slave(I2C_MOTOR_PIC_ADDRESS);
     #else
     // If I want to test the temperature sensor from the ARM, I just make
     // sure this PIC does not have the same address and configure the
@@ -308,7 +331,9 @@ void main(void) {
     PIE1bits.SSPIE = 1;
 
     
-    
+    // Enable A/D for general interrupt calling
+    IPR1bits.ADIP = 0;
+    PIE1bits.ADIE = 1;
     
 
     /*
@@ -326,6 +351,8 @@ void main(void) {
     OpenUSART(USART_TX_INT_OFF & USART_RX_INT_ON & USART_ASYNCH_MODE & USART_EIGHT_BIT &
         USART_CONT_RX & USART_BRGH_LOW, 0x19);
     #endif
+     *
+     * +-
     #endif
     */
 
@@ -339,7 +366,7 @@ void main(void) {
     //uart_send_byte( 0x50 );
     //uart_send_byte( 0x54 );
     
-    
+
 
     // Peripheral interrupts can have their priority set to high or low
     // enable high-priority interrupts and low-priority interrupts
@@ -374,6 +401,13 @@ void main(void) {
     // It is also slow and is blocking, so it will perturb your code's operation
     // Here is how it looks: printf("Hello\r\n");
 
+    unsigned char motor_data[I2C_DATA_SIZE];
+    //fill motor data with junk....for now
+    unsigned char poop;
+    for(poop=1;poop<I2C_DATA_SIZE;poop++)
+    {
+            motor_data[poop]=0x44;
+    }
 
     // loop forever
     // This loop is responsible for "handing off" messages to the subroutines
@@ -387,14 +421,11 @@ void main(void) {
         // an idle mode)
         //block_on_To_msgqueues();
 
-        unsigned char motor_data[I2C_DATA_SIZE];
+       
 
-        //fill motor data with junk....for now
-        unsigned char poop;
-        for(poop=0;poop<I2C_DATA_SIZE;poop++)
-        {
-                motor_data[poop]=0x55;
-        }
+        motor_data[0] = MSGID_MOTOR_RESPONSE;
+
+
  
         // At this point, one or both of the queues has a message.  It
         // makes sense to check the high-priority messages first -- in fact,
@@ -423,7 +454,7 @@ void main(void) {
                         case MSGID_MOVE:
                         {
                             i_like_to_moveit_moveit( (signed char)msgbuffer[1] , (signed char)msgbuffer[2] );
-                            blip();
+                            
                             break;
                         }
                         default:
@@ -442,7 +473,10 @@ void main(void) {
                 };
                 case MSGT_I2C_RQST:
                 {
-                    FromMainHigh_sendmsg(I2C_DATA_SIZE,MSGT_I2C_DATA,(void *) motor_data);
+                    // Request new data for encoders
+                    PIR1bits.ADIF = 1;
+
+                    FromMainHigh_sendmsg(I2C_DATA_SIZE,MSGT_I2C_DATA,(void *) motor_data );
 					
                     break;
                 };
@@ -545,12 +579,20 @@ void main(void) {
                     }
 					
                     break;
-                };
+                }
+                case MSGT_I2C_MOTOR_DATA:
+                {
+                    if(msgbuffer[0] != 0)
+                        blip();
+
+                    motor_data[I2C_DATA_SIZE-1] = msgbuffer[0];
+                    break;
+                }
                 default:
                 {
                     // Your code should handle this error
                     break;
-                };
+                }
             };
         }
     }

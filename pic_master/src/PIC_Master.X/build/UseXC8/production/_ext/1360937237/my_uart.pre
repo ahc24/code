@@ -11017,8 +11017,6 @@ RCSTA1bits.CREN = 1;
 # 54
 void uart_receive_interrupt_handler()
 {
-blip();
-
 
 static unsigned char frame[(14 + 2 + 2)];
 static unsigned char index = 0;
@@ -11030,7 +11028,6 @@ static unsigned char error = 0;
 
 if(!done)
 {
-blip1();
 frame[index] = RCREG1;
 if(error)
 {
@@ -11147,7 +11144,7 @@ received_counter++;
 error = 0;
 }
 
-# 190
+# 187
 }
 
 
@@ -11227,7 +11224,7 @@ done = 1;
 
 }
 
-# 376
+# 373
 void uart_frame_message( unsigned char * inner , unsigned char * outer )
 {
 static unsigned char sent_counter = 0;

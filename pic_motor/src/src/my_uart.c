@@ -199,7 +199,6 @@ unsigned char send_uart_message( unsigned char * message_ptr )
 //Handle uart transmit handler
 void uart_transmit_interrupt_handler()
 {
-    blip();
 
     static unsigned char done = 1;
     static unsigned char index = 0;

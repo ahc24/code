@@ -5980,7 +5980,7 @@ int in_low_int(void);
 
 int in_main(void);
 
-# 25 "../src/messages.h"
+# 27 "../src/messages.h"
 typedef struct __msg {
 unsigned char full;
 unsigned char length;
@@ -5994,7 +5994,7 @@ unsigned char cur_write_ind;
 unsigned char cur_read_ind;
 } msg_queue;
 
-# 58
+# 60
 void init_queues(void);
 
 
@@ -6005,19 +6005,19 @@ void SleepIfOkay(void);
 
 void block_on_To_msgqueues(void);
 
-# 72
+# 74
 signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 79
+# 81
 signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 86
+# 88
 signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 93
+# 95
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
@@ -6091,7 +6091,7 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 46
+# 48
 void init_i2c(i2c_comm *ic);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
@@ -6114,6 +6114,7 @@ int uart_lthread(uart_thread_struct *,int,int,unsigned char*);
 typedef struct __timer1_thread_struct {
 
 unsigned int msgcount;
+unsigned long encoder_ticks;
 } timer1_thread_struct;
 
 void init_timer1_lthread(timer1_thread_struct *);
@@ -6188,13 +6189,20 @@ init_queues();
 TRISB = 0x0;
 LATB = 0x0;
 
-# 263
-OpenTimer0(0b11111111 & 0b10111111 & 0b11011111 & 0b11110110);
+# 267
+INTCONbits.TMR0IE = 1;
+TRISBbits.TRISB5 = 1;
+T0CONbits.T08BIT = 1;
+T0CONbits.T0CS = 1;
+T0CONbits.T0SE = 1;
+T0CONbits.PSA = 0;
+T0CONbits.T0PS = 0x1;
+T0CONbits.TMR0ON = 1;
 
-# 272
+# 286
 OpenTimer1(0b11111111 & 0b11111111 & 0b11111111 & 0b11111101 & 0b11110111 & 0b11111111);
 
-# 279
+# 299
 IPR1bits.TMR1IP = 0;
 
 IPR1bits.RCIP = 0;
@@ -6202,39 +6210,49 @@ IPR1bits.RCIP = 0;
 
 IPR1bits.SSPIP = 1;
 
-# 293
-i2c_configure_slave(0x9E);
 
-# 308
+INTCON2bits.TMR0IP = 0;
+
+# 316
+i2c_configure_slave(0x9C);
+
+# 331
 PIE1bits.SSPIE = 1;
 
-# 333
+
+
+IPR1bits.ADIP = 0;
+PIE1bits.ADIE = 1;
+
+# 360
 debug_configure();
 blip();
 blip1();
 blip2();
 blip3();
 
-# 346
+# 373
 enable_interrupts();
 
-# 359
+# 386
 uart_configure();
 
-# 383
-while (1) {
-
-# 390
+# 404
 unsigned char motor_data[14];
 
-
 unsigned char poop;
-for(poop=0;poop<14;poop++)
+for(poop=1;poop<14;poop++)
 {
-motor_data[poop]=0x55;
+motor_data[poop]=0x44;
 }
 
-# 404
+# 417
+while (1) {
+
+# 426
+motor_data[0] = 0x07;
+
+# 435
 length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -6257,7 +6275,7 @@ switch( msgbuffer[0] )
 case 0x01:
 {
 i_like_to_moveit_moveit( (signed char)msgbuffer[1] , (signed char)msgbuffer[2] );
-blip();
+
 break;
 }
 default:
@@ -6276,7 +6294,10 @@ break;
 };
 case 42:
 {
-FromMainHigh_sendmsg(14,40,(void *) motor_data);
+
+PIR1bits.ADIF = 1;
+
+FromMainHigh_sendmsg(14,40,(void *) motor_data );
 
 break;
 };
@@ -6299,7 +6320,7 @@ if (length != -4) {
 else
 {
 
-# 475
+# 509
 switch (msgtype)
 {
 case 11:
@@ -6312,27 +6333,27 @@ case 30:
 case 32:
 {
 
-# 492
+# 526
 }
 case 33:
 {
 
-# 502
+# 536
 }
 case 34:
 {
 
-# 511
+# 545
 }
 case 35:
 {
 
-# 521
+# 555
 }
 case 36:
 {
 
-# 531
+# 565
 }
 case 31:
 {
@@ -6350,12 +6371,20 @@ break;
 }
 
 break;
-};
+}
+case 47:
+{
+if(msgbuffer[0] != 0)
+blip();
+
+motor_data[14-1] = msgbuffer[0];
+break;
+}
 default:
 {
 
 break;
-};
+}
 };
 }
 }

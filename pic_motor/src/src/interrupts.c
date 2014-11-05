@@ -84,8 +84,6 @@ interrupt
 #pragma interrupt InterruptHandlerHigh
 #endif
 void InterruptHandlerHigh() {
-    LATDbits.LD6 = 0;
-    LATDbits.LD6 = 1;
     // We need to check the interrupt flag of each enabled high-priority interrupt to
     // see which device generated this interrupt.  Then we can call the correct handler.
 
@@ -101,14 +99,16 @@ void InterruptHandlerHigh() {
     }
 
     // check to see if we have an interrupt on timer 0
+    /*
     if (INTCONbits.TMR0IF) {
         INTCONbits.TMR0IF = 0; // clear this interrupt flag
         // call whatever handler you want (this is "user" defined)
 
         
-        
+        blip2();
         timer0_int_handler();
     }
+    */
 
     // here is where you would check other interrupt flags.
 
@@ -118,8 +118,6 @@ void InterruptHandlerHigh() {
     // initialized using "init_queues()" -- if you aren't using
     // this, then you shouldn't have this call here
     SleepIfOkay();
-    LATDbits.LD6 = 1;
-    LATDbits.LD6 = 0;
 }
 
 //----------------------------------------------------------------------------
@@ -133,14 +131,26 @@ interrupt low_priority
 #pragma interruptlow InterruptHandlerLow
 #endif
 void InterruptHandlerLow() {
+    static unsigned char encoder_ticks=0;
     
     // check to see if we have an interrupt on timer 1
     if (PIR1bits.TMR1IF) {
         PIR1bits.TMR1IF = 0; //clear interrupt flag
 
-        
+        blip1();
 
         timer1_int_handler();
+    }
+
+    // check to see if we have an interrupt on timer 0
+    if (INTCONbits.TMR0IF) {
+        INTCONbits.TMR0IF = 0;  //clear interrupt flag
+
+        blip2();
+
+        encoder_ticks++;
+
+        timer0_int_handler();
     }
 
     // check to see if we have an interrupt on USART RX
@@ -164,7 +174,21 @@ void InterruptHandlerLow() {
         //PIR1bits.TX1IF = 0;
       
     }
-    
-    
+
+    // Check for I need data interrupt
+    if( PIR1bits.ADIF )
+    {
+        PIR1bits.ADIF = 0;
+
+        unsigned char sendy_stuff = TMR0L;
+
+        TMR0L = 0;
+
+        encoder_ticks = 0;
+        
+        ToMainLow_sendmsg(1,MSGT_I2C_MOTOR_DATA,(void *) &sendy_stuff );
+
+        blip3();
+    }
 }
 

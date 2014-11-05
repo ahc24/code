@@ -17,6 +17,8 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
 	
 	blink0();	//Make LED0 blink
 
+        
+
     tptr->msgcount++;
     // Every tenth message we get from timer1 we
     // send something to the High Priority Interrupt

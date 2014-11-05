@@ -45,38 +45,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S536 . . . . . . ]
 "8680
 [v _INTCONbits `VS536 ~T0 @X0 0 e@4082 ]
-"2338
-[s S168 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S168 . LATD0 LATD1 LATD2 LATD3 LATD4 LATD5 LATD6 LATD7 ]
-"2348
-[s S169 :1 `uc 1 ]
-[n S169 . LD0 ]
-"2351
-[s S170 :1 `uc 1 :1 `uc 1 ]
-[n S170 . . LD1 ]
-"2355
-[s S171 :2 `uc 1 :1 `uc 1 ]
-[n S171 . . LD2 ]
-"2359
-[s S172 :3 `uc 1 :1 `uc 1 ]
-[n S172 . . LD3 ]
-"2363
-[s S173 :4 `uc 1 :1 `uc 1 ]
-[n S173 . . LD4 ]
-"2367
-[s S174 :5 `uc 1 :1 `uc 1 ]
-[n S174 . . LD5 ]
-"2371
-[s S175 :6 `uc 1 :1 `uc 1 ]
-[n S175 . . LD6 ]
-"2375
-[s S176 :7 `uc 1 :1 `uc 1 ]
-[n S176 . . LD7 ]
-"2337
-[u S167 `S168 1 `S169 1 `S170 1 `S171 1 `S172 1 `S173 1 `S174 1 `S175 1 `S176 1 ]
-[n S167 . . . . . . . . . . ]
-"2380
-[v _LATDbits `VS167 ~T0 @X0 0 e@3980 ]
 "3659
 [s S223 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S223 . TMR1IF TMR2IF CCP1IF SSP1IF TXIF RCIF ADIF PSPIF ]
@@ -88,14 +56,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S222 . . . ]
 "3676
 [v _PIR1bits `VS222 ~T0 @X0 0 e@3998 ]
-"47 ../src/my_i2c.h
+"49 ../src/my_i2c.h
 [v _i2c_int_handler `(v ~T0 @X0 0 ef ]
-"12 ../src/user_interrupts.h
-[v _timer0_int_handler `(v ~T0 @X0 0 ef ]
-"62 ../src/messages.h
+"64 ../src/messages.h
 [v _SleepIfOkay `(v ~T0 @X0 0 ef ]
+"37 ../src/debug.h
+[v _blip1 `(v ~T0 @X0 0 ef ]
 "14 ../src/user_interrupts.h
 [v _timer1_int_handler `(v ~T0 @X0 0 ef ]
+"38 ../src/debug.h
+[v _blip2 `(v ~T0 @X0 0 ef ]
+"12 ../src/user_interrupts.h
+[v _timer0_int_handler `(v ~T0 @X0 0 ef ]
 "71 ../src/my_uart.h
 [v _uart_receive_interrupt_handler `(v ~T0 @X0 0 ef ]
 "3577 C:\Program Files (x86)\Microchip\xc8\v1.32\include\pic18f45j10.h
@@ -111,6 +83,12 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _PIE1bits `VS219 ~T0 @X0 0 e@3997 ]
 "74 ../src/my_uart.h
 [v _uart_transmit_interrupt_handler `(v ~T0 @X0 0 ef ]
+"8215 C:\Program Files (x86)\Microchip\xc8\v1.32\include\pic18f45j10.h
+[v _TMR0L `Vuc ~T0 @X0 0 e@4054 ]
+"74 ../src/messages.h
+[v _ToMainLow_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
+"39 ../src/debug.h
+[v _blip3 `(v ~T0 @X0 0 ef ]
 [; ;htc.h: 21: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 24: extern void __builtin_software_breakpoint(void);
 [; ;pic18f45j10.h: 47: extern volatile unsigned char PORTA @ 0xF80;
@@ -4728,28 +4706,28 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;debug.h: 42: void blink1();
 [; ;user_interrupts.h: 12: void timer0_int_handler(void);
 [; ;user_interrupts.h: 14: void timer1_int_handler(void);
-[; ;messages.h: 25: typedef struct __msg {
-[; ;messages.h: 26: unsigned char full;
-[; ;messages.h: 27: unsigned char length;
-[; ;messages.h: 28: unsigned char msgtype;
-[; ;messages.h: 29: unsigned char data[14];
-[; ;messages.h: 30: } msg;
-[; ;messages.h: 32: typedef struct __msg_queue {
-[; ;messages.h: 33: msg queue[5];
-[; ;messages.h: 34: unsigned char cur_write_ind;
-[; ;messages.h: 35: unsigned char cur_read_ind;
-[; ;messages.h: 36: } msg_queue;
-[; ;messages.h: 58: void init_queues(void);
-[; ;messages.h: 62: void SleepIfOkay(void);
-[; ;messages.h: 66: void block_on_To_msgqueues(void);
-[; ;messages.h: 72: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 73: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 79: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 80: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 86: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 87: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 93: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 94: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 27: typedef struct __msg {
+[; ;messages.h: 28: unsigned char full;
+[; ;messages.h: 29: unsigned char length;
+[; ;messages.h: 30: unsigned char msgtype;
+[; ;messages.h: 31: unsigned char data[14];
+[; ;messages.h: 32: } msg;
+[; ;messages.h: 34: typedef struct __msg_queue {
+[; ;messages.h: 35: msg queue[5];
+[; ;messages.h: 36: unsigned char cur_write_ind;
+[; ;messages.h: 37: unsigned char cur_read_ind;
+[; ;messages.h: 38: } msg_queue;
+[; ;messages.h: 60: void init_queues(void);
+[; ;messages.h: 64: void SleepIfOkay(void);
+[; ;messages.h: 68: void block_on_To_msgqueues(void);
+[; ;messages.h: 74: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 75: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 81: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 82: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 88: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 89: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 95: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 96: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 [; ;my_uart.h: 36: typedef struct
 [; ;my_uart.h: 37: {
 [; ;my_uart.h: 38: unsigned char data[(14 + 2 + 2)];
@@ -4788,14 +4766,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_i2c.h: 19: unsigned char initiated;
 [; ;my_i2c.h: 20: unsigned char slave_addr;
 [; ;my_i2c.h: 21: } i2c_comm;
-[; ;my_i2c.h: 46: void init_i2c(i2c_comm *ic);
-[; ;my_i2c.h: 47: void i2c_int_handler(void);
-[; ;my_i2c.h: 48: void start_i2c_slave_reply(unsigned char,unsigned char *);
-[; ;my_i2c.h: 49: void i2c_configure_slave(unsigned char);
-[; ;my_i2c.h: 50: void i2c_configure_master(unsigned char);
-[; ;my_i2c.h: 51: unsigned char i2c_master_send(unsigned char,unsigned char *);
-[; ;my_i2c.h: 52: unsigned char i2c_master_recv(unsigned char);
-[; ;my_i2c.h: 54: void retrieve_sensor_values( unsigned char * sensor_bank );
+[; ;my_i2c.h: 48: void init_i2c(i2c_comm *ic);
+[; ;my_i2c.h: 49: void i2c_int_handler(void);
+[; ;my_i2c.h: 50: void start_i2c_slave_reply(unsigned char,unsigned char *);
+[; ;my_i2c.h: 51: void i2c_configure_slave(unsigned char);
+[; ;my_i2c.h: 52: void i2c_configure_master(unsigned char);
+[; ;my_i2c.h: 53: unsigned char i2c_master_send(unsigned char,unsigned char *);
+[; ;my_i2c.h: 54: unsigned char i2c_master_recv(unsigned char);
+[; ;my_i2c.h: 56: void retrieve_sensor_values( unsigned char * sensor_bank );
 "14 ../src/interrupts.c
 [v _enable_interrupts `(v ~T0 @X0 1 ef ]
 {
@@ -4927,103 +4905,135 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interrupts.c: 86: void InterruptHandlerHigh() {
 [e :U _InterruptHandlerHigh ]
 [f ]
-[; ;interrupts.c: 87: LATDbits.LD6 = 0;
-"87
-[e = . . _LATDbits 7 1 -> -> 0 `i `uc ]
-[; ;interrupts.c: 88: LATDbits.LD6 = 1;
-"88
-[e = . . _LATDbits 7 1 -> -> 1 `i `uc ]
-[; ;interrupts.c: 93: if (PIR1bits.SSPIF) {
-"93
+[; ;interrupts.c: 91: if (PIR1bits.SSPIF) {
+"91
 [e $ ! != -> . . _PIR1bits 1 1 `i -> -> -> 0 `i `Vuc `i 599  ]
 {
-[; ;interrupts.c: 95: PIR1bits.SSPIF = 0;
-"95
+[; ;interrupts.c: 93: PIR1bits.SSPIF = 0;
+"93
 [e = . . _PIR1bits 1 1 -> -> 0 `i `uc ]
-[; ;interrupts.c: 100: i2c_int_handler();
-"100
+[; ;interrupts.c: 98: i2c_int_handler();
+"98
 [e ( _i2c_int_handler ..  ]
-"101
+"99
 }
 [e :U 599 ]
-[; ;interrupts.c: 101: }
-[; ;interrupts.c: 104: if (INTCONbits.TMR0IF) {
-"104
-[e $ ! != -> . . _INTCONbits 0 2 `i -> -> -> 0 `i `Vuc `i 600  ]
-{
-[; ;interrupts.c: 105: INTCONbits.TMR0IF = 0;
-"105
-[e = . . _INTCONbits 0 2 -> -> 0 `i `uc ]
-[; ;interrupts.c: 110: timer0_int_handler();
-"110
-[e ( _timer0_int_handler ..  ]
-"111
-}
-[e :U 600 ]
-[; ;interrupts.c: 111: }
+[; ;interrupts.c: 99: }
 [; ;interrupts.c: 120: SleepIfOkay();
 "120
 [e ( _SleepIfOkay ..  ]
-[; ;interrupts.c: 121: LATDbits.LD6 = 1;
+[; ;interrupts.c: 121: }
 "121
-[e = . . _LATDbits 7 1 -> -> 1 `i `uc ]
-[; ;interrupts.c: 122: LATDbits.LD6 = 0;
-"122
-[e = . . _LATDbits 7 1 -> -> 0 `i `uc ]
-[; ;interrupts.c: 123: }
-"123
 [e :UE 598 ]
 }
 [v F5195 `(v ~T0 @X0 1 tf ]
-"135
+"133
 [v _InterruptHandlerLow `ILF5195 ~T0 @X0 1 e ]
 {
-[; ;interrupts.c: 130: interrupt low_priority
-[; ;interrupts.c: 135: void InterruptHandlerLow() {
+[; ;interrupts.c: 128: interrupt low_priority
+[; ;interrupts.c: 133: void InterruptHandlerLow() {
 [e :U _InterruptHandlerLow ]
 [f ]
-[; ;interrupts.c: 138: if (PIR1bits.TMR1IF) {
-"138
-[e $ ! != -> . . _PIR1bits 0 0 `i -> -> -> 0 `i `Vuc `i 602  ]
+"134
+[v F5196 `uc ~T0 @X0 1 s encoder_ticks ]
+[i F5196
+-> -> 0 `i `uc
+]
+[; ;interrupts.c: 134: static unsigned char encoder_ticks=0;
+[; ;interrupts.c: 137: if (PIR1bits.TMR1IF) {
+"137
+[e $ ! != -> . . _PIR1bits 0 0 `i -> -> -> 0 `i `Vuc `i 601  ]
 {
-[; ;interrupts.c: 139: PIR1bits.TMR1IF = 0;
-"139
+[; ;interrupts.c: 138: PIR1bits.TMR1IF = 0;
+"138
 [e = . . _PIR1bits 0 0 -> -> 0 `i `uc ]
-[; ;interrupts.c: 143: timer1_int_handler();
-"143
+[; ;interrupts.c: 140: blip1();
+"140
+[e ( _blip1 ..  ]
+[; ;interrupts.c: 142: timer1_int_handler();
+"142
 [e ( _timer1_int_handler ..  ]
-"144
+"143
+}
+[e :U 601 ]
+[; ;interrupts.c: 143: }
+[; ;interrupts.c: 146: if (INTCONbits.TMR0IF) {
+"146
+[e $ ! != -> . . _INTCONbits 0 2 `i -> -> -> 0 `i `Vuc `i 602  ]
+{
+[; ;interrupts.c: 147: INTCONbits.TMR0IF = 0;
+"147
+[e = . . _INTCONbits 0 2 -> -> 0 `i `uc ]
+[; ;interrupts.c: 149: blip2();
+"149
+[e ( _blip2 ..  ]
+[; ;interrupts.c: 151: encoder_ticks++;
+"151
+[e ++ F5196 -> -> 1 `i `uc ]
+[; ;interrupts.c: 153: timer0_int_handler();
+"153
+[e ( _timer0_int_handler ..  ]
+"154
 }
 [e :U 602 ]
-[; ;interrupts.c: 144: }
-[; ;interrupts.c: 147: if (PIR1bits.RCIF) {
-"147
+[; ;interrupts.c: 154: }
+[; ;interrupts.c: 157: if (PIR1bits.RCIF) {
+"157
 [e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 603  ]
 {
-[; ;interrupts.c: 148: PIR1bits.RCIF = 0;
-"148
+[; ;interrupts.c: 158: PIR1bits.RCIF = 0;
+"158
 [e = . . _PIR1bits 0 5 -> -> 0 `i `uc ]
-[; ;interrupts.c: 152: uart_receive_interrupt_handler();
-"152
+[; ;interrupts.c: 162: uart_receive_interrupt_handler();
+"162
 [e ( _uart_receive_interrupt_handler ..  ]
-"153
+"163
 }
 [e :U 603 ]
-[; ;interrupts.c: 153: }
-[; ;interrupts.c: 157: if (PIR1bits.TX1IF && PIE1bits.TX1IE)
-"157
+[; ;interrupts.c: 163: }
+[; ;interrupts.c: 167: if (PIR1bits.TX1IF && PIE1bits.TX1IE)
+"167
 [e $ ! && != -> . . _PIR1bits 1 2 `i -> -> -> 0 `i `Vuc `i != -> . . _PIE1bits 1 2 `i -> -> -> 0 `i `Vuc `i 604  ]
-[; ;interrupts.c: 158: {
-"158
+[; ;interrupts.c: 168: {
+"168
 {
-[; ;interrupts.c: 162: uart_transmit_interrupt_handler();
-"162
+[; ;interrupts.c: 172: uart_transmit_interrupt_handler();
+"172
 [e ( _uart_transmit_interrupt_handler ..  ]
-"166
+"176
 }
 [e :U 604 ]
-[; ;interrupts.c: 166: }
-[; ;interrupts.c: 169: }
-"169
-[e :UE 601 ]
+[; ;interrupts.c: 176: }
+[; ;interrupts.c: 179: if( PIR1bits.ADIF )
+"179
+[e $ ! != -> . . _PIR1bits 0 6 `i -> -> -> 0 `i `Vuc `i 605  ]
+[; ;interrupts.c: 180: {
+"180
+{
+[; ;interrupts.c: 181: PIR1bits.ADIF = 0;
+"181
+[e = . . _PIR1bits 0 6 -> -> 0 `i `uc ]
+"183
+[v _sendy_stuff `uc ~T0 @X0 1 a ]
+[; ;interrupts.c: 183: unsigned char sendy_stuff = TMR0L;
+[e = _sendy_stuff _TMR0L ]
+[; ;interrupts.c: 185: TMR0L = 0;
+"185
+[e = _TMR0L -> -> 0 `i `uc ]
+[; ;interrupts.c: 187: encoder_ticks = 0;
+"187
+[e = F5196 -> -> 0 `i `uc ]
+[; ;interrupts.c: 189: ToMainLow_sendmsg(1,47,(void *) &sendy_stuff );
+"189
+[e ( _ToMainLow_sendmsg (3 , , -> -> 1 `i `uc -> -> 47 `i `uc -> &U _sendy_stuff `*v ]
+[; ;interrupts.c: 191: blip3();
+"191
+[e ( _blip3 ..  ]
+"192
+}
+[e :U 605 ]
+[; ;interrupts.c: 192: }
+[; ;interrupts.c: 193: }
+"193
+[e :UE 600 ]
 }

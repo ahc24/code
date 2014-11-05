@@ -5968,7 +5968,7 @@ extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupport
 extern int sprintf(char *, const char *, ...);
 extern int printf(const char *, ...);
 
-# 25 "../src/messages.h"
+# 27 "../src/messages.h"
 typedef struct __msg {
 unsigned char full;
 unsigned char length;
@@ -5982,7 +5982,7 @@ unsigned char cur_write_ind;
 unsigned char cur_read_ind;
 } msg_queue;
 
-# 58
+# 60
 void init_queues(void);
 
 
@@ -5993,19 +5993,19 @@ void SleepIfOkay(void);
 
 void block_on_To_msgqueues(void);
 
-# 72
+# 74
 signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 79
+# 81
 signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 86
+# 88
 signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 93
+# 95
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
@@ -6013,6 +6013,7 @@ signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 typedef struct __timer1_thread_struct {
 
 unsigned int msgcount;
+unsigned long encoder_ticks;
 } timer1_thread_struct;
 
 void init_timer1_lthread(timer1_thread_struct *);
@@ -6038,6 +6039,8 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
 signed char retval;
 
 blink0();
+
+
 
 tptr->msgcount++;
 

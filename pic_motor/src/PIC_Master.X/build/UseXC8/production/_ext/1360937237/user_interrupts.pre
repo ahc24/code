@@ -5983,7 +5983,7 @@ void timer0_int_handler(void);
 
 void timer1_int_handler(void);
 
-# 25 "../src/messages.h"
+# 27 "../src/messages.h"
 typedef struct __msg {
 unsigned char full;
 unsigned char length;
@@ -5997,7 +5997,7 @@ unsigned char cur_write_ind;
 unsigned char cur_read_ind;
 } msg_queue;
 
-# 58
+# 60
 void init_queues(void);
 
 
@@ -6008,19 +6008,19 @@ void SleepIfOkay(void);
 
 void block_on_To_msgqueues(void);
 
-# 72
+# 74
 signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 79
+# 81
 signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 86
+# 88
 signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 93
+# 95
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
@@ -6084,7 +6084,7 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 46
+# 48
 void init_i2c(i2c_comm *ic);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
@@ -6098,21 +6098,10 @@ void retrieve_sensor_values( unsigned char * sensor_bank );
 # 16 "../src/user_interrupts.c"
 void timer0_int_handler() {
 
-
-
-unsigned int val;
-int length, msgtype;
-
-
-
+# 24
 WriteTimer0(0);
 
-length = FromMainHigh_recvmsg(sizeof(val), (unsigned char *)&msgtype, (void *) &val);
-if (length == sizeof (val)) {
-ToMainHigh_sendmsg(sizeof (val), 10, (void *) &val);
-}
-
-
+# 36
 }
 
 
@@ -6124,7 +6113,7 @@ void timer1_int_handler() {
 
 unsigned int result;
 
-# 49
+# 52
 result = ReadTimer1();
 ToMainLow_sendmsg(0, 11, (void *) 0);
 

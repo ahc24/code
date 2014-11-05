@@ -186,8 +186,32 @@ void i2c_int_handler() {
                 break;
             }
 
-            SSP1BUF = ((ic_ptr->slave_addr) << 1);    //Write address
+            // Switch sending address
+            switch( ic_ptr->outbuffer[0] )
+            {
+                case MSGID_MOTOR_REQUEST:
+                {
+                    ic_ptr->slave_addr = I2C_MOTOR_PIC_ADDRESS;    //Write address
+                    break;
+                }
+                case MSGID_SENSOR_REQUEST:
+                {
+                    ic_ptr->slave_addr = I2C_SENSOR_PIC_ADDRESS;    //Write address
+                    break;
+                }
+                case MSGID_MOVE:
+                {
+                    ic_ptr->slave_addr = I2C_MOTOR_PIC_ADDRESS;    //Write address
+                    break;
+                }
+                default:
+                {
+                    ic_ptr->slave_addr = I2C_DEFAULT_PIC_ADDRESS;    //Write address
+                    break;
+                }
+            }
 
+            SSP1BUF = ic_ptr->slave_addr;
 
             ic_ptr->status = I2C_MASTER_DATA_SEND;
             ic_ptr->outbufind = 0;
@@ -262,7 +286,7 @@ void i2c_int_handler() {
                 break;
             }
 
-            SSP1BUF = ((ic_ptr->slave_addr) << 1)|1;    //Write address
+            SSP1BUF = ic_ptr->slave_addr | 1;    //Write address
 
             ic_ptr->status = I2C_MASTER_RECEIVE;
             break;

@@ -22,6 +22,8 @@ typedef struct __i2c_comm {
 
 #define I2C_DATA_SIZE MSGLEN
 
+#define I2C_MOTOR_PIC_ADDRESS 0x9C
+
 #define I2C_IDLE 0x5
 #define I2C_STARTED 0x6
 #define	I2C_RCV_DATA 0x7

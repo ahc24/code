@@ -9,6 +9,8 @@
 int timer0_lthread(timer0_thread_struct *tptr, int msgtype, int length, unsigned char *msgbuffer) {
     unsigned int *msgval;
 
+    //blip2();
+
     msgval = (unsigned int *) msgbuffer;
 
     // Here is where we would do something with the message

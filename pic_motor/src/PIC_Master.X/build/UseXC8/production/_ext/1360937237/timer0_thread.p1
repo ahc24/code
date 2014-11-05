@@ -4621,10 +4621,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 "10
 [v _msgval `*ui ~T0 @X0 1 a ]
 [; ;timer0_thread.c: 10: unsigned int *msgval;
-[; ;timer0_thread.c: 12: msgval = (unsigned int *) msgbuffer;
-"12
+[; ;timer0_thread.c: 14: msgval = (unsigned int *) msgbuffer;
+"14
 [e = _msgval -> _msgbuffer `*ui ]
-[; ;timer0_thread.c: 16: }
-"16
+[; ;timer0_thread.c: 18: }
+"18
 [e :UE 583 ]
 }

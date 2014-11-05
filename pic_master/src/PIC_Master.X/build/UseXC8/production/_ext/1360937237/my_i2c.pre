@@ -10958,7 +10958,7 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 47
+# 51
 void init_i2c(i2c_comm *);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
@@ -11117,8 +11117,32 @@ ic_ptr->status = 0x5;
 break;
 }
 
-SSP1BUF = ((ic_ptr->slave_addr) << 1);
 
+switch( ic_ptr->outbuffer[0] )
+{
+case 0x06:
+{
+ic_ptr->slave_addr = 0x9C;
+break;
+}
+case 0x04:
+{
+ic_ptr->slave_addr = 0x9E;
+break;
+}
+case 0x01:
+{
+ic_ptr->slave_addr = 0x9C;
+break;
+}
+default:
+{
+ic_ptr->slave_addr = 0x00;
+break;
+}
+}
+
+SSP1BUF = ic_ptr->slave_addr;
 
 ic_ptr->status = 0xa;
 ic_ptr->outbufind = 0;
@@ -11193,7 +11217,7 @@ ic_ptr->status = 0x5;
 break;
 }
 
-SSP1BUF = ((ic_ptr->slave_addr) << 1)|1;
+SSP1BUF = ic_ptr->slave_addr | 1;
 
 ic_ptr->status = 0xe;
 break;
@@ -11274,11 +11298,11 @@ ic_ptr->error_count = 0;
 
 void i2c_configure_slave(unsigned char addr) {
 
-# 353
+# 377
 TRISBbits.TRISB4 = 1;
 TRISBbits.TRISB5 = 1;
 
-# 362
+# 386
 SSPADD = addr;
 
 SSPSTAT = 0x0;
@@ -11287,11 +11311,11 @@ SSPCON2 = 0x0;
 SSPCON1 |= 0x0E;
 SSPSTAT |= 0b10000000;
 
-# 383
+# 407
 PORTBbits.SCL1 = 1;
 PORTBbits.SDA1 = 1;
 
-# 393
+# 417
 SSPCON2bits.SEN = 1;
 SSPCON1 |= 0b00100000;
 

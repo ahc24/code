@@ -10958,7 +10958,7 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 47
+# 51
 void init_i2c(i2c_comm *);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
@@ -11032,10 +11032,10 @@ int timer1_lthread(timer1_thread_struct *tptr, int msgtype, int length, unsigned
 signed char retval;
 blink0();
 
-unsigned char sensor_request[14];
-sensor_request[0]=0x04;
+unsigned char i2c_msg[14];
+i2c_msg[0]=0x04;
 
-i2c_master_send(14,sensor_request);
+i2c_master_send(14,i2c_msg);
 
 static unsigned char move_counter = 0;
 
@@ -11057,6 +11057,11 @@ tptr->move_msg[1]=0;
 tptr->move_msg[2]=0;
 i2c_master_send(14,tptr->move_msg);
 }
+
+
+i2c_msg[0]=0x06;
+
+i2c_master_send(14,i2c_msg);
 
 
 tptr->msgcount++;

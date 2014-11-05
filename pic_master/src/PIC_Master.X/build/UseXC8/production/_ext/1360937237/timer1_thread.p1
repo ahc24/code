@@ -4,7 +4,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S1137 __timer1_thread_struct move_msg new_move_msg msgcount ]
 "41 ../src/debug.h
 [v _blink0 `(v ~T0 @X0 0 ef ]
-"52 ../src/my_i2c.h
+"56 ../src/my_i2c.h
 [v _i2c_master_send `(uc ~T0 @X0 0 ef2`uc`*uc ]
 "98 ../src/messages.h
 [v _FromMainHigh_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
@@ -8387,13 +8387,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_i2c.h: 20: unsigned char initiated;
 [; ;my_i2c.h: 21: unsigned char slave_addr;
 [; ;my_i2c.h: 22: } i2c_comm;
-[; ;my_i2c.h: 47: void init_i2c(i2c_comm *);
-[; ;my_i2c.h: 48: void i2c_int_handler(void);
-[; ;my_i2c.h: 49: void start_i2c_slave_reply(unsigned char,unsigned char *);
-[; ;my_i2c.h: 50: void i2c_configure_slave(unsigned char);
-[; ;my_i2c.h: 51: void i2c_configure_master(unsigned char);
-[; ;my_i2c.h: 52: unsigned char i2c_master_send(unsigned char,unsigned char *);
-[; ;my_i2c.h: 53: unsigned char i2c_master_recv(unsigned char);
+[; ;my_i2c.h: 51: void init_i2c(i2c_comm *);
+[; ;my_i2c.h: 52: void i2c_int_handler(void);
+[; ;my_i2c.h: 53: void start_i2c_slave_reply(unsigned char,unsigned char *);
+[; ;my_i2c.h: 54: void i2c_configure_slave(unsigned char);
+[; ;my_i2c.h: 55: void i2c_configure_master(unsigned char);
+[; ;my_i2c.h: 56: unsigned char i2c_master_send(unsigned char,unsigned char *);
+[; ;my_i2c.h: 57: unsigned char i2c_master_recv(unsigned char);
 [; ;my_uart.h: 28: typedef struct
 [; ;my_uart.h: 29: {
 [; ;my_uart.h: 30: unsigned char data[(14 + 2 + 2)];
@@ -8456,14 +8456,14 @@ Version 3.2 HI-TECH Software Intermediate Code
 "19
 [e ( _blink0 ..  ]
 "21
-[v _sensor_request `uc ~T0 @X0 -> 14 `i a ]
-[; ;timer1_thread.c: 21: unsigned char sensor_request[14];
-[; ;timer1_thread.c: 22: sensor_request[0]=0x04;
+[v _i2c_msg `uc ~T0 @X0 -> 14 `i a ]
+[; ;timer1_thread.c: 21: unsigned char i2c_msg[14];
+[; ;timer1_thread.c: 22: i2c_msg[0]=0x04;
 "22
-[e = *U + &U _sensor_request * -> -> -> 0 `i `ui `ux -> -> # *U &U _sensor_request `ui `ux -> -> 4 `i `uc ]
-[; ;timer1_thread.c: 24: i2c_master_send(14,sensor_request);
+[e = *U + &U _i2c_msg * -> -> -> 0 `i `ui `ux -> -> # *U &U _i2c_msg `ui `ux -> -> 4 `i `uc ]
+[; ;timer1_thread.c: 24: i2c_master_send(14,i2c_msg);
 "24
-[e ( _i2c_master_send (2 , -> -> 14 `i `uc &U _sensor_request ]
+[e ( _i2c_master_send (2 , -> -> 14 `i `uc &U _i2c_msg ]
 "26
 [v F9225 `uc ~T0 @X0 1 s move_counter ]
 [i F9225
@@ -8524,29 +8524,35 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 [e :U 1142 ]
 [; ;timer1_thread.c: 45: }
-[; ;timer1_thread.c: 48: tptr->msgcount++;
+[; ;timer1_thread.c: 48: i2c_msg[0]=0x06;
 "48
+[e = *U + &U _i2c_msg * -> -> -> 0 `i `ui `ux -> -> # *U &U _i2c_msg `ui `ux -> -> 6 `i `uc ]
+[; ;timer1_thread.c: 50: i2c_master_send(14,i2c_msg);
+"50
+[e ( _i2c_master_send (2 , -> -> 14 `i `uc &U _i2c_msg ]
+[; ;timer1_thread.c: 53: tptr->msgcount++;
+"53
 [e ++ . *U _tptr 2 -> -> 1 `i `ui ]
-[; ;timer1_thread.c: 51: if ((tptr->msgcount % 10) == 9) {
-"51
+[; ;timer1_thread.c: 56: if ((tptr->msgcount % 10) == 9) {
+"56
 [e $ ! == % . *U _tptr 2 -> -> 10 `i `ui -> -> 9 `i `ui 1143  ]
 {
-[; ;timer1_thread.c: 52: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
-"52
+[; ;timer1_thread.c: 57: retval = FromMainHigh_sendmsg(sizeof (tptr->msgcount), 20, (void *) &(tptr->msgcount));
+"57
 [e = _retval ( _FromMainHigh_sendmsg (3 , , -> -> # . *U _tptr 2 `ui `uc -> -> 20 `i `uc -> &U . *U _tptr 2 `*v ]
-[; ;timer1_thread.c: 53: if (retval < 0) {
-"53
+[; ;timer1_thread.c: 58: if (retval < 0) {
+"58
 [e $ ! < -> _retval `i -> 0 `i 1144  ]
 {
-"55
+"60
 }
 [e :U 1144 ]
-"56
+"61
 }
 [e :U 1143 ]
-[; ;timer1_thread.c: 55: }
-[; ;timer1_thread.c: 56: }
-[; ;timer1_thread.c: 58: }
-"58
+[; ;timer1_thread.c: 60: }
+[; ;timer1_thread.c: 61: }
+[; ;timer1_thread.c: 63: }
+"63
 [e :UE 1139 ]
 }

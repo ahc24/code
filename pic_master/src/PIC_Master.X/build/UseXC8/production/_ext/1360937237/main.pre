@@ -11014,7 +11014,7 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 47
+# 51
 void init_i2c(i2c_comm *);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
@@ -11133,24 +11133,26 @@ LATB = 0x0;
 # 262
 OpenTimer0(0b11111111 & 0b10111111 & 0b11011111 & 0b11110110);
 
-# 269
+# 270
 OpenTimer1(0b11111111 & 0b10011111 & 0b11111111 & 0b11111111 & 0b11111011 & 0b11111111,0x0);
 
-# 278
+# 292
 IPR1bits.TMR1IP = 0;
+
+IPR2bits.TMR3IP = 0;
 
 IPR1bits.RCIP = 0;
 
 
 IPR1bits.SSPIP = 1;
 
-# 293
-i2c_configure_master(0x4f);
+# 309
+i2c_configure_master(0x00);
 
-# 304
+# 320
 PIE1bits.SSPIE = 1;
 
-# 330
+# 346
 debug_configure();
 blip();
 blip1();
@@ -11158,10 +11160,10 @@ blip2();
 blip3();
 blip4();
 
-# 345
+# 361
 enable_interrupts();
 
-# 355
+# 371
 uart_configure();
 
 
@@ -11177,14 +11179,14 @@ sensor_data[z] = 0x00;
 unsigned char myByte1 = 0x54;
 unsigned char myByte2 = 0x45;
 
-# 381
+# 397
 while (1) {
 
 
 
 block_on_To_msgqueues();
 
-# 393
+# 409
 length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -11202,7 +11204,36 @@ break;
 };
 case 40:
 {
-send_uart_message( msgbuffer );
+
+switch(msgbuffer[0])
+{
+case 0x05:
+{
+for(z=1;z<14-2;z++)
+{
+sensor_data[z] = msgbuffer[z];
+}
+
+
+break;
+}
+case 0x07:
+{
+sensor_data[14-2] = msgbuffer[14-2];
+sensor_data[14-1] = msgbuffer[14-1];
+
+send_uart_message( sensor_data );
+
+break;
+}
+default:
+{
+
+break;
+}
+}
+
+
 }
 case 41:
 {
@@ -11214,7 +11245,7 @@ break;
 case 42:
 {
 
-# 429
+# 474
 break;
 };
 default:

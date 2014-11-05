@@ -5995,7 +5995,7 @@ void timer0_int_handler(void);
 
 void timer1_int_handler(void);
 
-# 25 "../src/messages.h"
+# 27 "../src/messages.h"
 typedef struct __msg {
 unsigned char full;
 unsigned char length;
@@ -6009,7 +6009,7 @@ unsigned char cur_write_ind;
 unsigned char cur_read_ind;
 } msg_queue;
 
-# 58
+# 60
 void init_queues(void);
 
 
@@ -6020,19 +6020,19 @@ void SleepIfOkay(void);
 
 void block_on_To_msgqueues(void);
 
-# 72
+# 74
 signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 79
+# 81
 signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
-# 86
+# 88
 signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
 
-# 93
+# 95
 signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
 signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 
@@ -6096,7 +6096,7 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 46
+# 48
 void init_i2c(i2c_comm *ic);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
@@ -6150,8 +6150,6 @@ interrupt
 
 # 86
 void InterruptHandlerHigh() {
-LATDbits.LD6 = 0;
-LATDbits.LD6 = 1;
 
 
 
@@ -6166,35 +6164,35 @@ PIR1bits.SSPIF = 0;
 i2c_int_handler();
 }
 
-
-if (INTCONbits.TMR0IF) {
-INTCONbits.TMR0IF = 0;
-
-
-
-
-timer0_int_handler();
-}
-
 # 120
 SleepIfOkay();
-LATDbits.LD6 = 1;
-LATDbits.LD6 = 0;
 }
 
-# 130
+# 128
 interrupt low_priority
 
-# 135
+# 133
 void InterruptHandlerLow() {
+static unsigned char encoder_ticks=0;
 
 
 if (PIR1bits.TMR1IF) {
 PIR1bits.TMR1IF = 0;
 
-
+blip1();
 
 timer1_int_handler();
+}
+
+
+if (INTCONbits.TMR0IF) {
+INTCONbits.TMR0IF = 0;
+
+blip2();
+
+encoder_ticks++;
+
+timer0_int_handler();
 }
 
 
@@ -6220,5 +6218,19 @@ uart_transmit_interrupt_handler();
 }
 
 
+if( PIR1bits.ADIF )
+{
+PIR1bits.ADIF = 0;
+
+unsigned char sendy_stuff = TMR0L;
+
+TMR0L = 0;
+
+encoder_ticks = 0;
+
+ToMainLow_sendmsg(1,47,(void *) &sendy_stuff );
+
+blip3();
+}
 }
 

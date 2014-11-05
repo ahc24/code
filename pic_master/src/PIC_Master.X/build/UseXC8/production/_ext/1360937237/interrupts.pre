@@ -11019,7 +11019,7 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 47
+# 51
 void init_i2c(i2c_comm *);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
@@ -11106,12 +11106,21 @@ interrupt low_priority
 void InterruptHandlerLow() {
 
 
-if (PIR1bits.TMR1IF) {
+if (PIR1bits.TMR1IF)
+{
 PIR1bits.TMR1IF = 0;
 
-
+blip1();
 
 timer1_int_handler();
+}
+
+
+if (PIR2bits.TMR3IF)
+{
+PIR2bits.TMR3IF = 0;
+
+TMR3L = 0;
 }
 
 

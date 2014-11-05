@@ -53,8 +53,6 @@ void uart_configure()
 //Handle receive interrupt
 void uart_receive_interrupt_handler()
 {
-    blip();
-
     //static unsigned char done = 1;
     static unsigned char frame[UART_FRAME_LENGTH];
     static unsigned char index = 0;
@@ -66,7 +64,6 @@ void uart_receive_interrupt_handler()
 
     if(!done)
     {
-        blip1();
         frame[index] = RCREG1;
         if(error)
         {

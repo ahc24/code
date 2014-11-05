@@ -1,13 +1,9 @@
 Version 3.2 HI-TECH Software Intermediate Code
 "121 C:\Program Files (x86)\Microchip\xc8\v1.32\include\plib\timers.h
 [v _WriteTimer0 `(v ~T0 @X0 0 ef1`ui ]
-"94 ../src/messages.h
-[v _FromMainHigh_recvmsg `(c ~T0 @X0 0 ef3`uc`*uc`*v ]
-"79
-[v _ToMainHigh_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
-"238 C:\Program Files (x86)\Microchip\xc8\v1.32\include\plib\timers.h
+"238
 [v _ReadTimer1 `(ui ~T0 @X0 0 ef ]
-"72 ../src/messages.h
+"74 ../src/messages.h
 [v _ToMainLow_sendmsg `(c ~T0 @X0 0 ef3`uc`uc`*v ]
 "239 C:\Program Files (x86)\Microchip\xc8\v1.32\include\plib\timers.h
 [v _WriteTimer1 `(v ~T0 @X0 0 ef1`ui ]
@@ -4623,28 +4619,28 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;debug.h: 42: void blink1();
 [; ;user_interrupts.h: 12: void timer0_int_handler(void);
 [; ;user_interrupts.h: 14: void timer1_int_handler(void);
-[; ;messages.h: 25: typedef struct __msg {
-[; ;messages.h: 26: unsigned char full;
-[; ;messages.h: 27: unsigned char length;
-[; ;messages.h: 28: unsigned char msgtype;
-[; ;messages.h: 29: unsigned char data[14];
-[; ;messages.h: 30: } msg;
-[; ;messages.h: 32: typedef struct __msg_queue {
-[; ;messages.h: 33: msg queue[5];
-[; ;messages.h: 34: unsigned char cur_write_ind;
-[; ;messages.h: 35: unsigned char cur_read_ind;
-[; ;messages.h: 36: } msg_queue;
-[; ;messages.h: 58: void init_queues(void);
-[; ;messages.h: 62: void SleepIfOkay(void);
-[; ;messages.h: 66: void block_on_To_msgqueues(void);
-[; ;messages.h: 72: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 73: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 79: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 80: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 86: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 87: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
-[; ;messages.h: 93: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
-[; ;messages.h: 94: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 27: typedef struct __msg {
+[; ;messages.h: 28: unsigned char full;
+[; ;messages.h: 29: unsigned char length;
+[; ;messages.h: 30: unsigned char msgtype;
+[; ;messages.h: 31: unsigned char data[14];
+[; ;messages.h: 32: } msg;
+[; ;messages.h: 34: typedef struct __msg_queue {
+[; ;messages.h: 35: msg queue[5];
+[; ;messages.h: 36: unsigned char cur_write_ind;
+[; ;messages.h: 37: unsigned char cur_read_ind;
+[; ;messages.h: 38: } msg_queue;
+[; ;messages.h: 60: void init_queues(void);
+[; ;messages.h: 64: void SleepIfOkay(void);
+[; ;messages.h: 68: void block_on_To_msgqueues(void);
+[; ;messages.h: 74: signed char ToMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 75: signed char ToMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 81: signed char ToMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 82: signed char ToMainHigh_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 88: signed char FromMainLow_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 89: signed char FromMainLow_recvmsg(unsigned char,unsigned char *,void *);
+[; ;messages.h: 95: signed char FromMainHigh_sendmsg(unsigned char,unsigned char,void *);
+[; ;messages.h: 96: signed char FromMainHigh_recvmsg(unsigned char,unsigned char *,void *);
 [; ;my_uart.h: 36: typedef struct
 [; ;my_uart.h: 37: {
 [; ;my_uart.h: 38: unsigned char data[(14 + 2 + 2)];
@@ -4683,67 +4679,46 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;my_i2c.h: 19: unsigned char initiated;
 [; ;my_i2c.h: 20: unsigned char slave_addr;
 [; ;my_i2c.h: 21: } i2c_comm;
-[; ;my_i2c.h: 46: void init_i2c(i2c_comm *ic);
-[; ;my_i2c.h: 47: void i2c_int_handler(void);
-[; ;my_i2c.h: 48: void start_i2c_slave_reply(unsigned char,unsigned char *);
-[; ;my_i2c.h: 49: void i2c_configure_slave(unsigned char);
-[; ;my_i2c.h: 50: void i2c_configure_master(unsigned char);
-[; ;my_i2c.h: 51: unsigned char i2c_master_send(unsigned char,unsigned char *);
-[; ;my_i2c.h: 52: unsigned char i2c_master_recv(unsigned char);
-[; ;my_i2c.h: 54: void retrieve_sensor_values( unsigned char * sensor_bank );
+[; ;my_i2c.h: 48: void init_i2c(i2c_comm *ic);
+[; ;my_i2c.h: 49: void i2c_int_handler(void);
+[; ;my_i2c.h: 50: void start_i2c_slave_reply(unsigned char,unsigned char *);
+[; ;my_i2c.h: 51: void i2c_configure_slave(unsigned char);
+[; ;my_i2c.h: 52: void i2c_configure_master(unsigned char);
+[; ;my_i2c.h: 53: unsigned char i2c_master_send(unsigned char,unsigned char *);
+[; ;my_i2c.h: 54: unsigned char i2c_master_recv(unsigned char);
+[; ;my_i2c.h: 56: void retrieve_sensor_values( unsigned char * sensor_bank );
 "16 ../src/user_interrupts.c
 [v _timer0_int_handler `(v ~T0 @X0 1 ef ]
 {
 [; ;user_interrupts.c: 16: void timer0_int_handler() {
 [e :U _timer0_int_handler ]
 [f ]
-"20
-[v _val `ui ~T0 @X0 1 a ]
-"21
-[v _length `i ~T0 @X0 1 a ]
-[v _msgtype `i ~T0 @X0 1 a ]
-[; ;user_interrupts.c: 20: unsigned int val;
-[; ;user_interrupts.c: 21: int length, msgtype;
-[; ;user_interrupts.c: 25: WriteTimer0(0);
-"25
+[; ;user_interrupts.c: 24: WriteTimer0(0);
+"24
 [e ( _WriteTimer0 (1 -> -> 0 `i `ui ]
-[; ;user_interrupts.c: 27: length = FromMainHigh_recvmsg(sizeof(val), (unsigned char *)&msgtype, (void *) &val);
-"27
-[e = _length -> ( _FromMainHigh_recvmsg (3 , , -> -> # _val `ui `uc -> &U _msgtype `*uc -> &U _val `*v `i ]
-[; ;user_interrupts.c: 28: if (length == sizeof (val)) {
-"28
-[e $ ! == -> _length `ui -> # _val `ui 588  ]
-{
-[; ;user_interrupts.c: 29: ToMainHigh_sendmsg(sizeof (val), 10, (void *) &val);
-"29
-[e ( _ToMainHigh_sendmsg (3 , , -> -> # _val `ui `uc -> -> 10 `i `uc -> &U _val `*v ]
-"30
-}
-[e :U 588 ]
-[; ;user_interrupts.c: 30: }
-[; ;user_interrupts.c: 33: }
-"33
+[; ;user_interrupts.c: 36: }
+"36
 [e :UE 587 ]
 }
-"38
+"41
 [v _timer1_int_handler `(v ~T0 @X0 1 ef ]
 {
-[; ;user_interrupts.c: 38: void timer1_int_handler() {
+[; ;user_interrupts.c: 41: void timer1_int_handler() {
 [e :U _timer1_int_handler ]
 [f ]
-"42
+"45
 [v _result `ui ~T0 @X0 1 a ]
-[; ;user_interrupts.c: 42: unsigned int result;
-[; ;user_interrupts.c: 49: result = ReadTimer1();
-"49
+[; ;user_interrupts.c: 45: unsigned int result;
+[; ;user_interrupts.c: 52: result = ReadTimer1();
+"52
 [e = _result ( _ReadTimer1 ..  ]
-[; ;user_interrupts.c: 50: ToMainLow_sendmsg(0, 11, (void *) 0);
-"50
-[e ( _ToMainLow_sendmsg (3 , , -> -> 0 `i `uc -> -> 11 `i `uc -> -> 0 `i `*v ]
-[; ;user_interrupts.c: 53: WriteTimer1(0);
+[; ;user_interrupts.c: 53: ToMainLow_sendmsg(0, 11, (void *) 0);
 "53
+[e ( _ToMainLow_sendmsg (3 , , -> -> 0 `i `uc -> -> 11 `i `uc -> -> 0 `i `*v ]
+[; ;user_interrupts.c: 56: WriteTimer1(0);
+"56
 [e ( _WriteTimer1 (1 -> -> 0 `i `ui ]
-[; ;user_interrupts.c: 55: }
-"55
-[e :UE 589 ]
+[; ;user_interrupts.c: 58: }
+"58
+[e :UE 588 ]
 }

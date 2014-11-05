@@ -16,18 +16,21 @@
 void timer0_int_handler() {
 
     
+    
 
-    unsigned int val;
-    int length, msgtype;
-
+    
 
     // reset the timer
     WriteTimer0(0);
+    /*
+    unsigned int val;
+    int length, msgtype;
     // try to receive a message and, if we get one, echo it back
     length = FromMainHigh_recvmsg(sizeof(val), (unsigned char *)&msgtype, (void *) &val);
     if (length == sizeof (val)) {
         ToMainHigh_sendmsg(sizeof (val), MSGT_TIMER0, (void *) &val);
     }
+    */
 
     
 }

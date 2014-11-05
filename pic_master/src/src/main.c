@@ -260,6 +260,7 @@ void main(void) {
 
     // initialize Timers
     OpenTimer0(TIMER_INT_ON & T0_16BIT & T0_SOURCE_INT & T0_PS_1_128);
+
     
     #ifdef __USE18F26J50
     // MTJ added second argument for OpenTimer1()
@@ -267,6 +268,19 @@ void main(void) {
     #else
     #ifdef __USE18F46J50
     OpenTimer1(TIMER_INT_ON & T1_SOURCE_FOSC_4 & T1_PS_1_8 & T1_16BIT_RW & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF,0x0);
+
+    //configure Timer 3
+    /*
+    TRISAbits.TRISA5 = 1;
+    T3CON = 0x00;
+    T3CONbits.TMR3CS = 0x2;
+    T3CONbits.T3CKPS = 0x0;
+    T3CONbits.RD16 = 0;
+    T3CONbits.T3SYNC = 0;
+    T3CONbits.TMR3ON = 1;
+    RPINR6 = 0x02;
+    */
+
     #else
     OpenTimer1(TIMER_INT_ON & T1_PS_1_8 & T1_16BIT_RW & T1_SOURCE_INT & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF);
     #endif
@@ -276,6 +290,8 @@ void main(void) {
     // 0 is low, 1 is high
     // Timer1 interrupt
     IPR1bits.TMR1IP = 0;
+    // Timer3 interrupt
+    IPR2bits.TMR3IP = 0;
     // USART RX interrupt
     IPR1bits.RCIP = 0;
     
@@ -290,7 +306,7 @@ void main(void) {
     //   enabled.  They are just there to make the lights blink and can be
     //   disabled.
     //i2c_configure_slave(0x9E);
-    i2c_configure_master(0x4f);
+    i2c_configure_master(I2C_DEFAULT_PIC_ADDRESS);
     #else
     // If I want to test the temperature sensor from the ARM, I just make
     // sure this PIC does not have the same address and configure the
@@ -407,7 +423,36 @@ void main(void) {
                 };
                 case MSGT_I2C_DATA:
                 {
-                    send_uart_message( msgbuffer );
+
+                    switch(msgbuffer[0])
+                    {
+                        case MSGID_SENSOR_RESPONSE:
+                        {
+                            for(z=1;z<MSGLEN-2;z++)
+                            {
+                                sensor_data[z] = msgbuffer[z];
+                            }
+
+                            
+                            break;
+                        }
+                        case MSGID_MOTOR_RESPONSE:
+                        {
+                            sensor_data[MSGLEN-2] = msgbuffer[MSGLEN-2];
+                            sensor_data[MSGLEN-1] = msgbuffer[MSGLEN-1];
+
+                            send_uart_message( sensor_data );
+
+                            break;
+                        }
+                        default:
+                        {
+
+                            break;
+                        }
+                    }
+
+                    
                 }
                 case MSGT_I2C_DBG:
                 {

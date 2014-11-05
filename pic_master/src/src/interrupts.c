@@ -131,12 +131,21 @@ interrupt low_priority
 void InterruptHandlerLow() {
     
     // check to see if we have an interrupt on timer 1
-    if (PIR1bits.TMR1IF) {
+    if (PIR1bits.TMR1IF)
+    {
         PIR1bits.TMR1IF = 0; //clear interrupt flag
 
-        
+        blip1();
 
         timer1_int_handler();
+    }
+
+    //Check timer3
+    if (PIR2bits.TMR3IF)
+    {
+        PIR2bits.TMR3IF = 0; //clear interrupt flag
+
+        TMR3L = 0;
     }
 
     // check to see if we have an interrupt on USART RX

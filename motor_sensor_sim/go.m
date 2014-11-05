@@ -22,7 +22,7 @@ function varargout = go(varargin)
 
 % Edit the above text to modify the response to help go
 
-% Last Modified by GUIDE v2.5 23-Oct-2014 16:39:30
+% Last Modified by GUIDE v2.5 02-Nov-2014 12:33:38
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,13 +51,20 @@ function go_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to go (see VARARGIN)
+    ioARMSimWiFly = serial('COM4','BaudRate',57600);
+    fopen(ioARMSimWiFly);
 
-ioARMSimWiFly = serial('COM4','BaudRate',57600);
-fopen(ioARMSimWiFly);
 
+    handles.serial_connection = ioARMSimWiFly;
 
-handles.serial_connection = ioARMSimWiFly;
-
+    % plot(1,2,'+');
+    handles.x = 0;
+    t = timer('StartDelay', 2, 'Period', 0.05, 'ExecutionMode', 'fixedRate');
+    t.TimerFcn = { @do_timer_stuff , handles };
+    
+    
+    start(t);
+    
 % Choose default command line output for go
 handles.output = hObject;
 
@@ -67,6 +74,50 @@ guidata(hObject, handles);
 % UIWAIT makes go wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
+function do_timer_stuff(hObject, eventdata, handles)
+    % disp('timer callback');
+    persistent i;
+    persistent y;
+    persistent x;
+    
+    if isempty(i)
+        i= 1;
+    end
+    
+    if isempty(y)
+        y=zeros(255,1);
+    end
+    
+    if isempty(x)
+        x=[1:1:255];
+    end
+    
+    
+    
+    
+    byte = fread(handles.serial_connection, 1);
+    if (byte~=255)
+        return;
+    else
+        stuff = fread(handles.serial_connection, 17);
+        % disp(stuff);    
+
+        if(stuff(2) == 3)
+            y(i) = stuff(15);
+        else
+            y(i) = 0;
+        end     
+
+        plot(x, y, '+');
+        axis([1 255 0 255]);
+
+        i = i + 1;
+
+        if i > 255
+            i = 1;
+        end
+    end
+    
 
 % --- Outputs from this function are returned to the command line.
 function varargout = go_OutputFcn(hObject, eventdata, handles) 
@@ -81,7 +132,8 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in forward_button.
 function forward_button_Callback(hObject, eventdata, handles)
-    i_like_to_move_it_move_it(hObject,handles,127,127);
+    speed = str2double(get(handles.speed,'String'));   
+    i_like_to_move_it_move_it(hObject,handles,speed,speed);
 % hObject    handle to forward_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -89,7 +141,8 @@ function forward_button_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in backward_button.
 function backward_button_Callback(hObject, eventdata, handles)
-    i_like_to_move_it_move_it(hObject,handles,128,128);
+    speed = str2double(get(handles.speed,'String'));  
+    i_like_to_move_it_move_it(hObject,handles,255-speed,255-speed);
 
 % hObject    handle to backward_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -98,7 +151,8 @@ function backward_button_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in turn_left.
 function turn_left_Callback(hObject, eventdata, handles)
-    i_like_to_move_it_move_it(hObject,handles,127,128);
+    speed = str2double(get(handles.speed,'String'));  
+    i_like_to_move_it_move_it(hObject,handles,speed,255-speed);
 % hObject    handle to turn_left (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -106,13 +160,21 @@ function turn_left_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in turn_right.
 function turn_right_Callback(hObject, eventdata, handles)
-    i_like_to_move_it_move_it(hObject,handles,128,127);
+    speed = str2double(get(handles.speed,'String'));  
+    i_like_to_move_it_move_it(hObject,handles,255-speed,speed);
 % hObject    handle to turn_right (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+% --- Executes on button press in stop.
+function stop_Callback(hObject, eventdata, handles)
+    i_like_to_move_it_move_it(hObject,handles,0,0);
+% hObject    handle to stop (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 function i_like_to_move_it_move_it(hObject, handles, left_speed,right_speed)
-    some_kinda_handle_thingy = guidata(hObject);
+    % some_kinda_handle_thingy = guidata(hObject);
 
     persistent counter;
     
@@ -135,7 +197,7 @@ function i_like_to_move_it_move_it(hObject, handles, left_speed,right_speed)
     end
     footer = hex2dec('fe');
     str = strcat(header,counter,meaty_center, checksum, footer);
-    fwrite(some_kinda_handle_thingy.serial_connection,str);
+    fwrite(handles.serial_connection,str);
 
 
 
@@ -160,3 +222,54 @@ function time_inc_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+
+function speed_Callback(hObject, eventdata, handles)
+% hObject    handle to speed (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of speed as text
+%        str2double(get(hObject,'String')) returns contents of speed as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function speed_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to speed (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in start_sim.
+function start_sim_Callback(hObject, eventdata, handles)
+    ioARMSimWiFly = serial('COM4','BaudRate',57600);
+    fopen(ioARMSimWiFly);
+
+
+    handles.serial_connection = ioARMSimWiFly;
+% hObject    handle to start_sim (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in stop_sim.
+function stop_sim_Callback(hObject, eventdata, handles)
+    % Stop the ARMSim Timer
+    % stop(handles.serial_connection);
+
+    % Close WiFly FID
+    fclose(handles.serial_connection);
+    delete(handles.serial_connection);
+
+    % Clear all state
+    clear all;
+% hObject    handle to stop_sim (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
