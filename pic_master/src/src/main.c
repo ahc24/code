@@ -372,16 +372,20 @@ void main(void) {
 
     //Initialize snesor data
     unsigned char sensor_data[MSGLEN];
-    sensor_data[0] = MSGID_STATUS_RESPONSE;
-    unsigned char z;
-    for(z=1;z<MSGLEN;z++)
+    sensor_data[0] = MSGID_SENSOR_RESPONSE;
+    for(i=1;i<MSGLEN;i++)
     {
-        sensor_data[z] = 0x00;
+        sensor_data[i] = 0x00;
     }
 
+    unsigned char motor_data[MSGLEN];
+    motor_data[0] = MSGID_MOTOR_RESPONSE;
+    for(i=1;i<MSGLEN;i++)
+    {
+        motor_data[i] = 0x00;
+    }
 
-    unsigned char myByte1 = 0x54;
-    unsigned char myByte2 = 0x45;
+    
 
     // printf() is available, but is not advisable.  It goes to the UART pin
     // on the PIC and then you must hook something up to that to view it.
@@ -428,20 +432,25 @@ void main(void) {
                     {
                         case MSGID_SENSOR_RESPONSE:
                         {
-                            for(z=1;z<MSGLEN-2;z++)
+                            for(i=2;i<MSGLEN-2;i++)
                             {
-                                sensor_data[z] = msgbuffer[z];
+                                sensor_data[i] = msgbuffer[i];
                             }
 
+                            send_uart_message( sensor_data );
                             
                             break;
                         }
                         case MSGID_MOTOR_RESPONSE:
                         {
-                            sensor_data[MSGLEN-2] = msgbuffer[MSGLEN-2];
-                            sensor_data[MSGLEN-1] = msgbuffer[MSGLEN-1];
+                            for(i=2;i<MSGLEN-2;i++)
+                            {
+                                motor_data[i] = msgbuffer[i];
+                            }
 
-                            send_uart_message( sensor_data );
+                            //motor_data[3] = 3;
+
+                            send_uart_message( motor_data );
 
                             break;
                         }
@@ -559,7 +568,19 @@ void main(void) {
                     {
                         case MSGID_STATUS_REQUEST:
                         {
+
+                            //send_uart_message( sensor_data );
+                            break;
+                        }
+                        case MSGID_SENSOR_REQUEST:
+                        {
                             send_uart_message( sensor_data );
+                            break;
+                        }
+                        case MSGID_MOTOR_REQUEST:
+                        {
+                            send_uart_message( motor_data );
+                            motor_data[1] = 0;
                             break;
                         }
                         case MSGID_MOVE:

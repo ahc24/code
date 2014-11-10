@@ -10986,7 +10986,7 @@ unsigned char uart_num_bytes_in_recv_buffer();
 
 void uart_frame_message( unsigned char * inner , unsigned char * outer );
 
-# 22 "../src/my_uart.c"
+# 24 "../src/my_uart.c"
 void uart_configure()
 {
 TRISCbits.TRISC7 = 1;
@@ -11014,7 +11014,7 @@ RCSTA1bits.CREN = 1;
 
 }
 
-# 54
+# 56
 void uart_receive_interrupt_handler()
 {
 
@@ -11144,7 +11144,7 @@ received_counter++;
 error = 0;
 }
 
-# 187
+# 189
 }
 
 
@@ -11189,6 +11189,7 @@ uart_frame_message( data , message );
 index = 0;
 done = 0;
 
+# 237
 TXREG1 = message[index];
 index++;
 if( index >= (14 + 2 + 2) )
@@ -11213,6 +11214,7 @@ else
 else
 {
 
+# 263
 TXREG1 = message[index];
 index++;
 if( index >= (14 + 2 + 2) )
@@ -11224,7 +11226,7 @@ done = 1;
 
 }
 
-# 373
+# 381
 void uart_frame_message( unsigned char * inner , unsigned char * outer )
 {
 static unsigned char sent_counter = 0;

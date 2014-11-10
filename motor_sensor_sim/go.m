@@ -22,7 +22,7 @@ function varargout = go(varargin)
 
 % Edit the above text to modify the response to help go
 
-% Last Modified by GUIDE v2.5 02-Nov-2014 12:33:38
+% Last Modified by GUIDE v2.5 05-Nov-2014 20:06:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,19 +51,27 @@ function go_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to go (see VARARGIN)
+
+
     ioARMSimWiFly = serial('COM4','BaudRate',57600);
+    ioARMSimWiFly.BytesAvailableFcnCount = 18;
+    ioARMSimWiFly.BytesAvailableFcnMode = 'byte';
+    % ioARMSimWiFly.terminator = '~';    
+    ioARMSimWiFly.BytesAvailableFcn = {@get_stuff,handles};
     fopen(ioARMSimWiFly);
-
-
+    
+    
     handles.serial_connection = ioARMSimWiFly;
-
+    
+    
+    
     % plot(1,2,'+');
-    handles.x = 0;
-    t = timer('StartDelay', 2, 'Period', 0.05, 'ExecutionMode', 'fixedRate');
-    t.TimerFcn = { @do_timer_stuff , handles };
+    % handles.x = 0;
+    % t = timer('StartDelay', 2, 'Period', 0.05, 'ExecutionMode', 'fixedRate');
+    % t.TimerFcn = { @do_timer_stuff , handles };
     
     
-    start(t);
+    % start(t);
     
 % Choose default command line output for go
 handles.output = hObject;
@@ -74,49 +82,61 @@ guidata(hObject, handles);
 % UIWAIT makes go wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-function do_timer_stuff(hObject, eventdata, handles)
-    % disp('timer callback');
+function get_stuff(hObject, eventdata, handles)
+    
+    [data count msg] = fread(hObject, 18, 'char');
+    
+    
+    if(data(3) ~= 7)
+        return
+    end
+    
+    
+    
+    % disp(data);
+    
+    % Create and maintain index    
     persistent i;
-    persistent y;
-    persistent x;
-    
     if isempty(i)
-        i= 1;
-    end
-    
-    if isempty(y)
-        y=zeros(255,1);
-    end
-    
-    if isempty(x)
-        x=[1:1:255];
-    end
-    
-    
-    
-    
-    byte = fread(handles.serial_connection, 1);
-    if (byte~=255)
-        return;
+        i=1;  
+        % disp('i oned')
+    elseif i > 255
+        i=1;
+        % disp('i edge')
     else
-        stuff = fread(handles.serial_connection, 17);
-        % disp(stuff);    
-
-        if(stuff(2) == 3)
-            y(i) = stuff(15);
-        else
-            y(i) = 0;
-        end     
-
-        plot(x, y, '+');
-        axis([1 255 0 255]);
-
         i = i + 1;
-
-        if i > 255
-            i = 1;
-        end
+        % disp('i increment')
     end
+    % ===
+    
+    % Create and maintain y (actual sampled values)
+    persistent y;
+    if isempty(y)
+        % disp('y zeroed')
+        y=zeros(256,1);
+    else
+        y(i) = (bitshift(data(5),24))+(bitshift(data(6),16))+(bitshift(data(7),8))+(data(8));
+        % disp('y delta normal')
+    end  
+    
+    set(handles.ticks,'string',y(i));
+    % ===   
+    
+    % Create and maintain delta
+    persistent delta;
+    if isempty(delta)
+        delta = zeros(256,1);
+        delta(1) = y(1);
+    elseif i > 1
+        delta(i) = y(i) - y(i-1);
+        % disp(delta)
+    else 
+        delta(i) = y(i) - y(255);
+    end
+    t=1:1:256;
+    plot( handles.axes1, t, delta);
+    % ===
+
     
 
 % --- Outputs from this function are returned to the command line.
@@ -125,6 +145,8 @@ function varargout = go_OutputFcn(hObject, eventdata, handles)
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% delete(instrfindall)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -273,3 +295,26 @@ function stop_sim_Callback(hObject, eventdata, handles)
 % hObject    handle to stop_sim (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function ticks_Callback(hObject, eventdata, handles)
+% hObject    handle to ticks (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ticks as text
+%        str2double(get(hObject,'String')) returns contents of ticks as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ticks_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ticks (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

@@ -9,6 +9,8 @@
 
 //static uart_comm *uc_ptr;
 
+//#define MATLABSIM 1
+
 #ifdef __USE18F46J50  //Alex: Begin definitions for the Mk 4
 //static uart_packet_type * m_uart_send_buffer;
 //static uart_buffer_type * m_uart_receive_buffer;
@@ -228,6 +230,10 @@ void uart_transmit_interrupt_handler()
             index = 0;
             done = 0;
 
+            #ifdef MATLABSIM
+            message[index] = message[index] ^ 0x80;
+            #endif
+
             TXREG1 = message[index];
             index++;
             if( index >= UART_FRAME_LENGTH )
@@ -251,7 +257,9 @@ void uart_transmit_interrupt_handler()
     }
     else
     {
-
+        #ifdef MATLABSIM
+        message[index] = message[index] ^ 0x80;
+        #endif
         TXREG1 = message[index];
         index++;
         if( index >= UART_FRAME_LENGTH )

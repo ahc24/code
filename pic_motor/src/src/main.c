@@ -264,18 +264,26 @@ void main(void) {
     // Timer0
     //OpenTimer0(TIMER_INT_ON & T0_8BIT & T0_SOURCE_INT & T0_PS_1_128);
     ///*
-    INTCONbits.TMR0IE = 1;
-    TRISBbits.TRISB5 = 1;
-    T0CONbits.T08BIT = 1;
-    T0CONbits.T0CS = 1;
-    T0CONbits.T0SE = 1;
-    T0CONbits.PSA = 0;
-    T0CONbits.T0PS = 0x1;
-    T0CONbits.TMR0ON = 1;
+    INTCONbits.TMR0IE = 1;  // Timer 0 interrupt enable
+    TRISBbits.TRISB5 = 1;   // Enable Input on RB5
+    T0CONbits.T08BIT = 1;   // 8 bit mode or not
+    T0CONbits.T0CS = 1;     // Clock source select
+    T0CONbits.T0SE = 1;     // Edge select as h-l
+    T0CONbits.PSA = 1;      // Assign prescaler
+    T0CONbits.T0PS = 0x1;   // Prescaler
+    T0CONbits.TMR0ON = 1;   // Enable Timer 0
+    //*/
+
+    // Timer 1
+    ///*
+    
 
 
     //*/
-    
+
+
+
+
     #ifdef __USE18F26J50
     // MTJ added second argument for OpenTimer1()
     OpenTimer1(TIMER_INT_ON & T1_SOURCE_FOSC_4 & T1_PS_1_8 & T1_16BIT_RW & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF,0x0);
@@ -283,7 +291,7 @@ void main(void) {
     #ifdef __USE18F46J50
     OpenTimer1(TIMER_INT_ON & T1_SOURCE_FOSC_4 & T1_PS_1_8 & T1_16BIT_RW & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF,0x0);
     #else
-    OpenTimer1(TIMER_INT_ON & T1_PS_1_8 & T1_16BIT_RW & T1_SOURCE_INT & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF);
+    //OpenTimer1(TIMER_INT_ON & T1_PS_1_8 & T1_16BIT_RW & T1_SOURCE_INT & T1_OSC1EN_OFF & T1_SYNC_EXT_OFF);
     //OpenTimer2(TIMER_INT_ON & T2_PS_1_16 & T2_POST_1_16);
 
 
@@ -402,11 +410,11 @@ void main(void) {
     // Here is how it looks: printf("Hello\r\n");
 
     unsigned char motor_data[I2C_DATA_SIZE];
+    motor_data[0] = MSGID_MOTOR_RESPONSE;
     //fill motor data with junk....for now
-    unsigned char poop;
-    for(poop=1;poop<I2C_DATA_SIZE;poop++)
+    for(i=1;i<I2C_DATA_SIZE;i++)
     {
-            motor_data[poop]=0x44;
+            motor_data[i]=0x44;
     }
 
     // loop forever
@@ -423,7 +431,7 @@ void main(void) {
 
        
 
-        motor_data[0] = MSGID_MOTOR_RESPONSE;
+        
 
 
  
@@ -477,7 +485,9 @@ void main(void) {
                     PIR1bits.ADIF = 1;
 
                     FromMainHigh_sendmsg(I2C_DATA_SIZE,MSGT_I2C_DATA,(void *) motor_data );
-					
+
+                    motor_data[1] = 0;
+
                     break;
                 };
                 default:
@@ -582,10 +592,11 @@ void main(void) {
                 }
                 case MSGT_I2C_MOTOR_DATA:
                 {
-                    if(msgbuffer[0] != 0)
-                        blip();
-
-                    motor_data[I2C_DATA_SIZE-1] = msgbuffer[0];
+                    for(i=2;i<I2C_DATA_SIZE;i++)
+                    {
+                        motor_data[i] = msgbuffer[i];
+                    }
+                    motor_data[1] = 3;
                     break;
                 }
                 default:

@@ -131,15 +131,18 @@ interrupt low_priority
 #pragma interruptlow InterruptHandlerLow
 #endif
 void InterruptHandlerLow() {
-    static unsigned char encoder_ticks=0;
+    static unsigned long encoder_left=0;
+    static unsigned long encoder_right=0;
     
     // check to see if we have an interrupt on timer 1
     if (PIR1bits.TMR1IF) {
         PIR1bits.TMR1IF = 0; //clear interrupt flag
 
-        blip1();
+        
 
-        timer1_int_handler();
+        encoder_right++;       
+
+        //timer1_int_handler();
     }
 
     // check to see if we have an interrupt on timer 0
@@ -148,9 +151,11 @@ void InterruptHandlerLow() {
 
         blip2();
 
-        encoder_ticks++;
+        encoder_left++;
 
-        timer0_int_handler();
+        blink1();
+
+        //timer0_int_handler();
     }
 
     // check to see if we have an interrupt on USART RX
@@ -180,13 +185,19 @@ void InterruptHandlerLow() {
     {
         PIR1bits.ADIF = 0;
 
-        unsigned char sendy_stuff = TMR0L;
+        unsigned char sendy_stuff[I2C_DATA_SIZE];
 
-        TMR0L = 0;
-
-        encoder_ticks = 0;
         
-        ToMainLow_sendmsg(1,MSGT_I2C_MOTOR_DATA,(void *) &sendy_stuff );
+        sendy_stuff[2] = encoder_left >> 24;
+        sendy_stuff[3] = encoder_left >> 16;
+        sendy_stuff[4] = encoder_left >> 8;
+        sendy_stuff[5] = encoder_left;
+        sendy_stuff[6] = encoder_right >> 24;
+        sendy_stuff[7] = encoder_right >> 16;
+        sendy_stuff[8] = encoder_right >> 8;
+        sendy_stuff[9] = encoder_right;
+
+        ToMainLow_sendmsg(I2C_DATA_SIZE,MSGT_I2C_MOTOR_DATA,(void *) &sendy_stuff );
 
         blip3();
     }

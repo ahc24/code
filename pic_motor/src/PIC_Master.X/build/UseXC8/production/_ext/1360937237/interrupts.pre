@@ -6173,15 +6173,18 @@ interrupt low_priority
 
 # 133
 void InterruptHandlerLow() {
-static unsigned char encoder_ticks=0;
+static unsigned long encoder_left=0;
+static unsigned long encoder_right=0;
 
 
 if (PIR1bits.TMR1IF) {
 PIR1bits.TMR1IF = 0;
 
-blip1();
 
-timer1_int_handler();
+
+encoder_right++;
+
+
 }
 
 
@@ -6190,9 +6193,11 @@ INTCONbits.TMR0IF = 0;
 
 blip2();
 
-encoder_ticks++;
+encoder_left++;
 
-timer0_int_handler();
+blink1();
+
+
 }
 
 
@@ -6222,13 +6227,19 @@ if( PIR1bits.ADIF )
 {
 PIR1bits.ADIF = 0;
 
-unsigned char sendy_stuff = TMR0L;
+unsigned char sendy_stuff[14];
 
-TMR0L = 0;
 
-encoder_ticks = 0;
+sendy_stuff[2] = encoder_left >> 24;
+sendy_stuff[3] = encoder_left >> 16;
+sendy_stuff[4] = encoder_left >> 8;
+sendy_stuff[5] = encoder_left;
+sendy_stuff[6] = encoder_right >> 24;
+sendy_stuff[7] = encoder_right >> 16;
+sendy_stuff[8] = encoder_right >> 8;
+sendy_stuff[9] = encoder_right;
 
-ToMainLow_sendmsg(1,47,(void *) &sendy_stuff );
+ToMainLow_sendmsg(14,47,(void *) &sendy_stuff );
 
 blip3();
 }
