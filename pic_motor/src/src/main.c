@@ -272,13 +272,21 @@ void main(void) {
     T0CONbits.PSA = 1;      // Assign prescaler
     T0CONbits.T0PS = 0x1;   // Prescaler
     T0CONbits.TMR0ON = 1;   // Enable Timer 0
+    TMR0L = 0x35;
     //*/
 
     // Timer 1
     ///*
-    
-
-
+    PIE1bits.TMR1IE = 1;    // Timer 1 interrupt enable
+    TRISCbits.TRISC0 = 1;   // Enable input on RC0
+    T1CONbits.RD16 = 0;     // Something about 16bit or 8bit hoodoo
+    T1CONbits.T1RUN = 0;    // Timer input derived from other source not oscillator
+    T1CONbits.TMR1CS = 1;   // Clock source as external pin
+    T1CONbits.T1SYNC = 0;   // Sychronize extrnal timer input
+    T1CONbits.T1CKPS = 0x0; // Prescale set to 4
+    T1CONbits.TMR1ON = 1;   //  Enable Timer 1
+    TMR1H = 0xff;           // Preset timer1 high byte so it doesnt count so high
+    TMR1L = 0x35;
     //*/
 
 
@@ -313,6 +321,9 @@ void main(void) {
 
     //Set timer 0 to low
     INTCON2bits.TMR0IP = 0;
+
+    // A/D at priority low
+    IPR1bits.ADIP = 0;
 
     // configure the hardware i2c device as a slave (0x9E -> 0x4F) or (0x9A -> 0x4D)
     #if 1

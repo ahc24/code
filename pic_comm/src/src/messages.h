@@ -5,7 +5,7 @@
 #define MSGLEN 14
 
 // The maximum number of messages in a single queue
-#define MSGQUEUELEN 8
+#define MSGQUEUELEN 5
 
 //Command Definitions
 #define MSGID_MOVE                  0x01

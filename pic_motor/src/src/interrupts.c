@@ -138,9 +138,12 @@ void InterruptHandlerLow() {
     if (PIR1bits.TMR1IF) {
         PIR1bits.TMR1IF = 0; //clear interrupt flag
 
+        blip1();
         
+        encoder_right++;
 
-        encoder_right++;       
+        TMR1L = 0x35;
+        TMR1H = 0xff;
 
         //timer1_int_handler();
     }
@@ -153,6 +156,7 @@ void InterruptHandlerLow() {
 
         encoder_left++;
 
+        TMR0L = 0x35;
         blink1();
 
         //timer0_int_handler();

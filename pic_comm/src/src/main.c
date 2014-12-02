@@ -196,7 +196,6 @@ void main(void) {
     uart_thread_struct uthread_data; // info for uart_lthread
     timer1_thread_struct t1thread_data; // info for timer1_lthread
     timer0_thread_struct t0thread_data; // info for timer0_lthread
-    unsigned char need_sensor_data = 1;
 
     #ifdef __USE18F2680
     OSCCON = 0xFC; // see datasheet
@@ -289,7 +288,7 @@ void main(void) {
     // They *are* changed in the timer interrupt handlers if those timers are
     //   enabled.  They are just there to make the lights blink and can be
     //   disabled.
-    i2c_configure_slave(0x9E,&need_sensor_data);
+    i2c_configure_slave(0x9E);
     #else
     // If I want to test the temperature sensor from the ARM, I just make
     // sure this PIC does not have the same address and configure the
@@ -329,11 +328,14 @@ void main(void) {
     */
 
     // Alex: Set registers for debug output
+    #ifdef DEBUG_MODE
     debug_configure();
-	blip();
-	blip1();
-	blip2();
-	blip3();
+    blip();
+    blip1();
+    blip2();
+    blip3();
+    blip4();
+    #endif
 	
     //uart_send_byte( 0x50 );
     //uart_send_byte( 0x54 );
@@ -357,8 +359,6 @@ void main(void) {
     //Alex: Configure UART for transmit and recieve
     uart_configure();
 
-    unsigned char myByte1 = 0x44;
-    unsigned char myByte2 = 0x44;
 
     // printf() is available, but is not advisable.  It goes to the UART pin
     // on the PIC and then you must hook something up to that to view it.
@@ -366,13 +366,22 @@ void main(void) {
     // Here is how it looks: printf("Hello\r\n");
 
 
+    // Initialize snesor data buffer
     unsigned char sensor_data[MSGLEN];
-    sensor_data[0] = MSGID_STATUS_RESPONSE;
-    unsigned char z;
-    for(z=1;z<MSGLEN;z++)
+    sensor_data[0] = MSGID_SENSOR_RESPONSE;
+    for(i=1;i<MSGLEN;i++)
     {
-        sensor_data[z] = 0x00;
+        sensor_data[i] = 0x00;
     }
+
+    // Initialize motor data buffer
+    unsigned char motor_data[MSGLEN];
+    motor_data[0] = MSGID_MOTOR_RESPONSE;
+    for(i=1;i<MSGLEN;i++)
+    {
+        motor_data[i] = 0x00;
+    }
+
 
 
     // loop forever
@@ -387,12 +396,7 @@ void main(void) {
         // an idle mode)
         //block_on_To_msgqueues();
 
-         if( need_sensor_data )
-		{
-			
-			
-			need_sensor_data = 0;		
-		}		 
+	 
 
         
 
@@ -418,6 +422,9 @@ void main(void) {
                     break;
                 };
                 case MSGT_I2C_DATA:
+                {
+                    send_uart_message(msgbuffer);
+                }
                 case MSGT_I2C_DBG:
                 {
                     // Here is where you could handle debugging, if you wanted
@@ -427,11 +434,22 @@ void main(void) {
                 };
                 case MSGT_I2C_RQST:
                 {
-                    if ( msgbuffer[0] == 0xff )
+                    switch(msgbuffer[0])
                     {
-
-
-
+                        case MSGID_SENSOR_REQUEST:
+                        {
+                            FromMainHigh_sendmsg(I2C_DATA_SIZE,MSGT_I2C_DATA,(void *) sensor_data );
+                            break;
+                        }
+                        case MSGID_MOTOR_REQUEST:
+                        {
+                            FromMainHigh_sendmsg(I2C_DATA_SIZE,MSGT_I2C_DATA,(void *) motor_data );
+                            break;
+                        }
+                        default:
+                        {
+                            
+                        }
                     }
 					
                     break;
@@ -439,6 +457,9 @@ void main(void) {
                 default:
                 {
                     // Your code should handle this error
+
+                    // Sometimes the best course of action is to do nothing
+
                     break;
                 };
             };
@@ -454,11 +475,10 @@ void main(void) {
         } 
         else
         {
-			unsigned char uart_response[UART_DATA_LENGTH];
-            int jjj;
-            for(jjj=0;jjj<UART_DATA_LENGTH;jjj++)
+            unsigned char uart_response[UART_DATA_LENGTH];
+            for(i=0;i<UART_DATA_LENGTH;i++)
             {
-                uart_response[jjj] = 0;
+                uart_response[i] = 0;
             }
             switch (msgtype)
             {
@@ -512,9 +532,20 @@ void main(void) {
 					
                     switch( msgbuffer[0] )
                     {
-                        case MSGID_STATUS_REQUEST:
+                        case MSGID_SENSOR_REQUEST:
                         {
-                            send_uart_message( sensor_data );
+                            for(i=1;i<I2C_DATA_SIZE;i++)
+                            {
+                                sensor_data[i] = msgbuffer[i];
+                            }
+                            break;
+                        }
+                        case MSGID_MOTOR_REQUEST:
+                        {
+                            for(i=1;i<I2C_DATA_SIZE;i++)
+                            {
+                                motor_data[i] = msgbuffer[i];
+                            }
                             break;
                         }
                         default:
@@ -531,6 +562,9 @@ void main(void) {
                 default:
                 {
                     // Your code should handle this error
+
+                    // Sometimes the best course of action is to do nothing
+
                     break;
                 };
             };

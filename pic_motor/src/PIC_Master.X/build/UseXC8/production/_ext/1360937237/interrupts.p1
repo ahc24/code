@@ -60,9 +60,17 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _i2c_int_handler `(v ~T0 @X0 0 ef ]
 "64 ../src/messages.h
 [v _SleepIfOkay `(v ~T0 @X0 0 ef ]
+"37 ../src/debug.h
+[v _blip1 `(v ~T0 @X0 0 ef ]
+"7928 C:\Program Files (x86)\Microchip\xc8\v1.32\include\pic18f45j10.h
+[v _TMR1L `Vuc ~T0 @X0 0 e@4046 ]
+"7934
+[v _TMR1H `Vuc ~T0 @X0 0 e@4047 ]
 "38 ../src/debug.h
 [v _blip2 `(v ~T0 @X0 0 ef ]
-"42
+"8215 C:\Program Files (x86)\Microchip\xc8\v1.32\include\pic18f45j10.h
+[v _TMR0L `Vuc ~T0 @X0 0 e@4054 ]
+"42 ../src/debug.h
 [v _blink1 `(v ~T0 @X0 0 ef ]
 "71 ../src/my_uart.h
 [v _uart_receive_interrupt_handler `(v ~T0 @X0 0 ef ]
@@ -4947,107 +4955,119 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interrupts.c: 139: PIR1bits.TMR1IF = 0;
 "139
 [e = . . _PIR1bits 0 0 -> -> 0 `i `uc ]
+[; ;interrupts.c: 141: blip1();
+"141
+[e ( _blip1 ..  ]
 [; ;interrupts.c: 143: encoder_right++;
 "143
 [e ++ F5197 -> -> -> 1 `i `l `ul ]
+[; ;interrupts.c: 145: TMR1L = 0x35;
+"145
+[e = _TMR1L -> -> 53 `i `uc ]
+[; ;interrupts.c: 146: TMR1H = 0xff;
 "146
+[e = _TMR1H -> -> 255 `i `uc ]
+"149
 }
 [e :U 601 ]
-[; ;interrupts.c: 146: }
-[; ;interrupts.c: 149: if (INTCONbits.TMR0IF) {
-"149
+[; ;interrupts.c: 149: }
+[; ;interrupts.c: 152: if (INTCONbits.TMR0IF) {
+"152
 [e $ ! != -> . . _INTCONbits 0 2 `i -> -> -> 0 `i `Vuc `i 602  ]
 {
-[; ;interrupts.c: 150: INTCONbits.TMR0IF = 0;
-"150
+[; ;interrupts.c: 153: INTCONbits.TMR0IF = 0;
+"153
 [e = . . _INTCONbits 0 2 -> -> 0 `i `uc ]
-[; ;interrupts.c: 152: blip2();
-"152
+[; ;interrupts.c: 155: blip2();
+"155
 [e ( _blip2 ..  ]
-[; ;interrupts.c: 154: encoder_left++;
-"154
+[; ;interrupts.c: 157: encoder_left++;
+"157
 [e ++ F5196 -> -> -> 1 `i `l `ul ]
-[; ;interrupts.c: 156: blink1();
-"156
-[e ( _blink1 ..  ]
+[; ;interrupts.c: 159: TMR0L = 0x35;
 "159
+[e = _TMR0L -> -> 53 `i `uc ]
+[; ;interrupts.c: 160: blink1();
+"160
+[e ( _blink1 ..  ]
+"163
 }
 [e :U 602 ]
-[; ;interrupts.c: 159: }
-[; ;interrupts.c: 162: if (PIR1bits.RCIF) {
-"162
+[; ;interrupts.c: 163: }
+[; ;interrupts.c: 166: if (PIR1bits.RCIF) {
+"166
 [e $ ! != -> . . _PIR1bits 0 5 `i -> -> -> 0 `i `Vuc `i 603  ]
 {
-[; ;interrupts.c: 163: PIR1bits.RCIF = 0;
-"163
-[e = . . _PIR1bits 0 5 -> -> 0 `i `uc ]
-[; ;interrupts.c: 167: uart_receive_interrupt_handler();
+[; ;interrupts.c: 167: PIR1bits.RCIF = 0;
 "167
+[e = . . _PIR1bits 0 5 -> -> 0 `i `uc ]
+[; ;interrupts.c: 171: uart_receive_interrupt_handler();
+"171
 [e ( _uart_receive_interrupt_handler ..  ]
-"168
+"172
 }
 [e :U 603 ]
-[; ;interrupts.c: 168: }
-[; ;interrupts.c: 172: if (PIR1bits.TX1IF && PIE1bits.TX1IE)
-"172
+[; ;interrupts.c: 172: }
+[; ;interrupts.c: 176: if (PIR1bits.TX1IF && PIE1bits.TX1IE)
+"176
 [e $ ! && != -> . . _PIR1bits 1 2 `i -> -> -> 0 `i `Vuc `i != -> . . _PIE1bits 1 2 `i -> -> -> 0 `i `Vuc `i 604  ]
-[; ;interrupts.c: 173: {
-"173
-{
-[; ;interrupts.c: 177: uart_transmit_interrupt_handler();
+[; ;interrupts.c: 177: {
 "177
-[e ( _uart_transmit_interrupt_handler ..  ]
+{
+[; ;interrupts.c: 181: uart_transmit_interrupt_handler();
 "181
+[e ( _uart_transmit_interrupt_handler ..  ]
+"185
 }
 [e :U 604 ]
-[; ;interrupts.c: 181: }
-[; ;interrupts.c: 184: if( PIR1bits.ADIF )
-"184
-[e $ ! != -> . . _PIR1bits 0 6 `i -> -> -> 0 `i `Vuc `i 605  ]
-[; ;interrupts.c: 185: {
-"185
-{
-[; ;interrupts.c: 186: PIR1bits.ADIF = 0;
-"186
-[e = . . _PIR1bits 0 6 -> -> 0 `i `uc ]
+[; ;interrupts.c: 185: }
+[; ;interrupts.c: 188: if( PIR1bits.ADIF )
 "188
-[v _sendy_stuff `uc ~T0 @X0 -> 14 `i a ]
-[; ;interrupts.c: 188: unsigned char sendy_stuff[14];
-[; ;interrupts.c: 191: sendy_stuff[2] = encoder_left >> 24;
-"191
-[e = *U + &U _sendy_stuff * -> -> -> 2 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5196 -> 24 `i `uc ]
-[; ;interrupts.c: 192: sendy_stuff[3] = encoder_left >> 16;
+[e $ ! != -> . . _PIR1bits 0 6 `i -> -> -> 0 `i `Vuc `i 605  ]
+[; ;interrupts.c: 189: {
+"189
+{
+[; ;interrupts.c: 190: PIR1bits.ADIF = 0;
+"190
+[e = . . _PIR1bits 0 6 -> -> 0 `i `uc ]
 "192
-[e = *U + &U _sendy_stuff * -> -> -> 3 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5196 -> 16 `i `uc ]
-[; ;interrupts.c: 193: sendy_stuff[4] = encoder_left >> 8;
-"193
-[e = *U + &U _sendy_stuff * -> -> -> 4 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5196 -> 8 `i `uc ]
-[; ;interrupts.c: 194: sendy_stuff[5] = encoder_left;
-"194
-[e = *U + &U _sendy_stuff * -> -> -> 5 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> F5196 `uc ]
-[; ;interrupts.c: 195: sendy_stuff[6] = encoder_right >> 24;
+[v _sendy_stuff `uc ~T0 @X0 -> 14 `i a ]
+[; ;interrupts.c: 192: unsigned char sendy_stuff[14];
+[; ;interrupts.c: 195: sendy_stuff[2] = encoder_left >> 24;
 "195
-[e = *U + &U _sendy_stuff * -> -> -> 6 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5197 -> 24 `i `uc ]
-[; ;interrupts.c: 196: sendy_stuff[7] = encoder_right >> 16;
+[e = *U + &U _sendy_stuff * -> -> -> 2 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5196 -> 24 `i `uc ]
+[; ;interrupts.c: 196: sendy_stuff[3] = encoder_left >> 16;
 "196
-[e = *U + &U _sendy_stuff * -> -> -> 7 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5197 -> 16 `i `uc ]
-[; ;interrupts.c: 197: sendy_stuff[8] = encoder_right >> 8;
+[e = *U + &U _sendy_stuff * -> -> -> 3 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5196 -> 16 `i `uc ]
+[; ;interrupts.c: 197: sendy_stuff[4] = encoder_left >> 8;
 "197
-[e = *U + &U _sendy_stuff * -> -> -> 8 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5197 -> 8 `i `uc ]
-[; ;interrupts.c: 198: sendy_stuff[9] = encoder_right;
+[e = *U + &U _sendy_stuff * -> -> -> 4 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5196 -> 8 `i `uc ]
+[; ;interrupts.c: 198: sendy_stuff[5] = encoder_left;
 "198
-[e = *U + &U _sendy_stuff * -> -> -> 9 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> F5197 `uc ]
-[; ;interrupts.c: 200: ToMainLow_sendmsg(14,47,(void *) &sendy_stuff );
+[e = *U + &U _sendy_stuff * -> -> -> 5 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> F5196 `uc ]
+[; ;interrupts.c: 199: sendy_stuff[6] = encoder_right >> 24;
+"199
+[e = *U + &U _sendy_stuff * -> -> -> 6 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5197 -> 24 `i `uc ]
+[; ;interrupts.c: 200: sendy_stuff[7] = encoder_right >> 16;
 "200
-[e ( _ToMainLow_sendmsg (3 , , -> -> 14 `i `uc -> -> 47 `i `uc -> &U _sendy_stuff `*v ]
-[; ;interrupts.c: 202: blip3();
+[e = *U + &U _sendy_stuff * -> -> -> 7 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5197 -> 16 `i `uc ]
+[; ;interrupts.c: 201: sendy_stuff[8] = encoder_right >> 8;
+"201
+[e = *U + &U _sendy_stuff * -> -> -> 8 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> >> F5197 -> 8 `i `uc ]
+[; ;interrupts.c: 202: sendy_stuff[9] = encoder_right;
 "202
+[e = *U + &U _sendy_stuff * -> -> -> 9 `i `ui `ux -> -> # *U &U _sendy_stuff `ui `ux -> F5197 `uc ]
+[; ;interrupts.c: 204: ToMainLow_sendmsg(14,47,(void *) &sendy_stuff );
+"204
+[e ( _ToMainLow_sendmsg (3 , , -> -> 14 `i `uc -> -> 47 `i `uc -> &U _sendy_stuff `*v ]
+[; ;interrupts.c: 206: blip3();
+"206
 [e ( _blip3 ..  ]
-"203
+"207
 }
 [e :U 605 ]
-[; ;interrupts.c: 203: }
-[; ;interrupts.c: 204: }
-"204
+[; ;interrupts.c: 207: }
+[; ;interrupts.c: 208: }
+"208
 [e :UE 600 ]
 }

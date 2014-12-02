@@ -6180,9 +6180,12 @@ static unsigned long encoder_right=0;
 if (PIR1bits.TMR1IF) {
 PIR1bits.TMR1IF = 0;
 
-
+blip1();
 
 encoder_right++;
+
+TMR1L = 0x35;
+TMR1H = 0xff;
 
 
 }
@@ -6195,6 +6198,7 @@ blip2();
 
 encoder_left++;
 
+TMR0L = 0x35;
 blink1();
 
 

@@ -10912,7 +10912,7 @@ unsigned char data[14];
 } msg;
 
 typedef struct __msg_queue {
-msg queue[8];
+msg queue[5];
 unsigned char cur_write_ind;
 unsigned char cur_read_ind;
 } msg_queue;
@@ -11014,16 +11014,16 @@ unsigned char initiated;
 unsigned char slave_addr;
 } i2c_comm;
 
-# 46
+# 48
 void init_i2c(i2c_comm *ic);
 void i2c_int_handler(void);
 void start_i2c_slave_reply(unsigned char,unsigned char *);
-void i2c_configure_slave(unsigned char,unsigned char * ptr_thingy);
+void i2c_configure_slave(unsigned char);
 void i2c_configure_master(unsigned char);
 unsigned char i2c_master_send(unsigned char,unsigned char *);
 unsigned char i2c_master_recv(unsigned char);
 
-void retrieve_sensor_values( unsigned char * sensor_bank_1 , unsigned char * sensor_bank_2 , unsigned char * sensor_bank_3 );
+void retrieve_sensor_values( unsigned char * sensor_bank );
 
 # 1 "../src/uart_thread.h"
 typedef struct __uart_thread_struct {
@@ -11107,15 +11107,14 @@ unsigned char i;
 uart_thread_struct uthread_data;
 timer1_thread_struct t1thread_data;
 timer0_thread_struct t0thread_data;
-unsigned char need_sensor_data = 1;
 
-# 215
+# 214
 OSCCON = 0xE0;
 
-# 223
+# 222
 OSCTUNEbits.PLLEN = 1;
 
-# 238
+# 237
 init_i2c(&ic);
 
 
@@ -11129,13 +11128,13 @@ init_queues();
 TRISB = 0x0;
 LATB = 0x0;
 
-# 262
+# 261
 OpenTimer0(0b11111111 & 0b10111111 & 0b11011111 & 0b11110110);
 
-# 269
+# 268
 OpenTimer1(0b11111111 & 0b10011111 & 0b11111111 & 0b11111111 & 0b11111011 & 0b11111111,0x0);
 
-# 278
+# 277
 IPR1bits.TMR1IP = 0;
 
 IPR1bits.RCIP = 0;
@@ -11143,10 +11142,10 @@ IPR1bits.RCIP = 0;
 
 IPR1bits.SSPIP = 1;
 
-# 292
-i2c_configure_slave(0x9E,&need_sensor_data);
+# 291
+i2c_configure_slave(0x9E);
 
-# 307
+# 306
 PIE1bits.SSPIE = 1;
 
 # 332
@@ -11155,37 +11154,34 @@ blip();
 blip1();
 blip2();
 blip3();
+blip4();
 
-# 345
+# 347
 enable_interrupts();
 
-# 358
+# 360
 uart_configure();
 
-unsigned char myByte1 = 0x44;
-unsigned char myByte2 = 0x44;
-
-# 369
+# 370
 unsigned char sensor_data[14];
-sensor_data[0] = 0x03;
-unsigned char z;
-for(z=1;z<14;z++)
+sensor_data[0] = 0x05;
+for(i=1;i<14;i++)
 {
-sensor_data[z] = 0x00;
+sensor_data[i] = 0x00;
 }
 
-# 383
+
+unsigned char motor_data[14];
+motor_data[0] = 0x07;
+for(i=1;i<14;i++)
+{
+motor_data[i] = 0x00;
+}
+
+# 392
 while (1) {
 
-# 390
-if( need_sensor_data )
-{
-
-
-need_sensor_data = 0;
-}
-
-# 405
+# 409
 length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -11202,6 +11198,9 @@ timer0_lthread(&t0thread_data, msgtype, length, msgbuffer);
 break;
 };
 case 40:
+{
+send_uart_message(msgbuffer);
+}
 case 41:
 {
 
@@ -11211,11 +11210,20 @@ break;
 };
 case 42:
 {
-if ( msgbuffer[0] == 0xff )
+switch(msgbuffer[0])
+{
+case 0x04:
 {
 
+}
+case 0x06:
+{
 
+}
+default:
+{
 
+}
 }
 
 break;
@@ -11239,10 +11247,9 @@ if (length != -4) {
 else
 {
 unsigned char uart_response[14];
-int jjj;
-for(jjj=0;jjj<14;jjj++)
+for(i=0;i<14;i++)
 {
-uart_response[jjj] = 0;
+uart_response[i] = 0;
 }
 switch (msgtype)
 {

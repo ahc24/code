@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC18 LITE Macro Assembler V1.32 build 58300 
-                                                                                               Sun Nov 09 19:26:23 2014
+                                                                                               Fri Nov 14 12:53:50 2014
 
 Microchip Technology Omniscient Code Generator (Lite mode) build 58300
      1                           	processor	18F46J50
@@ -1269,15 +1269,15 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1257                           
   1258                           ; BSR set to: 1
   1259                           ;main.c: 379: }
-  1260                           ;main.c: 381: unsigned char motor_data[14];
-  1261                           ;main.c: 382: motor_data[0] = 0x07;
+  1260                           ;main.c: 382: unsigned char motor_data[14];
+  1261                           ;main.c: 383: motor_data[0] = 0x07;
   1262                           
   1263                           ; BSR set to: 1
   1264  000188  0E07               	movlw	7
   1265  00018A  0101               	movlb	1	; () banked
   1266  00018C  6F2F               	movwf	main@motor_data& (0+255),b
   1267                           
-  1268                           ;main.c: 383: for(i=1;i<14;i++)
+  1268                           ;main.c: 384: for(i=1;i<14;i++)
   1269  00018E  0E01               	movlw	1
   1270  000190  0101               	movlb	1	; () banked
   1271  000192  6F72               	movwf	main@i& (0+255),b
@@ -1285,8 +1285,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1273  000196                     l4125:
   1274                           
   1275                           ; BSR set to: 1
-  1276                           ;main.c: 384: {
-  1277                           ;main.c: 385: motor_data[i] = 0x00;
+  1276                           ;main.c: 385: {
+  1277                           ;main.c: 386: motor_data[i] = 0x00;
   1278  000196  0101               	movlb	1	; () banked
   1279  000198  5172               	movf	main@i& (0+255),w,b
   1280  00019A  0D01               	mullw	1
@@ -1313,10 +1313,10 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1301  0001BA  D7ED               	goto	l4125
   1302  0001BC                     l4131:
   1303                           
-  1304                           ;main.c: 405: block_on_To_msgqueues();
+  1304                           ;main.c: 406: block_on_To_msgqueues();
   1305  0001BC  ECCF  F00A         	call	_block_on_To_msgqueues	;wreg free
   1306                           
-  1307                           ;main.c: 413: length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
+  1307                           ;main.c: 414: length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
   1308  0001C0  0101               	movlb	1	; () banked
   1309  0001C2  0E01               	movlw	high main@msgtype
   1310  0001C4  0101               	movlb	1	; () banked
@@ -1339,7 +1339,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1327  0001E8  6F5F               	movwf	main@length& (0+255),b
   1328                           
   1329                           ; BSR set to: 1
-  1330                           ;main.c: 414: if (length < 0) {
+  1330                           ;main.c: 415: if (length < 0) {
   1331  0001EA  0101               	movlb	1	; () banked
   1332  0001EC  BF5F               	btfsc	main@length& (0+255),7,b
   1333  0001EE  D094               	goto	l4177
@@ -1347,8 +1347,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1335  0001F2                     l4139:
   1336                           
   1337                           ; BSR set to: 1
-  1338                           ;main.c: 424: {
-  1339                           ;main.c: 425: timer0_lthread(&t0thread_data, msgtype, length, msgbuffer);
+  1338                           ;main.c: 425: {
+  1339                           ;main.c: 426: timer0_lthread(&t0thread_data, msgtype, length, msgbuffer);
   1340  0001F2  0101               	movlb	1	; () banked
   1341  0001F4  0E01               	movlw	high main@t0thread_data
   1342  0001F6  0100               	movlb	0	; () banked
@@ -1381,12 +1381,12 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1369  00022E  6F98               	movwf	timer0_lthread@msgbuffer& (0+255),b
   1370  000230  EC42  F00E         	call	_timer0_lthread	;wreg free
   1371                           
-  1372                           ;main.c: 426: break;
+  1372                           ;main.c: 427: break;
   1373  000234  D071               	goto	l4177
   1374  000236                     l4141:
   1375                           
-  1376                           ;main.c: 434: {
-  1377                           ;main.c: 435: for(i=2;i<14-2;i++)
+  1376                           ;main.c: 435: {
+  1377                           ;main.c: 436: for(i=2;i<14-2;i++)
   1378  000236  0E02               	movlw	2
   1379  000238  0101               	movlb	1	; () banked
   1380  00023A  6F72               	movwf	main@i& (0+255),b
@@ -1394,8 +1394,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1382  00023E                     l4147:
   1383                           
   1384                           ; BSR set to: 1
-  1385                           ;main.c: 436: {
-  1386                           ;main.c: 437: sensor_data[i] = msgbuffer[i];
+  1385                           ;main.c: 437: {
+  1386                           ;main.c: 438: sensor_data[i] = msgbuffer[i];
   1387  00023E  0101               	movlb	1	; () banked
   1388  000240  5172               	movf	main@i& (0+255),w,b
   1389  000242  0D01               	mullw	1
@@ -1432,8 +1432,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1420  000278  D7E2               	goto	l4147
   1421                           
   1422                           ; BSR set to: 1
-  1423                           ;main.c: 438: }
-  1424                           ;main.c: 440: send_uart_message( sensor_data );
+  1423                           ;main.c: 439: }
+  1424                           ;main.c: 441: send_uart_message( sensor_data );
   1425                           
   1426                           ; BSR set to: 1
   1427  00027A  0101               	movlb	1	; () banked
@@ -1446,12 +1446,12 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1434  000288  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1435  00028A  ECCB  F00D         	call	_send_uart_message	;wreg free
   1436                           
-  1437                           ;main.c: 442: break;
+  1437                           ;main.c: 443: break;
   1438  00028E  D035               	goto	l137
   1439  000290                     l4155:
   1440                           
-  1441                           ;main.c: 445: {
-  1442                           ;main.c: 446: for(i=2;i<14-2;i++)
+  1441                           ;main.c: 446: {
+  1442                           ;main.c: 447: for(i=2;i<14-2;i++)
   1443  000290  0E02               	movlw	2
   1444  000292  0101               	movlb	1	; () banked
   1445  000294  6F72               	movwf	main@i& (0+255),b
@@ -1459,8 +1459,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1447  000298                     l4161:
   1448                           
   1449                           ; BSR set to: 1
-  1450                           ;main.c: 447: {
-  1451                           ;main.c: 448: motor_data[i] = msgbuffer[i];
+  1450                           ;main.c: 448: {
+  1451                           ;main.c: 449: motor_data[i] = msgbuffer[i];
   1452  000298  0101               	movlb	1	; () banked
   1453  00029A  5172               	movf	main@i& (0+255),w,b
   1454  00029C  0D01               	mullw	1
@@ -1497,8 +1497,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1485  0002D2  D7E2               	goto	l4161
   1486                           
   1487                           ; BSR set to: 1
-  1488                           ;main.c: 449: }
-  1489                           ;main.c: 453: send_uart_message( motor_data );
+  1488                           ;main.c: 450: }
+  1489                           ;main.c: 454: send_uart_message( motor_data );
   1490                           
   1491                           ; BSR set to: 1
   1492  0002D4  0101               	movlb	1	; () banked
@@ -1511,7 +1511,7 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1499  0002E2  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1500  0002E4  ECCB  F00D         	call	_send_uart_message	;wreg free
   1501                           
-  1502                           ;main.c: 455: break;
+  1502                           ;main.c: 456: break;
   1503  0002E8  D008               	goto	l137
   1504  0002EA                     l4171:
   1505  0002EA  0101               	movlb	1	; () banked
@@ -1531,11 +1531,11 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1519  0002F8  D7CB               	goto	l4155
   1520  0002FA                     l137:
   1521                           
-  1522                           ;main.c: 467: {
-  1523                           ;main.c: 470: last_reg_recvd = msgbuffer[0];
+  1522                           ;main.c: 468: {
+  1523                           ;main.c: 471: last_reg_recvd = msgbuffer[0];
   1524  0002FA  C140  F13D         	movff	main@msgbuffer,main@last_reg_recvd
   1525                           
-  1526                           ;main.c: 471: break;
+  1526                           ;main.c: 472: break;
   1527  0002FE  D00C               	goto	l4177
   1528  000300                     l4175:
   1529  000300  0101               	movlb	1	; () banked
@@ -1559,8 +1559,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1547  000316  0A03               	xorlw	3	; case 42
   1548  000318                     l4177:
   1549                           
-  1550                           ;main.c: 492: }
-  1551                           ;main.c: 497: length = ToMainLow_recvmsg(14, &msgtype, (void *) msgbuffer);
+  1550                           ;main.c: 493: }
+  1551                           ;main.c: 498: length = ToMainLow_recvmsg(14, &msgtype, (void *) msgbuffer);
   1552  000318  0101               	movlb	1	; () banked
   1553  00031A  0E01               	movlw	high main@msgtype
   1554  00031C  0101               	movlb	1	; () banked
@@ -1583,23 +1583,23 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1571  000340  6F5F               	movwf	main@length& (0+255),b
   1572                           
   1573                           ; BSR set to: 1
-  1574                           ;main.c: 498: if (length < 0) {
+  1574                           ;main.c: 499: if (length < 0) {
   1575  000342  0101               	movlb	1	; () banked
   1576  000344  BF5F               	btfsc	main@length& (0+255),7,b
   1577  000346  D73A               	goto	l4131
   1578                           
   1579                           ; BSR set to: 1
-  1580                           ;main.c: 504: else
-  1581                           ;main.c: 505: {
-  1582                           ;main.c: 506: unsigned char uart_response[14];
-  1583                           ;main.c: 507: int jjj;
-  1584                           ;main.c: 508: for(jjj=0;jjj<14;jjj++)
+  1580                           ;main.c: 505: else
+  1581                           ;main.c: 506: {
+  1582                           ;main.c: 507: unsigned char uart_response[14];
+  1583                           ;main.c: 508: int jjj;
+  1584                           ;main.c: 509: for(jjj=0;jjj<14;jjj++)
   1585                           
   1586                           ; BSR set to: 1
   1587                           
   1588                           ; BSR set to: 1
-  1589                           ;main.c: 502: }
-  1590                           ;main.c: 503: }
+  1589                           ;main.c: 503: }
+  1590                           ;main.c: 504: }
   1591                           
   1592                           ; BSR set to: 1
   1593  000348  0E00               	movlw	0
@@ -1621,8 +1621,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1609  000364  D0D1               	goto	l4255
   1610                           
   1611                           ; BSR set to: 1
-  1612                           ;main.c: 509: {
-  1613                           ;main.c: 510: uart_response[jjj] = 0;
+  1612                           ;main.c: 510: {
+  1613                           ;main.c: 511: uart_response[jjj] = 0;
   1614                           
   1615                           ; BSR set to: 1
   1616                           
@@ -1648,8 +1648,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1636  000386                     l4195:
   1637                           
   1638                           ; BSR set to: 1
-  1639                           ;main.c: 516: {
-  1640                           ;main.c: 518: timer1_lthread(&t1thread_data, msgtype, length, msgbuffer);
+  1639                           ;main.c: 517: {
+  1640                           ;main.c: 519: timer1_lthread(&t1thread_data, msgtype, length, msgbuffer);
   1641  000386  0101               	movlb	1	; () banked
   1642  000388  0E01               	movlw	high main@t1thread_data
   1643  00038A  0101               	movlb	1	; () banked
@@ -1681,22 +1681,22 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1669  0003C0  6F10               	movwf	timer1_lthread@msgbuffer& (0+255),b
   1670  0003C2  EC78  F005         	call	_timer1_lthread	;wreg free
   1671                           
-  1672                           ;main.c: 519: break;
+  1672                           ;main.c: 520: break;
   1673  0003C6  D6FA               	goto	l4131
   1674  0003C8                     l4197:
   1675                           
-  1676                           ;main.c: 524: {
-  1677                           ;main.c: 525: uart_response[0] = 0xf1;
+  1676                           ;main.c: 525: {
+  1677                           ;main.c: 526: uart_response[0] = 0xf1;
   1678  0003C8  0EF1               	movlw	241
   1679  0003CA  0101               	movlb	1	; () banked
   1680  0003CC  6F4F               	movwf	main@uart_response& (0+255),b
   1681                           
   1682                           ; BSR set to: 1
-  1683                           ;main.c: 526: uart_response[1] = msgbuffer[0];
+  1683                           ;main.c: 527: uart_response[1] = msgbuffer[0];
   1684  0003CE  C140  F150         	movff	main@msgbuffer,main@uart_response+1
   1685                           
   1686                           ; BSR set to: 1
-  1687                           ;main.c: 527: send_uart_message( uart_response );
+  1687                           ;main.c: 528: send_uart_message( uart_response );
   1688  0003D2  0101               	movlb	1	; () banked
   1689  0003D4  0E01               	movlw	high main@uart_response
   1690  0003D6  0101               	movlb	1	; () banked
@@ -1707,26 +1707,26 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1695  0003E0  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1696  0003E2  ECCB  F00D         	call	_send_uart_message	;wreg free
   1697                           
-  1698                           ;main.c: 528: break;
+  1698                           ;main.c: 529: break;
   1699  0003E6  D6EA               	goto	l4131
   1700  0003E8                     l4203:
   1701                           
-  1702                           ;main.c: 531: {
-  1703                           ;main.c: 532: uart_response[0] = 0xf2;
+  1702                           ;main.c: 532: {
+  1703                           ;main.c: 533: uart_response[0] = 0xf2;
   1704  0003E8  0EF2               	movlw	242
   1705  0003EA  0101               	movlb	1	; () banked
   1706  0003EC  6F4F               	movwf	main@uart_response& (0+255),b
   1707                           
   1708                           ; BSR set to: 1
-  1709                           ;main.c: 533: uart_response[1] = msgbuffer[0];
+  1709                           ;main.c: 534: uart_response[1] = msgbuffer[0];
   1710  0003EE  C140  F150         	movff	main@msgbuffer,main@uart_response+1
   1711                           
   1712                           ; BSR set to: 1
-  1713                           ;main.c: 534: uart_response[2] = msgbuffer[1];
+  1713                           ;main.c: 535: uart_response[2] = msgbuffer[1];
   1714  0003F2  C141  F151         	movff	main@msgbuffer+1,main@uart_response+2
   1715                           
   1716                           ; BSR set to: 1
-  1717                           ;main.c: 535: send_uart_message( uart_response );
+  1717                           ;main.c: 536: send_uart_message( uart_response );
   1718  0003F6  0101               	movlb	1	; () banked
   1719  0003F8  0E01               	movlw	high main@uart_response
   1720  0003FA  0101               	movlb	1	; () banked
@@ -1737,22 +1737,22 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1725  000404  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1726  000406  ECCB  F00D         	call	_send_uart_message	;wreg free
   1727                           
-  1728                           ;main.c: 536: break;
+  1728                           ;main.c: 537: break;
   1729  00040A  D6D8               	goto	l4131
   1730  00040C                     l4211:
   1731                           
-  1732                           ;main.c: 539: {
-  1733                           ;main.c: 540: uart_response[0] = 0xf3;
+  1732                           ;main.c: 540: {
+  1733                           ;main.c: 541: uart_response[0] = 0xf3;
   1734  00040C  0EF3               	movlw	243
   1735  00040E  0101               	movlb	1	; () banked
   1736  000410  6F4F               	movwf	main@uart_response& (0+255),b
   1737                           
   1738                           ; BSR set to: 1
-  1739                           ;main.c: 541: uart_response[1] = msgbuffer[0];
+  1739                           ;main.c: 542: uart_response[1] = msgbuffer[0];
   1740  000412  C140  F150         	movff	main@msgbuffer,main@uart_response+1
   1741                           
   1742                           ; BSR set to: 1
-  1743                           ;main.c: 542: send_uart_message( uart_response );
+  1743                           ;main.c: 543: send_uart_message( uart_response );
   1744  000416  0101               	movlb	1	; () banked
   1745  000418  0E01               	movlw	high main@uart_response
   1746  00041A  0101               	movlb	1	; () banked
@@ -1763,22 +1763,22 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1751  000424  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1752  000426  ECCB  F00D         	call	_send_uart_message	;wreg free
   1753                           
-  1754                           ;main.c: 543: break;
+  1754                           ;main.c: 544: break;
   1755  00042A  D6C8               	goto	l4131
   1756  00042C                     l4217:
   1757                           
-  1758                           ;main.c: 546: {
-  1759                           ;main.c: 547: uart_response[0] = 0xf4;
+  1758                           ;main.c: 547: {
+  1759                           ;main.c: 548: uart_response[0] = 0xf4;
   1760  00042C  0EF4               	movlw	244
   1761  00042E  0101               	movlb	1	; () banked
   1762  000430  6F4F               	movwf	main@uart_response& (0+255),b
   1763                           
   1764                           ; BSR set to: 1
-  1765                           ;main.c: 548: uart_response[1] = msgbuffer[0];
+  1765                           ;main.c: 549: uart_response[1] = msgbuffer[0];
   1766  000432  C140  F150         	movff	main@msgbuffer,main@uart_response+1
   1767                           
   1768                           ; BSR set to: 1
-  1769                           ;main.c: 549: send_uart_message( uart_response );
+  1769                           ;main.c: 550: send_uart_message( uart_response );
   1770  000436  0101               	movlb	1	; () banked
   1771  000438  0E01               	movlw	high main@uart_response
   1772  00043A  0101               	movlb	1	; () banked
@@ -1789,22 +1789,22 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1777  000444  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1778  000446  ECCB  F00D         	call	_send_uart_message	;wreg free
   1779                           
-  1780                           ;main.c: 550: break;
+  1780                           ;main.c: 551: break;
   1781  00044A  D6B8               	goto	l4131
   1782  00044C                     l4223:
   1783                           
-  1784                           ;main.c: 554: {
-  1785                           ;main.c: 555: uart_response[0] = 0x11;
+  1784                           ;main.c: 555: {
+  1785                           ;main.c: 556: uart_response[0] = 0x11;
   1786  00044C  0E11               	movlw	17
   1787  00044E  0101               	movlb	1	; () banked
   1788  000450  6F4F               	movwf	main@uart_response& (0+255),b
   1789                           
   1790                           ; BSR set to: 1
-  1791                           ;main.c: 556: uart_response[1] = msgbuffer[0];
+  1791                           ;main.c: 557: uart_response[1] = msgbuffer[0];
   1792  000452  C140  F150         	movff	main@msgbuffer,main@uart_response+1
   1793                           
   1794                           ; BSR set to: 1
-  1795                           ;main.c: 557: send_uart_message( uart_response );
+  1795                           ;main.c: 558: send_uart_message( uart_response );
   1796  000456  0101               	movlb	1	; () banked
   1797  000458  0E01               	movlw	high main@uart_response
   1798  00045A  0101               	movlb	1	; () banked
@@ -1815,12 +1815,12 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1803  000464  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1804  000466  ECCB  F00D         	call	_send_uart_message	;wreg free
   1805                           
-  1806                           ;main.c: 558: break;
+  1806                           ;main.c: 559: break;
   1807  00046A  D6A8               	goto	l4131
   1808  00046C                     l4229:
   1809                           
-  1810                           ;main.c: 576: {
-  1811                           ;main.c: 577: send_uart_message( sensor_data );
+  1810                           ;main.c: 577: {
+  1811                           ;main.c: 578: send_uart_message( sensor_data );
   1812  00046C  0101               	movlb	1	; () banked
   1813  00046E  0E01               	movlw	high main@sensor_data
   1814  000470  0101               	movlb	1	; () banked
@@ -1831,12 +1831,12 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1819  00047A  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1820  00047C  ECCB  F00D         	call	_send_uart_message	;wreg free
   1821                           
-  1822                           ;main.c: 578: break;
+  1822                           ;main.c: 579: break;
   1823  000480  D69D               	goto	l4131
   1824  000482                     l4231:
   1825                           
-  1826                           ;main.c: 581: {
-  1827                           ;main.c: 582: send_uart_message( motor_data );
+  1826                           ;main.c: 582: {
+  1827                           ;main.c: 583: send_uart_message( motor_data );
   1828  000482  0101               	movlb	1	; () banked
   1829  000484  0E01               	movlw	high main@motor_data
   1830  000486  0101               	movlb	1	; () banked
@@ -1847,18 +1847,18 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1835  000490  6F06               	movwf	send_uart_message@message_ptr& (0+255),b
   1836  000492  ECCB  F00D         	call	_send_uart_message	;wreg free
   1837                           
-  1838                           ;main.c: 583: motor_data[1] = 0;
+  1838                           ;main.c: 584: motor_data[1] = 0;
   1839  000496  0E00               	movlw	0
   1840  000498  0101               	movlb	1	; () banked
   1841  00049A  6F30               	movwf	(main@motor_data+1)& (0+255),b
   1842                           
-  1843                           ;main.c: 584: break;
+  1843                           ;main.c: 585: break;
   1844  00049C  D68F               	goto	l4131
   1845  00049E                     l4235:
   1846                           
   1847                           ; BSR set to: 1
-  1848                           ;main.c: 587: {
-  1849                           ;main.c: 589: for(i=0;i<14;i++)
+  1848                           ;main.c: 588: {
+  1849                           ;main.c: 590: for(i=0;i<14;i++)
   1850  00049E  0E00               	movlw	0
   1851  0004A0  0101               	movlb	1	; () banked
   1852  0004A2  6F72               	movwf	main@i& (0+255),b
@@ -1866,8 +1866,8 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1854  0004A6                     l4241:
   1855                           
   1856                           ; BSR set to: 1
-  1857                           ;main.c: 590: {
-  1858                           ;main.c: 591: t1thread_data.move_msg[i] = msgbuffer[i];
+  1857                           ;main.c: 591: {
+  1858                           ;main.c: 592: t1thread_data.move_msg[i] = msgbuffer[i];
   1859  0004A6  0101               	movlb	1	; () banked
   1860  0004A8  5172               	movf	main@i& (0+255),w,b
   1861  0004AA  0D01               	mullw	1
@@ -1904,15 +1904,15 @@ Microchip Technology Omniscient Code Generator (Lite mode) build 58300
   1892  0004E0  D7E2               	goto	l4241
   1893                           
   1894                           ; BSR set to: 1
-  1895                           ;main.c: 592: }
-  1896                           ;main.c: 594: t1thread_data.new_move_msg = 1;
+  1895                           ;main.c: 593: }
+  1896                           ;main.c: 595: t1thread_data.new_move_msg = 1;
   1897                           
   1898                           ; BSR set to: 1
   1899  0004E2  0E01               	movlw	1
   1900  0004E4  0101               	movlb	1	; () banked
   1901  0004E6  6F6F               	movwf	(main@t1thread_data+14)& (0+255),b
   1902                           
-  1903                           ;main.c: 596: break;
+  1903                           ;main.c: 597: break;
   1904  0004E8  D669               	goto	l4131
   1905  0004EA                     l4251:
   1906  0004EA  0101               	movlb	1	; () banked
@@ -11314,7 +11314,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V1.32 build 58300 
-Symbol Table                                                                                   Sun Nov 09 19:26:23 2014
+Symbol Table                                                                                   Fri Nov 14 12:53:50 2014
 
                                  ??_debug_configure 0092                            _MQ_Main_Willing_to_block 00B8  
                                        _SSPSTATbits 000FC7                  uart_receive_interrupt_handler@done 004B  

@@ -6198,8 +6198,23 @@ T0CONbits.T0SE = 1;
 T0CONbits.PSA = 1;
 T0CONbits.T0PS = 0x1;
 T0CONbits.TMR0ON = 1;
+TMR0L = 0x35;
 
-# 307
+
+
+
+PIE1bits.TMR1IE = 1;
+TRISCbits.TRISC0 = 1;
+T1CONbits.RD16 = 0;
+T1CONbits.T1RUN = 0;
+T1CONbits.TMR1CS = 1;
+T1CONbits.T1SYNC = 0;
+T1CONbits.T1CKPS = 0x0;
+T1CONbits.TMR1ON = 1;
+TMR1H = 0xff;
+TMR1L = 0x35;
+
+# 315
 IPR1bits.TMR1IP = 0;
 
 IPR1bits.RCIP = 0;
@@ -6210,10 +6225,13 @@ IPR1bits.SSPIP = 1;
 
 INTCON2bits.TMR0IP = 0;
 
-# 324
+
+IPR1bits.ADIP = 0;
+
+# 335
 i2c_configure_slave(0x9C);
 
-# 339
+# 350
 PIE1bits.SSPIE = 1;
 
 
@@ -6221,20 +6239,20 @@ PIE1bits.SSPIE = 1;
 IPR1bits.ADIP = 0;
 PIE1bits.ADIE = 1;
 
-# 368
+# 379
 debug_configure();
 blip();
 blip1();
 blip2();
 blip3();
 
-# 381
+# 392
 enable_interrupts();
 
-# 394
+# 405
 uart_configure();
 
-# 412
+# 423
 unsigned char motor_data[14];
 motor_data[0] = 0x07;
 
@@ -6243,10 +6261,10 @@ for(i=1;i<14;i++)
 motor_data[i]=0x44;
 }
 
-# 425
+# 436
 while (1) {
 
-# 443
+# 454
 length = ToMainHigh_recvmsg(14, &msgtype, (void *) msgbuffer);
 if (length < 0) {
 
@@ -6316,7 +6334,7 @@ if (length != -4) {
 else
 {
 
-# 519
+# 530
 switch (msgtype)
 {
 case 11:
@@ -6329,27 +6347,27 @@ case 30:
 case 32:
 {
 
-# 536
+# 547
 }
 case 33:
 {
 
-# 546
+# 557
 }
 case 34:
 {
 
-# 555
+# 566
 }
 case 35:
 {
 
-# 565
+# 576
 }
 case 36:
 {
 
-# 575
+# 586
 }
 case 31:
 {

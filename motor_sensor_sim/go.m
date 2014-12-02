@@ -22,7 +22,7 @@ function varargout = go(varargin)
 
 % Edit the above text to modify the response to help go
 
-% Last Modified by GUIDE v2.5 05-Nov-2014 20:06:49
+% Last Modified by GUIDE v2.5 18-Nov-2014 10:15:35
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,15 +51,26 @@ function go_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to go (see VARARGIN)
+    figure()
+    % handles.encoder_left_mark = 0;
+    % handles.encoder_right_mark = 0;
+    % figure(handles.sensor_map);
+    line([-10 10] , [10 10]);
+    line([-10 -10] , [-10 10] );
+    line([10 10] , [-10 10]);
+    line([-10 10] , [-10 -10]);
+    %line_thingy = line([5 11],[5 11]);
+    disp( gcf );
+    % plot(handles.sensor_map );
 
-
+    % %{
     ioARMSimWiFly = serial('COM4','BaudRate',57600);
     ioARMSimWiFly.BytesAvailableFcnCount = 18;
     ioARMSimWiFly.BytesAvailableFcnMode = 'byte';
     % ioARMSimWiFly.terminator = '~';    
     ioARMSimWiFly.BytesAvailableFcn = {@get_stuff,handles};
     fopen(ioARMSimWiFly);
-    
+    % %}
     
     handles.serial_connection = ioARMSimWiFly;
     
@@ -84,58 +95,106 @@ guidata(hObject, handles);
 
 function get_stuff(hObject, eventdata, handles)
     
+      
+
+
     [data count msg] = fread(hObject, 18, 'char');
     
+    if(data(1) ~= 255)
+        term_char = 0;
+        while(term_char ~= 254)
+            [term_char count msg] = fread(hObject, 1, 'char');
+        end
+        
+    end
     
-    if(data(3) ~= 7)
+
+    
+    
+    
+    % === A Motor Response
+    if( data(3) == 7 )
+        % disp(data);
+        % Update encoder values 
+        y = (bitshift(data(5),24))+(bitshift(data(6),16))+(bitshift(data(7),8))+(data(8));
+        set(handles.ticks_left,'string',y);
+        % set(handles.encoder_trip_left,'string', ( y - handles.encoder_left_mark ));
+        % disp(handles.encoder_left_mark);
+        y = (bitshift(data(9),24))+(bitshift(data(10),16))+(bitshift(data(11),8))+(data(12));
+        set(handles.ticks_right,'string',y);
+        %set(handles.encoder_trip_right,'string', (y - handles.encoder_right_mark));
+        % ===      
+        
         return
     end
-    
-    
-    
-    % disp(data);
-    
-    % Create and maintain index    
-    persistent i;
-    if isempty(i)
-        i=1;  
-        % disp('i oned')
-    elseif i > 255
-        i=1;
-        % disp('i edge')
-    else
-        i = i + 1;
-        % disp('i increment')
-    end
     % ===
     
-    % Create and maintain y (actual sampled values)
-    persistent y;
-    if isempty(y)
-        % disp('y zeroed')
-        y=zeros(256,1);
-    else
-        y(i) = (bitshift(data(5),24))+(bitshift(data(6),16))+(bitshift(data(7),8))+(data(8));
-        % disp('y delta normal')
-    end  
+    persistent x;
     
-    set(handles.ticks,'string',y(i));
-    % ===   
     
-    % Create and maintain delta
-    persistent delta;
-    if isempty(delta)
-        delta = zeros(256,1);
-        delta(1) = y(1);
-    elseif i > 1
-        delta(i) = y(i) - y(i-1);
-        % disp(delta)
-    else 
-        delta(i) = y(i) - y(255);
-    end
-    t=1:1:256;
-    plot( handles.axes1, t, delta);
+    % === A Sensor Response
+    %
+    if( data(3) == 5 )
+        
+        % disp(data);
+        if(isempty(x))
+            x = 1;            
+        elseif( x >=10 )
+            
+            set(handles.ultra,'string',data(6));        
+            set(handles.forward_left_ir,'string',data(7));        
+            set(handles.forward_right_ir,'string',data(8));        
+            set(handles.lsf_forward_ir,'string',data(9));        
+            set(handles.lsf_rear_ir,'string',data(10));        
+            set(handles.lsf_ir,'string',data(11));        
+            set(handles.rsf_forward_ir,'string',data(12));        
+            set(handles.rsf_rear_ir,'string',data(13));
+            set(handles.rsf_ir,'string',data(14));
+        
+            %{
+            line([0 0],[0 255],'Color', [1 1 1]);
+            line([0 0],[0 data(6)]);
+            line([0 0],[0 0],'Color', [1 1 1]);
+            line([0 0],[0 0]);
+            line([0 0],[0 0],'Color', [1 1 1]);
+            line([0 0],[0 0]);
+            line([0 -255],[10 10],'Color', [1 1 1]);
+            line([0 -data(9)],[10 10]);
+            line([0 -255],[10 10],'Color', [1 1 1]);
+            line([0 -data(9)],[10 10]);
+            line([0 -255],[10 10],'Color', [1 1 1]);
+            line([0 -data(9)],[10 10]);
+            line([0 -255],[-10 -10],'Color', [1 1 1]);
+            line([0 -data(10)],[-10 -10]);
+            line([0 -255],[0 0],'Color', [1 1 1]);
+            line([0 -data(11)],[0 0]);
+            line([0 -255],[0 0],'Color', [1 1 1]);
+            line([0 -data(11)],[0 0]);
+            line([0 255],[10 10],'Color', [1 1 1]);
+            line([0 data(12)],[10 10]);
+            line([0 255],[10 10],'Color', [1 1 1]);
+            line([0 data(12)],[10 10]);
+            line([0 255],[-10 -10],'Color', [1 1 1]);
+            line([0 data(13)],[-10 -10]);        
+            line([0 255],[0 0],'Color', [1 1 1]);
+            line([0 data(14)],[0 0]);
+            %}
+            x = 1;
+            
+        else
+            x = x + 1;
+        end
+        
+            
+        
+    end 
+    %
     % ===
+    
+
+    
+  
+
 
     
 
@@ -298,18 +357,18 @@ function stop_sim_Callback(hObject, eventdata, handles)
 
 
 
-function ticks_Callback(hObject, eventdata, handles)
-% hObject    handle to ticks (see GCBO)
+function ticks_left_Callback(hObject, eventdata, handles)
+% hObject    handle to ticks_left (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of ticks as text
-%        str2double(get(hObject,'String')) returns contents of ticks as a double
+% Hints: get(hObject,'String') returns contents of ticks_left as text
+%        str2double(get(hObject,'String')) returns contents of ticks_left as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function ticks_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to ticks (see GCBO)
+function ticks_left_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ticks_left (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -318,3 +377,299 @@ function ticks_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+
+function ultra_Callback(hObject, eventdata, handles)
+% hObject    handle to ultra (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ultra as text
+%        str2double(get(hObject,'String')) returns contents of ultra as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ultra_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ultra (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function forward_left_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to forward_left_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of forward_left_ir as text
+%        str2double(get(hObject,'String')) returns contents of forward_left_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function forward_left_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to forward_left_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function forward_right_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to forward_right_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of forward_right_ir as text
+%        str2double(get(hObject,'String')) returns contents of forward_right_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function forward_right_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to forward_right_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function lsf_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to lsf_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of lsf_ir as text
+%        str2double(get(hObject,'String')) returns contents of lsf_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function lsf_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lsf_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function rsf_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to rsf_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rsf_ir as text
+%        str2double(get(hObject,'String')) returns contents of rsf_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rsf_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rsf_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function rsf_rear_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to rsf_rear_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rsf_rear_ir as text
+%        str2double(get(hObject,'String')) returns contents of rsf_rear_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rsf_rear_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rsf_rear_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function lsf_rear_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to lsf_rear_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of lsf_rear_ir as text
+%        str2double(get(hObject,'String')) returns contents of lsf_rear_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function lsf_rear_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lsf_rear_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function rsf_forward_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to rsf_forward_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of rsf_forward_ir as text
+%        str2double(get(hObject,'String')) returns contents of rsf_forward_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function rsf_forward_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to rsf_forward_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function lsf_forward_ir_Callback(hObject, eventdata, handles)
+% hObject    handle to lsf_forward_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of lsf_forward_ir as text
+%        str2double(get(hObject,'String')) returns contents of lsf_forward_ir as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function lsf_forward_ir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to lsf_forward_ir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function ticks_right_Callback(hObject, eventdata, handles)
+% hObject    handle to ticks_right (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ticks_right as text
+%        str2double(get(hObject,'String')) returns contents of ticks_right as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ticks_right_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ticks_right (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function encoder_trip_left_Callback(hObject, eventdata, handles)
+% hObject    handle to encoder_trip_left (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of encoder_trip_left as text
+%        str2double(get(hObject,'String')) returns contents of encoder_trip_left as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function encoder_trip_left_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to encoder_trip_left (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+
+function encoder_trip_right_Callback(hObject, eventdata, handles)
+% hObject    handle to encoder_trip_right (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of encoder_trip_right as text
+%        str2double(get(hObject,'String')) returns contents of encoder_trip_right as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function encoder_trip_right_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to encoder_trip_right (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes on button press in reset_trip_left.
+function reset_trip_left_Callback(hObject, eventdata, handles)
+% hObject    handle to reset_trip_left (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    set(handles.encoder_trip_left,'string',0);
+    handles.encoder_left_mark = str2double(get(handles.ticks_left,'String'));
+    disp(handles.encoder_left_mark)
+    
+
+
+% --- Executes on button press in reset_trip_right.
+function reset_trip_right_Callback(hObject, eventdata, handles)
+% hObject    handle to reset_trip_right (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    set(handles.encoder_trip_right,'string',0);
+    handles.encoder_right_mark = str2double(get(handles.ticks_right,'String'));

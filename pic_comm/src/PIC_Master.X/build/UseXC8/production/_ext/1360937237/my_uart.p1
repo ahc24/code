@@ -8468,7 +8468,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;messages.h: 35: unsigned char data[14];
 [; ;messages.h: 36: } msg;
 [; ;messages.h: 38: typedef struct __msg_queue {
-[; ;messages.h: 39: msg queue[8];
+[; ;messages.h: 39: msg queue[5];
 [; ;messages.h: 40: unsigned char cur_write_ind;
 [; ;messages.h: 41: unsigned char cur_read_ind;
 [; ;messages.h: 42: } msg_queue;

@@ -370,7 +370,7 @@ void main(void) {
     //Alex: Configure UART for transmit and recieve
     uart_configure();
 
-    //Initialize snesor data
+    // Initialize snesor data buffer
     unsigned char sensor_data[MSGLEN];
     sensor_data[0] = MSGID_SENSOR_RESPONSE;
     for(i=1;i<MSGLEN;i++)
@@ -378,6 +378,7 @@ void main(void) {
         sensor_data[i] = 0x00;
     }
 
+    // Initialize motor data buffer
     unsigned char motor_data[MSGLEN];
     motor_data[0] = MSGID_MOTOR_RESPONSE;
     for(i=1;i<MSGLEN;i++)
@@ -485,6 +486,8 @@ void main(void) {
                 default:
                 {
                     // Your code should handle this error
+
+                    // Sometimes the best course of action is to do nothing
 
                     break;
                 };
@@ -609,6 +612,9 @@ void main(void) {
                 default:
                 {
                     // Your code should handle this error
+
+                    // Sometimes the best course of action is to do nothing
+                    
                     break;
                 };
             };
